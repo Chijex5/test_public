@@ -1,0 +1,53 @@
+.footer {
+  background-color: #ffffff;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.footer nav ul {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer nav li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer .nav-link {
+  text-decoration: none;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  transition: color 0.3s, box-shadow 0.3s;
+}
+
+.footer .nav-link svg {
+  fill: #333;
+  margin-bottom: 5px;
+}
+
+.footer .nav-link span {
+  font-size: 12px;
+}
+
+.footer .nav-link.active {
+  color: green;
+}
+
+.footer .nav-link.active svg {
+  fill: green;
+}
+
+.footer .nav-link.active {
+  box-shadow: 0 0 5px green;
+}

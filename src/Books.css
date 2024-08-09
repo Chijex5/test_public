@@ -1,0 +1,232 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: #333;
+  }
+  
+  .container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    align-items: center;
+    justify-items: center;
+  }
+  
+  /* Search Area */
+  .search-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .search-container {
+    position: relative;
+    width: 40px; /* Initial width to only show the icon */
+    cursor: pointer;
+    transition: width 0.3s ease;
+    flex-grow: 1;
+  }
+  
+  .search-container.active {
+    width: 60%; /* Expand to show the search bar */
+  }
+  
+  .search-bar {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    padding-right: 40px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
+  
+  .search-bar.visible {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+  }
+  
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #999;
+  }
+  
+  .search-icon.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .filter-dropdown {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+  }
+   @media (max-width: 768px) {
+    .filter-dropdown{
+      width: 100%;
+      margin-top: 10px;
+    }
+    .search-container.active{
+      width: 100%;
+    }
+   }
+  
+  /* Recommendation Area */
+  .recommendation-section {
+    margin-bottom: 40px;
+  }
+  
+  .section-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #33cc33;
+  }
+  
+  .books-list {
+    display: flex;
+    overflow-x: scroll;
+    gap: 20px;
+  }
+  
+  .books-list::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Sell a Book Section */
+  .sell-book-section {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
+  }
+  
+  .section-title {
+    text-align: center;
+    color: #333;
+    font-family: 'Ubuntu', sans-serif;
+    margin-bottom: 1.5em;
+  }
+  
+  .name-code {
+    display: flex;
+    gap: 1em;
+    margin-bottom: 1.5em;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 0.75em 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-family: 'Ubuntu', sans-serif;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-field:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
+  .dept {
+    margin-bottom: 1.5em;
+  } 
+  .desc{
+    height: 100px;
+    margin-bottom: 1.5em;
+    resize: none;
+  }
+  .price{
+    margin-bottom: 0.5em;
+  }
+  
+  .warning-message {
+    color: #ff6f61;
+    font-size: 0.875em;
+    margin-bottom: 1em;
+  }
+
+  .earnings {
+    font-size: 1.125em;
+    margin-bottom: 1.5em;
+  }
+
+  .earnings span {
+    font-weight: bold;
+    color: #4CAF50;
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 0.75em;
+    background-color: #4CAF50;
+    color: white;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .submit-button:hover{
+    background-color: #45a049;
+  }
+  
+  /* Book Cards */
+  .book-card {
+    min-width: 200px;
+    margin-right: 10px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid #33cc33;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .book-card h3 {
+    color: #33cc33;
+  }
+  
+  .book-card p {
+    margin: 5px 0;
+  }
+  
+  .book-card .add-to-cart-btn {
+    padding: 5px 10px;
+    background-color: #33cc33;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .book-card .add-to-cart-btn:hover {
+    background-color: #28a428;
+  }
+  
+  /* Error/Success Messages */
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  .success-message {
+    color: green;
+    margin-top: 10px;
+  }
+  

@@ -1,0 +1,16 @@
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.progress-ring {
+  transform: rotate(-90deg); /* Rotate to start from top */
+}
+
+.progress-ring__circle {
+  stroke-dasharray: 251; /* 2 * π * 40 (circumference) */
+  stroke-dashoffset: 0;
+  transition: stroke-dasharray 0.3s;
+}

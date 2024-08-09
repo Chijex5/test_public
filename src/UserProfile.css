@@ -1,0 +1,62 @@
+/* UserProfile.css */
+.user-profile {
+  padding: 20px;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: 'Arial, sans-serif';
+  max-width: 400px;
+  margin: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-profile h1 {
+  text-align: center;
+  color: #33cc33; /* Green text */
+}
+
+.profile-img {
+  display: block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 20px auto;
+}
+
+.details, .form {
+  margin: 20px 0;
+}
+
+.details p {
+  margin: 10px 0;
+}
+
+.form label {
+  display: block;
+  margin: 10px 0;
+}
+
+.form input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #33cc33; /* Green background */
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #28a428; /* Darker green */
+}

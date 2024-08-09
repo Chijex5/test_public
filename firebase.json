@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "bookshop-4cb62-dd200",
+    "public": "bookshop",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

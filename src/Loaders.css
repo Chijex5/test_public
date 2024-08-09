@@ -1,0 +1,49 @@
+:root {
+  --second: 0.1s;
+}
+
+.loader-container{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.loader {
+  display: flex;
+  gap: 0.5em;
+}
+.ball {
+  height: 0.8em;
+  width: 0.8em;
+  border-radius: 50%;
+  background: #4CAF50;
+  animation-name: loading;
+  animation-duration: 1.6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.ball.one,
+.ball.two,
+.ball.three,
+.ball.four,
+.ball.five,
+.ball.six,
+.ball.seven,
+.ball.eight,
+.ball.nine,
+.ball.ten {
+  animation-delay: calc(var(--i) * var(--second));
+}
+@keyframes loading {
+  0% {
+      transform: translateY(0%);
+  }
+  6.25% {
+      transform: translateY(-200%);
+  }
+  18.75% {
+      transform: translateY(0%);
+  }
+}

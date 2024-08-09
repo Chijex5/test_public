@@ -1,0 +1,155 @@
+.home {
+  padding: 20px;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: 'Arial, sans-serif';
+}
+
+.profile-section {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.profile-pic {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.profile-pic img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid #33cc33; /* Green border */
+}
+
+.progress-ring {
+  position: absolute;
+  width: 86px; /* Slightly larger than the profile picture */
+  height: 86px; /* Slightly larger than the profile picture */
+  top: -3px; /* Center the ring */
+  left: -3px; /* Center the ring */
+  pointer-events: none;
+  transform: rotate(-90deg);
+}
+
+.progress-ring__circle {
+  stroke: red;
+  stroke-width: 4;
+  fill: transparent;
+  r: 38; /* Radius adjusted for alignment */
+  cx: 43; /* Center adjusted for alignment */
+  cy: 43; /* Center adjusted for alignment */
+  transition: stroke-dasharray 0.3s;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.dashboard-item {
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+  flex: 1;
+  margin: 0 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.dashboard-item .label {
+  display: block;
+  margin-bottom: 10px;
+  color: #33cc33; /* Green text */
+}
+
+.dashboard-item .value {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.section h2 {
+  margin-bottom: 10px;
+  color: #33cc33; /* Green text */
+}
+
+.book-cards {
+  display: flex;
+  overflow-x: scroll;
+}
+
+.book-cards::-webkit-scrollbar {
+  display: none;
+}
+
+.book-card {
+  min-width: 200px;
+  margin-right: 10px;
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  border: 2px solid #33cc33; /* Green border */
+}
+
+.book-card.expanded {
+  min-width: 300px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.book-summary {
+  font-size: 14px;
+}
+
+.book-details {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.book-details button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #33cc33; /* Green background */
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.book-details button:hover {
+  background-color: #28a428; /* Darker green */
+}
+
+.offers, .ads {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 768px) {
+  .dashboard-item {
+    margin-left: 0;
+  }
+  .dashboard-item .label {
+    display: block;
+    font-size: 0.9em;
+  }
+  .dashboard-item .value {
+    display: block;
+    font-size: 0.9em;
+    font-weight: bold;
+  }
+}
