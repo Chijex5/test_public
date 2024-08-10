@@ -1,0 +1,29 @@
+.breadcrumb-header {
+    background-color: #f5f5f5;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .breadcrumb-header h1 {
+    font-family: 'Cambria', serif;
+    font-size: 24px;
+    margin: 0;
+    color: #333;
+  }
+  
+  .breadcrumb-nav {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    color: #666;
+    margin-top: 5px;
+  }
+  
+  .breadcrumb-nav span {
+    margin-right: 5px;
+  }
+  
+  .breadcrumb-nav .breadcrumb-current {
+    color: #333;
+    font-weight: bold;
+  }
+  

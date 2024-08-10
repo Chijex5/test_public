@@ -3,63 +3,99 @@ import { useUser } from './UserContext'; // Import the context
 import './Home.css';
 import { Link } from 'react-router-dom';
 import profilePic from './33.jpg';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 
-function Home() {
+const Home = ({ cartItems, setCartItems }) =>  {
   const { userData, loading } = useUser();
   const [expandedBook, setExpandedBook] = useState(null);
 
   const books = [
-    { id: 1, title: "Book 1", subject: "Subject 1", available: true, price: "10.99", department: "Department 1" },
-    { id: 2, title: "Book 2", subject: "Subject 2", available: false, price: "8.99", department: "Department 2" },
-    { id: 3, title: "Book 3", subject: "Subject 3", available: true, price: "12.99", department: "Department 3" },
-    { id: 4, title: "Book 4", subject: "Subject 4", available: true, price: "15.99", department: "Department 4" }
+    { code: 'STA112', id: 1, name: 'Probability II', department: 'Statistics', price: 2000, available: true, level: "100" },
+    { code: 'STA111', id: 2, name: 'Introduction to Probability', department: 'Statistics', price: 2500, available: true, level: "100" },
+    { code: 'STA132', id: 3, name: 'Inference II', department: 'Statistics', price: 3000, available: false, level: "100" },
+    { code: 'STA131', id: 4, name: 'Introduction to Inference', department: 'Statistics', price: 2200, available: true, level: "100" },
+    { code: 'STA172', id: 5, name: 'Statistical Computing', department: 'Statistics', price: 2800, available: true, level: "100" },
+    { code: 'MTH122', id: 6, name: 'Circle Geometry', department: 'Mathematics', price: 1800, available: true, level: "100" },
+    { code: 'MTH111', id: 7, name: 'Integrated Mathematics', department: 'Mathematics', price: 1500, available: false, level: "100" },
+    { code: 'MTH131', id: 8, name: 'Integration and Depreciation', department: 'Mathematics', price: 2000, available: true, level: "100" },
+    { code: 'BIO151', id: 9, name: 'Introduction to Biology', department: 'Micro Biology', price: 3000, available: true, level: "100" },
+    { code: 'CHM122', id: 10, name: 'Organic Chemistry II', department: 'Pure and Industrial Chemistry', price: 3500, available: true, level: "100" },
+    { code: 'CHM132', id: 11, name: 'Inorganic Chemistry II', department: 'Pure and Industrial Chemistry', price: 4000, available: false, level: "100" },
+    { code: 'CHM171', id: 12, name: 'Introduction to Organic Chemistry', department: 'Pure and Industrial Chemistry', price: 3200, available: true, level: "100" },
+    { code: 'CHM101', id: 13, name: 'Introduction to Inorganic Chemistry', department: 'Pure and Industrial Chemistry', price: 2800, available: true, level: "100" },
+    { code: 'ENG101', id: 14, name: 'Introduction to Engineering', department: 'Engineering', price: 2500, available: true, level: "100" },
+    { code: 'GSP102', id: 15, name: 'Lexis and Structure', department: 'General Studies', price: 1500, available: true, level: "100" }
   ];
 
   const bookse = [
-    { id: 5, title: "Book 5", subject: "Subject 5", available: true, price: "10.99", department: "Department 5" },
-    { id: 6, title: "Book 6", subject: "Subject 6", available: false, price: "8.99", department: "Department 6" },
-    { id: 7, title: "Book 7", subject: "Subject 7", available: true, price: "12.99", department: "Department 7" },
-    { id: 8, title: "Book 8", subject: "Subject 8", available: true, price: "15.99", department: "Department 8" }
+    { code: 'GSP111', id: 21, name: 'Use of Library', department: 'General Studies', price: 1000, available: false, level: "100" },
+    { code: 'GSP101', id: 16, name: 'Use of English', department: 'General Studies', price: 1200, available: true, level: "100" },
+    { code: 'ENG102', id: 17, name: 'Introduction to Engineering II', department: 'Engineering', price: 3000, available: true, level: "100" },
+    { code: 'GLG142', id: 18, name: 'Earth History', department: 'Geology', price: 2000, available: true, level: "100" },
+    { code: 'COS101', id: 19, name: 'Introduction to Computer Sciences', department: 'Computer Sciences', price: 2500, available: true, level: "100" },
+    { code: 'PHY121', id: 20, name: 'Physics for Engineering', department: 'Engineering', price: 2500, available: true, level: "100" }
   ];
 
   const toggleExpand = (id) => {
     setExpandedBook(expandedBook === id ? null : id);
   };
+  // eslint-disable-next-line
+  const [clicked, setClicked] = useState(false);
 
-  const profileCompletion = {
-    personalDetails: true,
-    paymentDetails: false,
-    verification: false,
+  const handleAddToCart = (book) => {
+    setClicked(true)
+    
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item.name === book.name);
+      console.log(book)
+      if (existingItem) {
+        // If the book is already in the cart, increase the quantity
+        return prevItems.map((item) =>
+          item.name === book.name ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      } else {
+        // If the book is not in the cart, add it with a quantity of 1
+        return [...prevItems, { ...book, quantity: 1 }];
+      }
+      
+    });
+    setTimeout(() => {
+      setClicked(false);
+    }, 2000); // 2 seconds
   };
 
-  const completionPercentage = Object.values(profileCompletion).filter(Boolean).length / 3 * 100;
+
+  const profileCompletion = {
+    firstName: !!userData?.username?.split(' ')[0],
+    lastName: !!userData?.username?.split(' ')[1],
+    email: !!userData?.email,
+    phone: !!userData?.phone,
+    department: !!userData?.department,
+    address: !!userData?.address,
+  };
+
+  const completionPercentage = Object.values(profileCompletion).filter(Boolean).length / Object.keys(profileCompletion).length * 100;
 
   if (loading) return <p>Fetching Data .... </p>;
 
   return (
     <div className="home">
       <div className="profile-section">
-      <Link to="/profile" className="profile-link">
-        <div className="profile-pic">
-          <img src={userData?.profileUrl || profilePic} alt="Profile" className="profile-img" />
-          {completionPercentage < 100 && (
-            <svg className="progress-ring" width="80" height="80">
-              <circle
-                className="progress-ring__circle"
-                stroke="red"
-                strokeWidth="4"
-                fill="transparent"
-                r="36"
-                cx="40"
-                cy="40"
-                strokeDasharray={`${completionPercentage} ${100 - completionPercentage}`}
-              />
-            </svg>
-          )}
-        </div>
+        <Link to="/home/profile" className="profile-link" data-tooltip-id="profile-tooltip">
+          <div className="profile-pic">
+            <img src={userData?.profileUrl || profilePic} alt="Profile" className="profile-img" />
+            {completionPercentage < 100 && (
+              <div className="profile-completion-overlay">
+                <div className="completion-bar" style={{ width: `${completionPercentage}%` }}></div>
+                <span className="completion-text">{Math.floor(completionPercentage)}% Complete</span>
+              </div>
+            )}
+          </div>
         </Link>
+        <Tooltip id="profile-tooltip" content="View Profile" place="top" />
       </div>
-      <h1>Hello, {userData?.username || 'User'}!</h1>
+      <h1>Hello, {userData?.username?.split(' ')[0] || 'User'}!</h1>
       <div className="dashboard">
         <div className="dashboard-item">
           <span className="label">Books Bought</span>
@@ -71,7 +107,7 @@ function Home() {
         </div>
         <div className="dashboard-item">
           <span className="label">Books in Cart</span>
-          <span className="value">5</span>
+          <span className="value">{cartItems.length}</span>
         </div>
       </div>
       <div className="section recent-books">
@@ -83,16 +119,32 @@ function Home() {
               className={`book-card ${expandedBook === book.id ? 'expanded' : ''}`}
               onClick={() => toggleExpand(book.id)}
             >
-              <div className="book-summary">
-                <p>Subject: {book.subject}</p>
-                <p>Available: {book.available ? "Yes" : "No"}</p>
-                <p>Price: ${book.price}</p>
+              <div className="book-summary" data-tooltip-id="recent-book-tooltip">
+                <p>Course Code: {book.code}</p>
+                <p className={book.available ? "available" : "notavailable"}>{book.available ? "Available" : "Unavailable"}</p>
+                <p>Price: ₦{book.price}</p>
               </div>
+              <Tooltip id="recent-book-tooltip" content={`${expandedBook === book.id ? 'Expanded' : 'Click to Expand'}`} place="top" />
               {expandedBook === book.id && (
                 <div className="book-details">
-                  <p>Title: {book.title}</p>
+                  <p>Title: {book.name}</p>
                   <p>Department: {book.department}</p>
-                  <button onClick={(event) => event.stopPropagation()}>Add to Cart</button>
+                  <button
+                    onClick={(event) => {
+                      event.stopPropagation(); 
+                      handleAddToCart(book);
+                    }} 
+                    disabled={!book.available}
+                    className={
+                      clicked
+                        ? "add-to-cart-button clicked"
+                        : book.available
+                        ? "add-to-cart-button"
+                        : "out-of-stock-button"
+                    }
+                  >
+                    {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
+                  </button>
                 </div>
               )}
             </div>
@@ -109,15 +161,30 @@ function Home() {
               onClick={() => toggleExpand(book.id)}
             >
               <div className="book-summary">
-                <p>Subject: {book.subject}</p>
-                <p>Available: {book.available ? "Yes" : "No"}</p>
-                <p>Price: ${book.price}</p>
+                <p>Course Code: {book.code}</p>
+                <p className={book.available ? "available" : "notavailable"}>{book.available ? "Available" : "Unavailable"}</p>
+                <p>Price: ₦{book.price}</p>
               </div>
               {expandedBook === book.id && (
                 <div className="book-details">
-                  <p>Title: {book.title}</p>
+                  <p>Title: {book.name}</p>
                   <p>Department: {book.department}</p>
-                  <button onClick={(event) => event.stopPropagation()}>Add to Cart</button>
+                  <button
+                    onClick={(event) => {
+                      event.stopPropagation(); 
+                      handleAddToCart(book);
+                    }} 
+                    disabled={!book.available}
+                    className={
+                      clicked
+                        ? "add-to-cart-button clicked"
+                        : book.available
+                        ? "add-to-cart-button"
+                        : "out-of-stock-button"
+                    }
+                  >
+                    {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
+                  </button>
                 </div>
               )}
             </div>

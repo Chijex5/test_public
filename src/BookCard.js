@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Books.css';
 
-const BookCard = ({ book }) => {
-  const { name, subject_code, department, available } = book;
+const BookCard = ({ book, onAddToCart }) => {
+  const [clicked, setClicked] = useState(false);
+
+  const handleAddToCart = () => {
+    onAddToCart(book);
+    setClicked(true);
+
+    // Reset clicked state after a short duration
+    setTimeout(() => {
+      setClicked(false);
+    }, 2000); // 2 seconds
+  };
+
   return (
     <div className="book-card">
-      <h3>{name}</h3>
-      <p>Subject Code: {subject_code}</p>
-      <p>Department: {department}</p>
-      <p>{available ? 'Available' : 'Not Available'}</p>
-      <button className="add-to-cart-btn">Add to Cart</button>
+      <h3>{book.code}</h3>
+      <p>{book.name}</p>
+      <p>{book.department}</p>
+      <p>₦{book.price.toFixed(2)}</p>
+      <button
+        onClick={handleAddToCart}
+        disabled={!book.available}
+        className={
+          clicked
+            ? "add-to-cart-button clicked"
+            : book.available
+            ? "add-to-cart-button"
+            : "out-of-stock-button"
+        }
+      >
+        {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
+      </button>
     </div>
   );
 };

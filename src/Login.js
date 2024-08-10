@@ -46,7 +46,7 @@ const Login = () => {
       const user = result.user;
       saveUserDataToLocalStorage(user);
       await sendUserDataToBackend(user);
-      navigate('/'); // Redirect to home page on success
+      navigate('/home'); // Redirect to home page on success
     } catch (err) {
       setError(err.message);
       console.error('Authentication Error:', err);

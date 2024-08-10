@@ -19,7 +19,7 @@ const Signup = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/'); // Redirect to home page on success
+      navigate('/home'); // Redirect to home page on success
     } catch (err) {
       setError(err.message);
       console.error('Authentication Error:', err);

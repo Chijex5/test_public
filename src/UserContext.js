@@ -1,10 +1,9 @@
-// UserContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({}); // Set default value as an empty object
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

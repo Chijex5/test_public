@@ -1,49 +1,74 @@
-.home {
-  padding: 20px;
-  background-color: #ffffff;
-  color: #333333;
-  font-family: 'Arial, sans-serif';
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  color: #333;
 }
 
+/* Home Container */
+.home {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Profile Section */
 .profile-section {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .profile-pic {
   position: relative;
-  width: 80px;
-  height: 80px;
-}
-
-.profile-pic img {
-  width: 100%;
-  height: 100%;
+  width: 10rem;
+  height: 10rem;
   border-radius: 50%;
-  border: 3px solid #33cc33; /* Green border */
+  overflow: hidden;
+  border: 2px solid #ddd;
 }
 
-.progress-ring {
+.profile-img {
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+}
+
+.profile-completion-overlay {
   position: absolute;
-  width: 86px; /* Slightly larger than the profile picture */
-  height: 86px; /* Slightly larger than the profile picture */
-  top: -3px; /* Center the ring */
-  left: -3px; /* Center the ring */
-  pointer-events: none;
-  transform: rotate(-90deg);
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.progress-ring__circle {
-  stroke: red;
-  stroke-width: 4;
-  fill: transparent;
-  r: 38; /* Radius adjusted for alignment */
-  cx: 43; /* Center adjusted for alignment */
-  cy: 43; /* Center adjusted for alignment */
-  transition: stroke-dasharray 0.3s;
+.completion-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: green;
 }
 
+.completion-text {
+  font-size: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Dashboard */
 .dashboard {
   display: flex;
   justify-content: space-around;
@@ -61,95 +86,244 @@
   position: relative;
 }
 
+.profile-pic:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-link:hover .profile-completion-overlay .completion-text {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.profile-completion-overlay .completion-text {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+
+.add-to-cart-button {
+  padding: 5px 10px;
+  background-color: #33cc33;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.out-of-stock-button{
+  padding: 5px 10px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: not-allowed;
+}
+.book-card .add-to-cart-btn:hover {
+  background-color: #28a428;
+}
+
+.add-to-cart-button.clicked {
+  background-color: #218838;
+  animation: buttonClicked 0.5s;
+}
+
+.out-of-stock-button {
+  background-color: #6c757d;
+
+}
+
+@keyframes buttonClicked {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .dashboard-item .label {
   display: block;
   margin-bottom: 10px;
-  color: #33cc33; /* Green text */
 }
 
 .dashboard-item .value {
   display: block;
   font-size: 1.5em;
   font-weight: bold;
+  color: #4CAF50;
 }
 
+/* Sections */
 .section {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .section h2 {
-  margin-bottom: 10px;
-  color: #33cc33; /* Green text */
+  margin-bottom: 15px;
+  font-size: 24px;
+  color: #444;
 }
 
+/* Book Cards */
 .book-cards {
   display: flex;
   overflow-x: scroll;
+  gap: 15px;
 }
-
-.book-cards::-webkit-scrollbar {
+.book-cards::-webkit-scrollbar{
   display: none;
 }
 
 .book-card {
-  min-width: 200px;
-  margin-right: 10px;
-  background-color: #ffffff;
-  padding: 10px;
-  border-radius: 5px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
+  flex: 1;
+  min-width: 200px;
   cursor: pointer;
-  border: 2px solid #33cc33; /* Green border */
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .book-card.expanded {
-  min-width: 300px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .book-summary {
+  margin-bottom: 10px;
   font-size: 14px;
+  color: #555;
+}
+.book-summary .available{
+  color: #218838;
+}
+
+.book-summary .notavailable{
+  color: #ff6f61;
 }
 
 .book-details {
   margin-top: 10px;
-  font-size: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
 }
 
-.book-details button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  background-color: #33cc33; /* Green background */
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
 
-.book-details button:hover {
-  background-color: #28a428; /* Darker green */
-}
-
+/* Offers and Ads */
 .offers, .ads {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 5px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-@media screen and (max-width: 768px) {
+.offers p, .ads p {
+  margin: 0;
+  padding: 5px 0;
+  font-size: 16px;
+  color: #444;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .home {
+    padding: 10px;
+  }
+
+  .book-details .notavailable{
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+
+  .dashboard {
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
   .dashboard-item {
-    margin-left: 0;
+    margin: 0;
+    width: 80%;
+    padding: 10px;
   }
+
+  .book-details .notavailable{
+    background-color: #6c757d;
+  }
+
+  .section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .book-card {
+    width: 20%;
+    margin-bottom: 15px;
+  }
+
+  .offers, .ads {
+    padding: 10px;
+  }
+
+  .offers p, .ads p {
+    font-size: 14px;
+  }
+}
+
+/* Very Small Devices */
+@media (max-width: 480px) {
+
+  .book-details .notavailable{
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  .profile-pic {
+    width: 7rem;
+    height: 7rem;
+    border: 2px solid #ccc;
+  }
+  .profile-img{
+    width: 7rem;
+    height: 7rem;
+
+  }
+
+
+  .profile-completion-overlay {
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .completion-bar {
+    height: 6px;
+  }
+
   .dashboard-item .label {
-    display: block;
-    font-size: 0.9em;
+    font-size: 14px;
   }
+
   .dashboard-item .value {
-    display: block;
-    font-size: 0.9em;
-    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .section h2 {
+    font-size: 22px;
+  }
+
+  .book-summary, .book-details {
+    font-size: 14px;
+  }
+
+  
+
+  .offers p, .ads p {
+    font-size: 16px;
   }
 }

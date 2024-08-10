@@ -17,69 +17,80 @@ body {
   .search-area {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 20px;
-    flex-wrap: wrap;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 100%;
+    max-width: 100%;
+    background-color: #fff;
+    position: relative;
   }
   
   .search-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
     position: relative;
-    width: 40px; /* Initial width to only show the icon */
-    cursor: pointer;
-    transition: width 0.3s ease;
-    flex-grow: 1;
-  }
-  
-  .search-container.active {
-    width: 60%; /* Expand to show the search bar */
-  }
-  
-  .search-bar {
-    width: 60%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    outline: none;
-    padding-right: 40px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
-  }
-  
-  .search-bar.visible {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.3s ease;
   }
   
   .search-icon {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    color: #999;
+    margin-right: 8px;
+    color: #ccc;
   }
   
-  .search-icon.hidden {
-    opacity: 0;
-    visibility: hidden;
+  .search-bar {
+    border: none;
+    outline: none;
+    width: 90%;
+    font-size: 14px;
+  }
+  
+  .filter-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 10%;
+  }
+  .filter-container.active {
+    width: 60%;
+  }
+  .filter-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #555;
+    font-size: 16px; /* Ensure the icon is visible */
+    padding: 0 5px;
   }
   
   .filter-dropdown {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 200px;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    z-index: 10;
+    overflow-y: auto;
+    max-height: 200px;
   }
-   @media (max-width: 768px) {
-    .filter-dropdown{
-      width: 100%;
-      margin-top: 10px;
-    }
-    .search-container.active{
-      width: 100%;
-    }
-   }
+  
+  .filter-dropdown.active {
+    display: block;
+  }
+  
+  .filter-option {
+    padding: 8px;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  .filter-option:hover {
+    background-color: #f1f1f1;
+  }
+  
   
   /* Recommendation Area */
   .recommendation-section {
@@ -206,7 +217,7 @@ body {
     margin: 5px 0;
   }
   
-  .book-card .add-to-cart-btn {
+  .book-card .add-to-cart-button {
     padding: 5px 10px;
     background-color: #33cc33;
     color: white;
@@ -215,8 +226,37 @@ body {
     cursor: pointer;
   }
   
+  .out-of-stock-button{
+    padding: 5px 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: not-allowed;
+  }
   .book-card .add-to-cart-btn:hover {
     background-color: #28a428;
+  }
+
+  .add-to-cart-button.clicked {
+    background-color: #218838;
+    animation: buttonClicked 0.5s;
+  }
+  
+  .out-of-stock-button {
+    background-color: #6c757d;
+  
+  }
+  
+  @keyframes buttonClicked {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
   
   /* Error/Success Messages */

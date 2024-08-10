@@ -1,53 +1,54 @@
 .footer {
-  background-color: #ffffff;
-  padding: 10px;
+  background-color: #333;
+  padding: 1em 0;
   position: fixed;
   bottom: 0;
   width: 100%;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
-.footer nav ul {
+.nav-list {
   display: flex;
   justify-content: space-around;
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
-.footer nav li {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.nav-item {
+  text-align: center;
 }
 
-.footer .nav-link {
+.nav-link {
+  color: #ccc;
   text-decoration: none;
-  color: #333;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 0.9em;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
-  transition: color 0.3s, box-shadow 0.3s;
+  transition: color 0.3s ease;
 }
 
-.footer .nav-link svg {
-  fill: #333;
-  margin-bottom: 5px;
+.nav-link svg {
+  margin-bottom: 0.25em;
+  transition: transform 0.3s ease;
 }
 
-.footer .nav-link span {
-  font-size: 12px;
+.nav-link:hover {
+  color: #fff;
 }
 
-.footer .nav-link.active {
-  color: green;
+.nav-link:hover svg {
+  transform: scale(1.2);
 }
 
-.footer .nav-link.active svg {
-  fill: green;
+.active {
+  color: #4CAF50;
 }
 
-.footer .nav-link.active {
-  box-shadow: 0 0 5px green;
+.active svg {
+  transform: scale(1.2);
+  color: #4CAF50;
 }

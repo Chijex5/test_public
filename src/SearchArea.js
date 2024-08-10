@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaChevronDown } from 'react-icons/fa';
 import './Books.css';
 
 const departments = [
@@ -117,8 +117,11 @@ const departments = [
   "Zoology",
 ].sort();
 
-const SearchArea = () => {
+const SearchArea = ({ onSearch }) => {
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [isDropdownActive, setIsDropdownActive] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleFocus = () => {
     setIsSearchActive(true);
@@ -126,6 +129,21 @@ const SearchArea = () => {
 
   const handleBlur = () => {
     setIsSearchActive(false);
+  };
+
+  const handleDropdownToggle = () => {
+    setIsDropdownActive(!isDropdownActive);
+  };
+
+  const handleDepartmentSelect = (department) => {
+    setSelectedDepartment(department);
+    setIsDropdownActive(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    onSearch(query);
   };
 
   return (
@@ -140,17 +158,27 @@ const SearchArea = () => {
           type="text"
           className={`search-bar ${isSearchActive ? 'visible' : ''}`}
           placeholder="Search books..."
+          value={searchQuery}
+          onChange={handleSearchChange}
           onBlur={handleBlur}
         />
       </div>
-      <select className="filter-dropdown">
-        <option value="" disabled>Select Department</option>
-        {departments.map(department => (
-          <option key={department} value={department}>
-            {department}
-          </option>
-        ))}
-      </select>
+      <div className={`filter-container ${isDropdownActive ? 'active' : ''}`}>
+        <div className="filter-label" onClick={handleDropdownToggle}>
+          <FaChevronDown />
+        </div>
+        <div className={`filter-dropdown ${isDropdownActive ? 'active' : ''}`}>
+          {departments.map(department => (
+            <div
+              key={department}
+              className="filter-option"
+              onClick={() => handleDepartmentSelect(department)}
+            >
+              {department}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
