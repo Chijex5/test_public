@@ -275,6 +275,17 @@ body {
   .offers p, .ads p {
     font-size: 14px;
   }
+
+  .profile-pic {
+    width: 8rem;
+    height: 8rem;
+    border: 2px solid #ccc;
+  }
+  .profile-img{
+    width: 7rem;
+    height: 7rem;
+
+  }
 }
 
 /* Very Small Devices */

@@ -1,12 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUser } from './UserContext'; // Import the context
 import './Home.css';
 import { Link } from 'react-router-dom';
 import profilePic from './33.jpg';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
+import Joyride from 'react-joyride';
 
 const Home = ({ cartItems, setCartItems }) =>  {
+
+  const [tour, setTour] = useState({
+    run: false,
+    steps: [
+
+      {
+        target: '.hello',  // CSS selector for the target element
+        content: 'This is your Dashbord. You get to see your activities here.',
+      },
+      {
+        target: '.profile-link',  // CSS selector for the target element
+        content: 'This is your profile. Click here to view more details.',
+      },
+      {
+        target: '.book-card',  // Example of another target
+        content: 'Click on this and watch it expand. Unavailable actually means the book is not in stock',
+      },
+      {
+        target: '.sales-offers',  // Example of another target
+        content: 'Remember to checkout here. Once in a while we give the bes offer',
+      },
+      {
+        target: '.advertisements',  // Example of another target
+        content: 'Hey everyone hates advatisments. but there sometimes that you will love advertisments',
+      },
+    ],
+
+    
+  });
   const { userData, loading } = useUser();
   const [expandedBook, setExpandedBook] = useState(null);
 
@@ -36,6 +66,18 @@ const Home = ({ cartItems, setCartItems }) =>  {
     { code: 'COS101', id: 19, name: 'Introduction to Computer Sciences', department: 'Computer Sciences', price: 2500, available: true, level: "100" },
     { code: 'PHY121', id: 20, name: 'Physics for Engineering', department: 'Engineering', price: 2500, available: true, level: "100" }
   ];
+
+  const handleTourFinish = () => {
+    localStorage.setItem('hasCompletedTour', 'true');
+    setTour((prevTour) => ({ ...prevTour, run: false }));
+  };
+
+  useEffect(() => {
+    const hasCompletedTour = localStorage.getItem('hasCompletedTour');
+    if (!hasCompletedTour) {
+      setTour((prevTour) => ({ ...prevTour, run: true }));
+    }
+  }, []);
 
   const toggleExpand = (id) => {
     setExpandedBook(expandedBook === id ? null : id);
@@ -80,129 +122,150 @@ const Home = ({ cartItems, setCartItems }) =>  {
   if (loading) return <p>Fetching Data .... </p>;
 
   return (
+    
     <div className="home">
-      <div className="profile-section">
-        <Link to="/home/profile" className="profile-link" data-tooltip-id="profile-tooltip">
-          <div className="profile-pic">
-            <img src={userData?.profileUrl || profilePic} alt="Profile" className="profile-img" />
-            {completionPercentage < 100 && (
-              <div className="profile-completion-overlay">
-                <div className="completion-bar" style={{ width: `${completionPercentage}%` }}></div>
-                <span className="completion-text">{Math.floor(completionPercentage)}% Complete</span>
-              </div>
-            )}
+      <div className="homeie">
+      <Joyride
+        steps={tour.steps}
+        run={tour.run}
+        continuous={true}
+        scrollToFirstStep={true}
+        showProgress={true}
+        showSkipButton={true}
+        callback={(data) => {
+          const { status } = data;
+          if (status === 'finished' || status === 'skipped') {
+            handleTourFinish();
+          }
+        }}
+        styles={{
+          options: {
+            primaryColor: '#28a745',
+          },
+        }}
+      />
+        <div className="profile-section">
+          <Link to="/home/profile" className="profile-link" data-tooltip-id="profile-tooltip">
+            <div className="profile-pic">
+              <img src={userData?.profileUrl || profilePic} alt="Profile" className="profile-img" />
+              {completionPercentage < 100 && (
+                <div className="profile-completion-overlay">
+                  <div className="completion-bar" style={{ width: `${completionPercentage}%` }}></div>
+                  <span className="completion-text">{Math.floor(completionPercentage)}% Complete</span>
+                </div>
+              )}
+            </div>
+          </Link>
+          <Tooltip id="profile-tooltip" content="View Profile" place="top" />
+        </div>
+        <h1 className='hello'>Hello, {userData?.username?.split(' ')[0] || 'User'}!</h1>
+        <div className="dashboard">
+          <div className="dashboard-item">
+            <span className="label">Books Bought</span>
+            <span className="value">10</span>
           </div>
-        </Link>
-        <Tooltip id="profile-tooltip" content="View Profile" place="top" />
-      </div>
-      <h1>Hello, {userData?.username?.split(' ')[0] || 'User'}!</h1>
-      <div className="dashboard">
-        <div className="dashboard-item">
-          <span className="label">Books Bought</span>
-          <span className="value">10</span>
+          <div className="dashboard-item">
+            <span className="label">Money Spent</span>
+            <span className="value">₦20,000.00</span>
+          </div>
+          <div className="dashboard-item">
+            <span className="label">Books in Cart</span>
+            <span className="value">{cartItems.length}</span>
+          </div>
         </div>
-        <div className="dashboard-item">
-          <span className="label">Money Spent</span>
-          <span className="value">₦20,000.00</span>
-        </div>
-        <div className="dashboard-item">
-          <span className="label">Books in Cart</span>
-          <span className="value">{cartItems.length}</span>
-        </div>
-      </div>
-      <div className="section recent-books">
-        <h2>Recent Books</h2>
-        <div className="book-cards">
-          {books.map((book) => (
-            <div
-              key={book.id}
-              className={`book-card ${expandedBook === book.id ? 'expanded' : ''}`}
-              onClick={() => toggleExpand(book.id)}
-            >
-              <div className="book-summary" data-tooltip-id="recent-book-tooltip">
-                <p>Course Code: {book.code}</p>
-                <p className={book.available ? "available" : "notavailable"}>{book.available ? "Available" : "Unavailable"}</p>
-                <p>Price: ₦{book.price}</p>
-              </div>
-              <Tooltip id="recent-book-tooltip" content={`${expandedBook === book.id ? 'Expanded' : 'Click to Expand'}`} place="top" />
-              {expandedBook === book.id && (
-                <div className="book-details">
-                  <p>Title: {book.name}</p>
-                  <p>Department: {book.department}</p>
-                  <button
-                    onClick={(event) => {
-                      event.stopPropagation(); 
-                      handleAddToCart(book);
-                    }} 
-                    disabled={!book.available}
-                    className={
-                      clicked
-                        ? "add-to-cart-button clicked"
-                        : book.available
-                        ? "add-to-cart-button"
-                        : "out-of-stock-button"
-                    }
-                  >
-                    {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
-                  </button>
+        <div className="section recent-books">
+          <h2>Recent Books</h2>
+          <div className="book-cards">
+            {books.map((book) => (
+              <div
+                key={book.id}
+                className={`book-card ${expandedBook === book.id ? 'expanded' : ''}`}
+                onClick={() => toggleExpand(book.id)}
+              >
+                <div className="book-summary" >
+                  <p>Course Code: {book.code}</p>
+                  <p className={book.available ? "available" : "notavailable"}>{book.available ? "Available" : "Unavailable"}</p>
+                  <p>Price: ₦{book.price}</p>
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="section highest-sellers">
-        <h2>Highest Sellers This Week</h2>
-        <div className="book-cards">
-          {bookse.map((book) => (
-            <div
-              key={book.id}
-              className={`book-card ${expandedBook === book.id ? 'expanded' : ''}`}
-              onClick={() => toggleExpand(book.id)}
-            >
-              <div className="book-summary">
-                <p>Course Code: {book.code}</p>
-                <p className={book.available ? "available" : "notavailable"}>{book.available ? "Available" : "Unavailable"}</p>
-                <p>Price: ₦{book.price}</p>
+                {expandedBook === book.id && (
+                  <div className="book-details">
+                    <p>Title: {book.name}</p>
+                    <p>Department: {book.department}</p>
+                    <button
+                      onClick={(event) => {
+                        event.stopPropagation(); 
+                        handleAddToCart(book);
+                      }} 
+                      disabled={!book.available}
+                      className={
+                        clicked
+                          ? "add-to-cart-button clicked"
+                          : book.available
+                          ? "add-to-cart-button"
+                          : "out-of-stock-button"
+                      }
+                    >
+                      {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
+                    </button>
+                  </div>
+                )}
               </div>
-              {expandedBook === book.id && (
-                <div className="book-details">
-                  <p>Title: {book.name}</p>
-                  <p>Department: {book.department}</p>
-                  <button
-                    onClick={(event) => {
-                      event.stopPropagation(); 
-                      handleAddToCart(book);
-                    }} 
-                    disabled={!book.available}
-                    className={
-                      clicked
-                        ? "add-to-cart-button clicked"
-                        : book.available
-                        ? "add-to-cart-button"
-                        : "out-of-stock-button"
-                    }
-                  >
-                    {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
-                  </button>
+            ))}
+          </div>
+        </div>
+        <div className="section highest-sellers">
+          <h2>Highest Sellers This Week</h2>
+          <div className="book-cards">
+            {bookse.map((book) => (
+              <div
+                key={book.id}
+                className={`book-card ${expandedBook === book.id ? 'expanded' : ''}`}
+                onClick={() => toggleExpand(book.id)}
+              >
+                <div className="book-summary">
+                  <p>Course Code: {book.code}</p>
+                  <p className={book.available ? "available" : "notavailable"}>{book.available ? "Available" : "Unavailable"}</p>
+                  <p>Price: ₦{book.price}</p>
                 </div>
-              )}
-            </div>
-          ))}
+                {expandedBook === book.id && (
+                  <div className="book-details">
+                    <p>Title: {book.name}</p>
+                    <p>Department: {book.department}</p>
+                    <button
+                      onClick={(event) => {
+                        event.stopPropagation(); 
+                        handleAddToCart(book);
+                      }} 
+                      disabled={!book.available}
+                      className={
+                        clicked
+                          ? "add-to-cart-button clicked"
+                          : book.available
+                          ? "add-to-cart-button"
+                          : "out-of-stock-button"
+                      }
+                    >
+                      {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="section sales-offers">
-        <h2>Sales and Offers</h2>
-        <div className="offers">
-          <p>Sale 1</p>
-          <p>Sale 2</p>
+        <div className="section sales-offers">
+          <h2>Sales and Offers</h2>
+          <div className="offers">
+            <p>Sale 1</p>
+            <p>Sale 2</p>
+          </div>
         </div>
-      </div>
-      <div className="section advertisements">
-        <h2>Advertisements</h2>
-        <div className="ads">
-          <p>Ad 1</p>
-          <p>Ad 2</p>
+        <div className="section advertisements">
+          <h2>Advertisements</h2>
+          <div className="ads">
+            <p>Ad 1</p>
+            <p>Ad 2</p>
+          </div>
         </div>
       </div>
     </div>
