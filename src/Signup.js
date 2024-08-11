@@ -35,7 +35,7 @@ const Signup = () => {
 
     try {
       await signInWithPopup(auth, provider);
-      navigate('/'); // Redirect to home page on success
+      navigate('/home'); // Redirect to home page on success
     } catch (err) {
       setError(err.message);
       console.error('Google Authentication Error:', err);

@@ -76,7 +76,7 @@ const Login = () => {
       const user = result.user;
       saveUserDataToLocalStorage(user);
       await sendUserDataToBackend(user);
-      navigate('/'); // Redirect to home page on success
+      navigate('/login'); // Redirect to home page on success
     } catch (err) {
       setError(err.message);
       console.error('Google Authentication Error:', err);
