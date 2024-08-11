@@ -326,6 +326,10 @@ body {
   .btn-shop-now {
     padding: 0.65rem 1.25rem;
   }
+  .profile-completion-overlay .completion-text {
+    opacity: 1;
+  }
+
 }
 
 /* Styles for screens with max-width of 480px */
@@ -354,6 +358,10 @@ body {
   .btn-shop-now {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
+  }
+
+  .profile-completion-overlay .completion-text {
+    opacity: 1;
   }
 }
 
