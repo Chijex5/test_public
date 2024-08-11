@@ -77,7 +77,7 @@ const Signup = () => {
         <button onClick={handleGoogleAuth} className="google-sign-in-button">
           Continue with Google
         </button>
-        <a href="/login" className="auth-link">
+        <a href="#/login" className="auth-link">
           Already have an account? Log In
         </a>
       </div>

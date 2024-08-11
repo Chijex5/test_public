@@ -1,24 +1,30 @@
+// UserContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [userData, setUserData] = useState({}); // Set default value as an empty object
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserDataFromLocalStorage = () => {
-      const user = JSON.parse(localStorage.getItem('user'));
-
-      if (user) {
-        setUserData(user);
+    const fetchUserDataFromLocalStorage = async () => {
+      try {
+        const user = await JSON.parse(localStorage.getItem('user'));
+  
+        if (user) {
+          setUserData(user);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
-
+  
     fetchUserDataFromLocalStorage();
   }, []);
+  
 
   const updateUserData = (newData) => {
     setUserData(newData);

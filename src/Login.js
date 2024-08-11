@@ -121,7 +121,7 @@ const Login = () => {
           </svg>
           <p>Log In with Google</p>
         </button>
-        <a href="/signup" className="auth-link">
+        <a href="#/signup" className="auth-link">
           Don't have an account? Sign Up
         </a>
       </div>
