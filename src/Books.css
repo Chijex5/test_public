@@ -1,272 +1,401 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: white;
-    color: #333;
+  font-family: Arial, sans-serif;
+  background-color: white;
+  color: #333;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  align-items: center;
+  justify-items: center;
+  margin-bottom: 120px;
+}
+
+/* Search Area */
+.search-area {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 100%;
+  max-width: 100%;
+  background-color: #fff;
+  position: relative;
+}
+
+.search-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.search-icon {
+  margin-right: 8px;
+  color: #ccc;
+}
+
+.search-bar {
+  border: none;
+  outline: none;
+  width: 90%;
+  font-size: 14px;
+}
+
+.filter-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 10%;
+}
+.filter-container.active {
+  width: 60%;
+}
+.filter-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #555;
+  font-size: 16px;
+  padding: 0 5px;
+}
+
+.filter-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  z-index: 10;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.filter-dropdown.active {
+  display: block;
+}
+
+.filter-option {
+  padding: 8px;
+  cursor: pointer;
+  color: #555;
+}
+
+.filter-option:hover {
+  background-color: #f1f1f1;
+}
+
+/* Recommendation Area */
+.recommendation-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #33cc33;
+}
+
+.books-list {
+  display: flex;
+  overflow-x: scroll;
+  gap: 20px;
+}
+
+.books-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Sell a Book Section */
+.sell-book-section {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2em;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 50px;
+}
+
+.section-title {
+  text-align: center;
+  color: #333;
+  font-family: 'Ubuntu', sans-serif;
+  margin-bottom: 1.5em;
+}
+
+.name-code {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 1.5em;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75em 1em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-family: 'Ubuntu', sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+.dept {
+  margin-bottom: 1.5em;
+} 
+.desc {
+  height: 100px;
+  margin-bottom: 1.5em;
+  resize: none;
+}
+.price {
+  margin-bottom: 0.5em;
+}
+
+.warning-message {
+  color: #ff6f61;
+  font-size: 0.875em;
+  margin-bottom: 1em;
+}
+
+.earnings {
+  font-size: 1.125em;
+  margin-bottom: 1.5em;
+}
+
+.earnings span {
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75em;
+  background-color: #4CAF50;
+  color: white;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+}
+
+/* Book Cards */
+.book-card {
+  min-width: 200px;
+  margin-right: 10px;
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid #33cc33;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.book-card h3 {
+  color: #33cc33;
+}
+
+.book-card p {
+  margin: 5px 0;
+}
+
+.book-card .add-to-cart-button {
+  padding: 5px 10px;
+  background-color: #33cc33;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.out-of-stock-button {
+  padding: 5px 10px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: not-allowed;
+}
+
+.book-card .add-to-cart-btn:hover {
+  background-color: #28a428;
+}
+
+.add-to-cart-button.clicked {
+  background-color: #218838;
+  animation: buttonClicked 0.5s;
+}
+
+.out-of-stock-button {
+  background-color: #6c757d;
+}
+
+@keyframes buttonClicked {
+  0% {
+      transform: scale(1);
   }
-  
+  50% {
+      transform: scale(1.1);
+  }
+  100% {
+      transform: scale(1);
+  }
+}
+
+/* Error/Success Messages */
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+  margin-top: 10px;
+}
+
+/* Responsive Styles */
+
+/* For screens with max-width of 720px */
+@media (max-width: 720px) {
   .container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    align-items: center;
-    justify-items: center;
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 80px;
   }
-  
-  /* Search Area */
-  .search-area {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px;
-    width: 100%;
-    max-width: 100%;
-    background-color: #fff;
-    position: relative;
-  }
-  
-  .search-container {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
-  
-  .search-icon {
-    margin-right: 8px;
-    color: #ccc;
-  }
-  
+
   .search-bar {
-    border: none;
-    outline: none;
-    width: 90%;
-    font-size: 14px;
+      font-size: 12px;
   }
-  
-  .filter-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 10%;
-  }
-  .filter-container.active {
-    width: 60%;
-  }
-  .filter-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    color: #555;
-    font-size: 16px; /* Ensure the icon is visible */
-    padding: 0 5px;
-  }
-  
-  .filter-dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #fff;
-    z-index: 10;
-    overflow-y: auto;
-    max-height: 200px;
-  }
-  
-  .filter-dropdown.active {
-    display: block;
-  }
-  
-  .filter-option {
-    padding: 8px;
-    cursor: pointer;
-    color: #555;
-  }
-  
-  .filter-option:hover {
-    background-color: #f1f1f1;
-  }
-  
-  
-  /* Recommendation Area */
-  .recommendation-section {
-    margin-bottom: 40px;
-  }
-  
+
   .section-title {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: #33cc33;
+      font-size: 1.2em;
   }
-  
-  .books-list {
-    display: flex;
-    overflow-x: scroll;
-    gap: 20px;
-  }
-  
-  .books-list::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Sell a Book Section */
+
   .sell-book-section {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 2em;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 50px;
+      padding: 1.5em;
   }
-  
-  .section-title {
-    text-align: center;
-    color: #333;
-    font-family: 'Ubuntu', sans-serif;
-    margin-bottom: 1.5em;
-  }
-  
+
   .name-code {
-    display: flex;
-    gap: 1em;
-    margin-bottom: 1.5em;
+      flex-direction: column;
   }
-  
+
   .input-field {
-    width: 100%;
-    padding: 0.75em 1em;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-family: 'Ubuntu', sans-serif;
-    transition: border-color 0.3s ease;
+      font-size: 14px;
   }
-  
-  .input-field:focus {
-    border-color: #4CAF50;
-    outline: none;
+
+  .books-list {
+      gap: 15px;
   }
-  
-  .dept {
-    margin-bottom: 1.5em;
-  } 
-  .desc{
-    height: 100px;
-    margin-bottom: 1.5em;
-    resize: none;
+
+  .book-card {
+      min-width: 150px;
+      margin-right: 5px;
   }
-  .price{
-    margin-bottom: 0.5em;
+
+  .book-card h3 {
+      font-size: 1.2em;
   }
-  
-  .warning-message {
-    color: #ff6f61;
-    font-size: 0.875em;
-    margin-bottom: 1em;
+
+  .book-card p {
+      font-size: 0.9em;
+  }
+
+  .add-to-cart-button {
+      padding: 5px;
+      font-size: 0.9em;
   }
 
   .earnings {
-    font-size: 1.125em;
-    margin-bottom: 1.5em;
-  }
-
-  .earnings span {
-    font-weight: bold;
-    color: #4CAF50;
+      font-size: 1em;
   }
 
   .submit-button {
-    width: 100%;
-    padding: 0.75em;
-    background-color: #4CAF50;
-    color: white;
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+      padding: 0.5em;
+      font-size: 0.9em;
+  }
+}
+
+/* For screens with max-width of 480px */
+@media (max-width: 480px) {
+  .container {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 80px;
   }
 
-  .submit-button:hover{
-    background-color: #45a049;
+  .search-area {
+      flex-direction: column;
+      align-items: stretch;
   }
-  
-  /* Book Cards */
+
+  .search-bar {
+      font-size: 10px;
+      width: 100%;
+  }
+
+  .section-title {
+      font-size: 1em;
+  }
+
+  .sell-book-section {
+      padding: 1em;
+  }
+
+  .name-code {
+      flex-direction: column;
+      gap: 0.5em;
+  }
+
+  .input-field {
+      font-size: 12px;
+      padding: 0.5em;
+  }
+
+  .books-list {
+      gap: 10px;
+  }
+
   .book-card {
-    min-width: 200px;
-    margin-right: 10px;
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: 2px solid #33cc33;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-  }
-  
-  .book-card h3 {
-    color: #33cc33;
-  }
-  
-  .book-card p {
-    margin: 5px 0;
-  }
-  
-  .book-card .add-to-cart-button {
-    padding: 5px 10px;
-    background-color: #33cc33;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .out-of-stock-button{
-    padding: 5px 10px;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: not-allowed;
-  }
-  .book-card .add-to-cart-btn:hover {
-    background-color: #28a428;
+      min-width: 120px;
+      margin-right: 5px;
   }
 
-  .add-to-cart-button.clicked {
-    background-color: #218838;
-    animation: buttonClicked 0.5s;
+  .book-card h3 {
+      font-size: 1em;
   }
-  
-  .out-of-stock-button {
-    background-color: #6c757d;
-  
+
+  .book-card p {
+      font-size: 0.8em;
   }
-  
-  @keyframes buttonClicked {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
+
+  .add-to-cart-button {
+      padding: 3px;
+      font-size: 0.8em;
   }
-  
-  /* Error/Success Messages */
-  .error-message {
-    color: red;
-    margin-top: 10px;
+
+  .earnings {
+      font-size: 0.9em;
   }
-  
-  .success-message {
-    color: green;
-    margin-top: 10px;
+
+  .submit-button {
+      padding: 0.5em;
+      font-size: 0.8em;
   }
-  
+}

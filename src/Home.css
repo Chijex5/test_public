@@ -12,6 +12,7 @@ body {
   padding: 20px;
   max-width: 1200px;
   margin: auto;
+  margin-bottom: 80px;
 }
 
 /* Profile Section */
@@ -228,6 +229,134 @@ body {
   font-size: 16px;
   color: #444;
 }
+
+.section.advertisements {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.ads-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.ads-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.ad {
+  width: 45%;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ad:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.ad-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ad-title {
+  font-size: 1.5rem;
+  color: #33cc33; /* Primary Color */
+  margin-bottom: 1rem;
+}
+
+.ad-text {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.btn-shop-now {
+  background-color: #33cc33; /* Primary Color */
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-shop-now:hover {
+  background-color: #28a428; /* Darker shade of primary color */
+}
+
+/* Styles for screens with max-width of 720px */
+@media screen and (max-width: 720px) {
+  .ads-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ad {
+    width: 80%;
+  }
+
+  .ads-title {
+    font-size: 1.6rem;
+  }
+
+  .ad-title {
+    font-size: 1.4rem;
+  }
+
+  .ad-text {
+    font-size: 0.9rem;
+  }
+
+  .btn-shop-now {
+    padding: 0.65rem 1.25rem;
+  }
+}
+
+/* Styles for screens with max-width of 480px */
+@media screen and (max-width: 480px) {
+  .ads-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ad {
+    width: 90%;
+  }
+
+  .ads-title {
+    font-size: 1.4rem;
+  }
+
+  .ad-title {
+    font-size: 1.2rem;
+  }
+
+  .ad-text {
+    font-size: 0.85rem;
+  }
+
+  .btn-shop-now {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
 
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {

@@ -6,6 +6,7 @@ import profilePic from './33.jpg';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import Joyride from 'react-joyride';
+import OffersCarousel from './OffersCarousel'
 
 const Home = ({ cartItems, setCartItems }) =>  {
 
@@ -23,15 +24,15 @@ const Home = ({ cartItems, setCartItems }) =>  {
       },
       {
         target: '.book-card',  // Example of another target
-        content: 'Click on this and watch it expand. Unavailable actually means the book is not in stock',
+        content: "Click to expand. 'Unavailable' simply means the book is currently out of stock.",
       },
       {
         target: '.sales-offers',  // Example of another target
-        content: 'Remember to checkout here. Once in a while we give the bes offer',
+        content: "Don't forget to check back here—every now and then, we roll out unbeatable offers you won't want to miss!",
       },
       {
         target: '.advertisements',  // Example of another target
-        content: 'Hey everyone hates advatisments. but there sometimes that you will love advertisments',
+        content: "Hey, we know ads can be a drag, but we promise our offers are worth your attention. Keep an eye out—you might just find something you love!",
       },
     ],
 
@@ -90,7 +91,6 @@ const Home = ({ cartItems, setCartItems }) =>  {
     
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.name === book.name);
-      console.log(book)
       if (existingItem) {
         // If the book is already in the cart, increase the quantity
         return prevItems.map((item) =>
@@ -255,21 +255,37 @@ const Home = ({ cartItems, setCartItems }) =>  {
         </div>
         <div className="section sales-offers">
           <h2>Sales and Offers</h2>
-          <div className="offers">
-            <p>Sale 1</p>
-            <p>Sale 2</p>
-          </div>
+          <OffersCarousel />
         </div>
+              
+
         <div className="section advertisements">
-          <h2>Advertisements</h2>
-          <div className="ads">
-            <p>Ad 1</p>
-            <p>Ad 2</p>
+          <h2 className="ads-title">Advertisements</h2>
+          <div className="ads-container">
+            
+            {/* Pop-Up Banner */}
+            <div className="ad pop-up-banner">
+              <div className="ad-content">
+                <h3 className="ad-title">New Arrivals Just In!</h3>
+                <p className="ad-text">Explore the latest additions to our collection.</p>
+                <button className="btn-shop-now">Shop Now</button>
+              </div>
+            </div>
+
+            {/* Sidebar Ad */}
+            <div className="ad sidebar-ad">
+              <div className="ad-content">
+                <h3 className="ad-title">Back-to-School Discounts</h3>
+                <p className="ad-text">Save up to 30% on textbooks and materials for the new school year.</p>
+                <button className="btn-shop-now">Shop Now</button>
+              </div>
+            </div>
+            
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+      </div>
+    );
+    }
 
 export default Home;
