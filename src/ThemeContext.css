@@ -1,0 +1,23 @@
+body.light {
+  background-color: white;
+  color: black;
+}
+
+body.dark {
+  background-color: black;
+  color: white;
+}
+
+/* Ensure all components adhere to the theme */
+.profile-section,
+.dashboard,
+.book-card {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark .profile-section,
+body.dark .dashboard,
+body.dark .book-card {
+  background-color: #333;
+  color: white;
+}

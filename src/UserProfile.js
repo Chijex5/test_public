@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from './UserContext';
 import './UserProfile.css';
+import profilePic from './33.jpg'
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from './firebase';
@@ -54,7 +55,7 @@ function UserProfile() {
   return (
     <div className="user-profile">
       <h1>User Profile</h1>
-      <img src={form.profileUrl} alt="Profile" className="profile-img" />
+      <img src={form?.profileUrl || profilePic} alt="Profile" className="profile-img" />
       {isEditing ? (
         <div className="form">
           <label>

@@ -45,6 +45,23 @@ const Footer = ({ activeNav, setActiveNav }) => {
           </li>
           <li className="nav-item">
             <Link
+              to="/wishlist"
+              className={`nav-link ${activeNav === 'wishlist' ? 'active' : ''}`}
+              onClick={() => setActiveNav('wishlist')}
+            >
+             <svg xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 24 24"
+              width="24"
+              height="24" 
+              fill="currentColor">
+                <path d="M11 4H21V6H11V4ZM11 8H17V10H11V8ZM11 14H21V16H11V14ZM11 18H17V20H11V18ZM3 4H9V10H3V4ZM5 6V8H7V6H5ZM3 14H9V20H3V14ZM5 16V18H7V16H5Z"></path>
+              </svg>
+              <span>Wishlist</span>
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link
               to="/cart"
               className={`nav-link ${activeNav === 'cart' ? 'active' : ''}`}
               onClick={() => setActiveNav('cart')}

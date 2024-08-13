@@ -7,13 +7,15 @@ import Footer from './Footer';
 import Cart from './Cart';
 import Home from './Home';
 import Books from './Book';
-import About from './About';
 import Login from './Login';
 import Signup from './Signup';
 import { auth } from './firebase';
 import Loaders from './Loaders';
 import UserProfile from './UserProfile';
+import Wishlist from './Wishlist';
 import { UserProvider } from './UserContext';
+import { ThemeProvider, useTheme } from './ThemeContext';
+import ErrorBoundary from './ErrorBoundary';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,24 +39,28 @@ const App = () => {
 
   return (
     <Router>
-      <UserProvider>
-        <div className="App">
-          <ConditionalHeaderFooter activeNav={activeNav} setActiveNav={setActiveNav} />
-          <main>
-            <Routes>
-            <Route path="/" element={ <Navigate to="/home" /> } />
-              <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login />} />
-              <Route path="/signup" element={isAuthenticated ? <Navigate to="/home" /> : <Signup />} />
-              <Route path="/home/profile" element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} />
-              <Route path="/home" element={isAuthenticated ? <Home cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
-              <Route path="/book" element={isAuthenticated ? <Books cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
-              <Route path="/cart" element={isAuthenticated ? <Cart cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
-              <Route path="/about" element={isAuthenticated ? <About /> : <Navigate to="/login" />} />
-              <Route path="*" element={<Navigate to="/home" />} />
-            </Routes>
-          </main>
-        </div>
-      </UserProvider>
+      <ThemeProvider>
+        <UserProvider>
+        <ErrorBoundary>
+          <div className="App">
+            <ConditionalHeaderFooter activeNav={activeNav} setActiveNav={setActiveNav} />
+            <main>
+              <Routes>
+              <Route path="/" element={ <Navigate to="/home" /> } />
+                <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login />} />
+                <Route path="/signup" element={isAuthenticated ? <Navigate to="/home" /> : <Signup />} />
+                <Route path="/home/profile" element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} />
+                <Route path="/home" element={isAuthenticated ? <Home cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
+                <Route path="/wishlist" element={isAuthenticated ? <Wishlist cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
+                <Route path="/book" element={isAuthenticated ? <Books cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
+                <Route path="/cart" element={isAuthenticated ? <Cart cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
+                <Route path="*" element={<Navigate to="/home" />} />
+              </Routes>
+            </main>
+          </div>
+          </ErrorBoundary>
+        </UserProvider>
+      </ThemeProvider>
     </Router>
   );
 };

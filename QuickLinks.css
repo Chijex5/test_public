@@ -1,0 +1,23 @@
+.quick-links {
+  padding: 20px;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.link-item {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link-item:hover {
+  background-color: #0056b3;
+}

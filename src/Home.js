@@ -1,14 +1,46 @@
+// Home.js
 import React, { useState, useEffect } from 'react';
-import { useUser } from './UserContext'; // Import the context
+import { useUser } from './UserContext';
 import './Home.css';
 import { Link } from 'react-router-dom';
 import profilePic from './33.jpg';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import Joyride from 'react-joyride';
-import OffersCarousel from './OffersCarousel'
+import OffersCarousel from './OffersCarousel';
+import Notification from './Notifications';
 
-const Home = ({ cartItems, setCartItems }) =>  {
+const Home = ({ cartItems, setCartItems }) => {
+  const { userData, loading } = useUser();
+  const [expandedBook, setExpandedBook] = useState(null);
+  const [notification, setNotification] = useState({ message: '', type: '' });
+  const [wishlistItems, setWishlistItems] = useState([]);
+
+
+  const handleAddToWishlist = (book) => {
+    const existingItem = wishlistItems.find((item) => item.code === book.code);
+    if (!existingItem) {
+      const updatedWishlist = [...wishlistItems, book];
+      setWishlistItems(updatedWishlist);
+      localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+      setNotification({ message: `${book.code} added to wishlist!`, type: 'success' });
+    } else {
+      setNotification({ message: `${book.code} is already in your wishlist!`, type: 'info' });
+    }
+    setClicke(true)
+    setTimeout(() => {
+      setClicke(false);
+    }, 2000);
+    setTimeout(() => {
+      setClicked(false);
+      setNotification({ message: '', type: '' });
+    }, 4000);
+  };
+
+  useEffect(() => {
+    const storedWishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    setWishlistItems(storedWishlist);
+  }, []);
 
   const [tour, setTour] = useState({
     run: false,
@@ -38,8 +70,6 @@ const Home = ({ cartItems, setCartItems }) =>  {
 
     
   });
-  const { userData, loading } = useUser();
-  const [expandedBook, setExpandedBook] = useState(null);
 
   const books = [
     { code: 'STA112', id: 1, name: 'Probability II', department: 'Statistics', price: 2000, available: true, level: "100" },
@@ -85,6 +115,7 @@ const Home = ({ cartItems, setCartItems }) =>  {
   };
   // eslint-disable-next-line
   const [clicked, setClicked] = useState(false);
+  const [clicke, setClicke] = useState(false);
 
   const handleAddToCart = (book) => {
     setClicked(true)
@@ -105,8 +136,18 @@ const Home = ({ cartItems, setCartItems }) =>  {
     setTimeout(() => {
       setClicked(false);
     }, 2000); // 2 seconds
+    setNotification({ message: `${book.code} added to cart!`, type: 'success' });
+
+    setTimeout(() => {
+      setClicked(false);
+      setNotification({ message: '', type: '' });
+    }, 4000); // 2 seconds
+
   };
 
+  const handleNotificationClose = () => {
+    setNotification({ message: '', type: '' });
+  };
 
   const profileCompletion = {
     firstName: !!userData?.username?.split(' ')[0],
@@ -122,7 +163,6 @@ const Home = ({ cartItems, setCartItems }) =>  {
   if (loading) return <p>Fetching Data .... </p>;
 
   return (
-    
     <div className="home">
       <div className="homeie">
       <Joyride
@@ -173,6 +213,13 @@ const Home = ({ cartItems, setCartItems }) =>  {
             <span className="value">{cartItems.length}</span>
           </div>
         </div>
+        {notification.message && (
+          <Notification 
+            message={notification.message} 
+            type={notification.type} 
+            onClose={handleNotificationClose} 
+          />
+        )}
         <div className="section recent-books">
           <h2>Recent Books</h2>
           <div className="book-cards">
@@ -206,6 +253,19 @@ const Home = ({ cartItems, setCartItems }) =>  {
                       }
                     >
                       {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
+                    </button>
+                    <button
+                      onClick={(event) => {
+                        event.stopPropagation(); 
+                        handleAddToWishlist(book);
+                      }}
+                      className={
+                      clicke
+                          ? "add-to-wishlist-button clicked"
+                          : "add-to-wishlist-button"
+                          }
+                    >
+                      {clicke ? "Added!" : "Add to Wishlist"}
                     </button>
                   </div>
                 )}
@@ -247,18 +307,32 @@ const Home = ({ cartItems, setCartItems }) =>  {
                     >
                       {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
                     </button>
+                    <button
+                      onClick={(event) => {
+                        event.stopPropagation(); 
+                        handleAddToWishlist(book);
+                      }}
+                      className={
+                      clicke
+                          ? "add-to-wishlist-button clicked"
+                          : "add-to-wishlist-button"
+                          }
+                    >
+                      {clicke ? "Added!" : "Add to Wishlist"}
+                    </button>
                   </div>
                 )}
               </div>
             ))}
           </div>
         </div>
-        <div className="section sales-offers">
+      <div className="section sales-offers">
           <h2>Sales and Offers</h2>
           <OffersCarousel />
         </div>
-              
 
+        
+              
         <div className="section advertisements">
           <h2 className="ads-title">Advertisements</h2>
           <div className="ads-container">
@@ -286,6 +360,6 @@ const Home = ({ cartItems, setCartItems }) =>  {
       </div>
       </div>
     );
-    }
+  }
 
 export default Home;

@@ -197,27 +197,25 @@ body {
 }
 
 /* Book Cards */
-.book-card {
-  min-width: 200px;
-  margin-right: 10px;
-  background-color: #ffffff;
-  padding: 10px;
-  border-radius: 5px;
+.book-cardy {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 2px solid #33cc33;
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
+  flex: 1;
+  min-width: 200px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.book-card h3 {
+.book-cardy h3 {
   color: #33cc33;
 }
 
-.book-card p {
+.book-cardy p {
   margin: 5px 0;
 }
 
-.book-card .add-to-cart-button {
+.book-cardy .add-to-cart-button {
   padding: 5px 10px;
   background-color: #33cc33;
   color: white;
@@ -230,11 +228,12 @@ body {
   padding: 5px 10px;
   color: white;
   border: none;
+  font-size: 0.8em;
   border-radius: 5px;
   cursor: not-allowed;
 }
 
-.book-card .add-to-cart-btn:hover {
+.book-cardy .add-to-cart-btn:hover {
   background-color: #28a428;
 }
 
@@ -304,16 +303,13 @@ body {
       gap: 15px;
   }
 
-  .book-card {
-      min-width: 150px;
-      margin-right: 5px;
-  }
 
-  .book-card h3 {
+
+  .book-cardy h3 {
       font-size: 1.2em;
   }
 
-  .book-card p {
+  .book-cardy p {
       font-size: 0.9em;
   }
 
@@ -372,16 +368,13 @@ body {
       gap: 10px;
   }
 
-  .book-card {
-      min-width: 120px;
-      margin-right: 5px;
-  }
 
-  .book-card h3 {
+
+  .book-cardy h3 {
       font-size: 1em;
   }
 
-  .book-card p {
+  .book-cardy p {
       font-size: 0.8em;
   }
 

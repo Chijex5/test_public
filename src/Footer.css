@@ -52,3 +52,11 @@
   transform: scale(1.2);
   color: #4CAF50;
 }
+@media (max-width: 720px) {
+  .nav-link:hover{
+    color: #ccc;
+  }
+  .nav-link.active:hover{
+    color: #4CAF50;
+  }
+}

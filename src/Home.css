@@ -69,7 +69,6 @@ body {
   font-weight: bold;
 }
 
-/* Dashboard */
 .dashboard {
   display: flex;
   justify-content: space-around;
@@ -77,15 +76,27 @@ body {
 }
 
 .dashboard-item {
-  background-color: #f0f0f0;
+  background-color: #fff;
   padding: 20px;
   text-align: center;
   flex: 1;
   margin: 0 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.dashboard-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
 
 .profile-pic:hover {
   transform: scale(1.05);
@@ -111,22 +122,126 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  gap: 20px;
 }
 
-.out-of-stock-button{
-  padding: 5px 10px;
-  color: white;
+/* General Button Styles */
+button {
+  padding: 10px;
   border: none;
+  cursor: pointer;
   border-radius: 5px;
-  cursor: not-allowed;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 0.9rem;
+  text-align: center;
+  flex: 1;
 }
-.book-card .add-to-cart-btn:hover {
+
+/* Add to Cart Button */
+.add-to-cart-button {
+  background-color: #33cc33;
+  color: white;
+}
+
+.add-to-cart-button:hover {
   background-color: #28a428;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
+/* Add to Wishlist Button */
+.add-to-wishlist-button {
+  background-color: #28a745;
+  color: white;
+  margin-top: 0.6em;
+}
+
+.add-to-wishlist-button:hover {
+  background-color: #218838;
+}
+
+/* Move to Cart Button */
+.move-to-cart-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.move-to-cart-button:hover {
+  background-color: #218838;
+}
+
+/* Remove from Wishlist Button */
+.remove-from-wishlist-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.remove-from-wishlist-button:hover {
+  background-color: #c82333;
+}
+
+/* Wishlist Section */
+.wishlist-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.add-to-cart-button,
+.add-to-wishlist-button,
+.move-to-cart-button,
+.out-of-stock-button,
+.remove-from-wishlist-button {
+  width: 80%; /* Ensure all buttons are the same width */
+  padding: 10px;
+  height: 2.5em;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 480px) {
+  .wishlist-buttons {
+    flex-direction: column; /* Ensure buttons stack vertically */
+    gap: 8px;
+  }
+
+  .add-to-cart-button,
+  .out-of-stock-button,
+  .add-to-wishlist-button,
+  .move-to-cart-button,
+  .remove-from-wishlist-button {
+    width: 80%;
+    height: 2.5em;
+    padding: 8px; /* Slightly smaller padding for better fit */
+    font-size: 0.8em; /* Further reduce font size on very small screens */
+  }
+}
+
+/* Responsive Layout Adjustments */
+@media (min-width: 481px) {
+  .wishlist-buttons {
+    flex-direction: row; /* Align buttons side by side on larger screens */
+  }
+}
+
 
 .add-to-cart-button.clicked {
   background-color: #218838;
   animation: buttonClicked 0.5s;
+}
+
+.add-to-wishlist-button.clicked{
+  background-color: #218838;
+  animation: buttonClicked 0.5s;
+}
+
+.add-to-cart-button:hover{
+  background-color: #28a428;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .out-of-stock-button {
@@ -144,18 +259,6 @@ body {
   100% {
     transform: scale(1);
   }
-}
-
-.dashboard-item .label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.dashboard-item .value {
-  display: block;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #4CAF50;
 }
 
 /* Sections */
@@ -259,6 +362,18 @@ body {
   padding: 1.5rem;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-item .label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.dashboard-item .value {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #4CAF50;
 }
 
 .ad:hover {
@@ -427,11 +542,6 @@ body {
 
 /* Very Small Devices */
 @media (max-width: 480px) {
-
-  .book-details .notavailable{
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
   .profile-pic {
     width: 7rem;
     height: 7rem;
@@ -454,11 +564,11 @@ body {
   }
 
   .dashboard-item .label {
-    font-size: 14px;
+    font-size: 0.8rem;
   }
 
   .dashboard-item .value {
-    font-size: 20px;
+    font-size: 1rem;
   }
 
   .section h2 {
