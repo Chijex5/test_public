@@ -10,12 +10,6 @@ const recentChoices = [
   { name: "Organic Chemistry", code: "CHEM201", department: "Chemistry", available: true, price: 4500.00 },
 ];
 
-const departmentBooks = [
-  { name: "Advanced Calculus", code: "MATH301", department: "Mathematics", available: true, price: 5500.00 },
-  { name: "Modern Physics", code: "PHYS401", department: "Physics", available: true, price: 6000.00 },
-  { name: "Sociology: A Brief Introduction", code: "SOC101", department: "Sociology", available: false, price: 4000.00 },
-];
-
 const allBooks = [
   { code: 'STA112', name: 'Probability II', department: 'Statistics', price: 2000, available: true, level: "100" },
   { code: 'STA111', name: 'Introduction to Probability', department: 'Statistics', price: 2500, available: true, level: "100" },
@@ -37,7 +31,7 @@ const allBooks = [
   { code: 'ENG102', name: 'Introduction to Engineering II', department: 'Engineering', price: 3000, available: true, level: "100" },
   { code: 'GLG142', name: 'Earth History', department: 'Geology', price: 2000, available: true, level: "100" },
   { code: 'COS101', name: 'Introduction to Computer Sciences', department: 'Computer Sciences', price: 2500, available: true, level: "100" },
-  { code: 'PHY121', name: 'Physics for Engineering', department: 'Engineering', price: 2500, available: true, level: "100" },
+  { code: 'PHY121', name: 'Physics for Engineering', department: 'Physics and Astronomy', price: 2500, available: true, level: "100" },
 ];
 
 // Categorizing books
@@ -45,7 +39,7 @@ const newArrivals = allBooks.slice(0, 3);
 const topRatedBooks = allBooks.slice(3, 6);
 const onSaleBooks = allBooks.filter(book => book.price < 2000);
 const engineeringBooks = allBooks.filter(book => book.department === 'Engineering');
-const scienceBooks = allBooks.filter(book => ['Physics', 'Chemistry', 'Biology'].includes(book.department));
+const scienceBooks = allBooks.filter(book => ['Physics and Astronomy', 'Pure and Industrial Chemistry', 'Micro Biology'].includes(book.department));
 const artsBooks = allBooks.filter(book => ['Sociology', 'General Studies'].includes(book.department));
 const itBooks = allBooks.filter(book => book.department === 'Computer Sciences');
 const featuredBooks = allBooks.slice(6, 9);
@@ -87,7 +81,8 @@ const Books = ({ setCartItems }) => {
 
   return (
     <div className="container">
-      <SearchArea onSearch={handleSearch} />
+      <SearchArea onSearch={handleSearch} allBooks={allBooks} />
+
 
       {isSearching && searchResults.length > 0 ? (
         <RecommendationArea
@@ -95,6 +90,8 @@ const Books = ({ setCartItems }) => {
           books={searchResults}
           onAddToCart={handleAddToCart}
         />
+      ) : isSearching && searchResults.length === 0 ? (
+        <div className="no-results">No results found</div>
       ) : (
         <>
           <RecommendationArea
@@ -152,10 +149,11 @@ const Books = ({ setCartItems }) => {
             books={popularBooks}
             onAddToCart={handleAddToCart}
           />
+          <SellBook />
         </>
       )}
 
-      <SellBook />
+      
     </div>
   );
 };
