@@ -1,9 +1,9 @@
 import React from 'react';
 import './Cart.css';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Cart = ({ cartItems, setCartItems }) => {
-
+  const navigate = useNavigate();
   // Function to update the quantity
   const handleQuantityChange = (name, delta) => {
     setCartItems((prevItems) =>
@@ -84,9 +84,12 @@ const Cart = ({ cartItems, setCartItems }) => {
           </div>
 
           <div className="cart-actions">
-            <Link to="/book" className="profile-link">
-                <button className="continue-shopping">Continue Shopping</button>
-            </Link>
+            
+              <button 
+                onClick={() => navigate('/book')}
+                className="continue-shopping">Continue Shopping
+              </button>
+           
             <button className="checkout">Proceed to Checkout</button>
           </div>
         </>
