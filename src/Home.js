@@ -2,45 +2,91 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from './UserContext';
 import './Home.css';
-import { Link } from 'react-router-dom';
-import profilePic from './33.jpg';
-import { Tooltip } from 'react-tooltip';
+import Loaders from './Loaders';
+import Loader from './Loader'
+import axios from 'axios'
+
+
 import 'react-tooltip/dist/react-tooltip.css';
 import Joyride from 'react-joyride';
 import OffersCarousel from './OffersCarousel';
 import Notification from './Notifications';
+import configureBaseUrl from './configureBaseUrl';
 
 const Home = ({ cartItems, setCartItems }) => {
   const { userData, loading } = useUser();
   const [expandedBook, setExpandedBook] = useState(null);
+  const [load, setLoading] = useState(false)
   const [notification, setNotification] = useState({ message: '', type: '' });
-  const [wishlistItems, setWishlistItems] = useState([]);
-
-
-  const handleAddToWishlist = (book) => {
-    const existingItem = wishlistItems.find((item) => item.code === book.code);
-    if (!existingItem) {
-      const updatedWishlist = [...wishlistItems, book];
-      setWishlistItems(updatedWishlist);
-      localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
-      setNotification({ message: `${book.code} added to wishlist!`, type: 'success' });
-    } else {
-      setNotification({ message: `${book.code} is already in your wishlist!`, type: 'info' });
-    }
-    setClicke(true)
-    setTimeout(() => {
-      setClicke(false);
-    }, 2000);
-    setTimeout(() => {
-      setClicked(false);
-      setNotification({ message: '', type: '' });
-    }, 4000);
-  };
+  const [userId, setUserId] = useState(''); 
+  const [baseUrl, setBaseUrl] = useState('');
 
   useEffect(() => {
-    const storedWishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-    setWishlistItems(storedWishlist);
+    const fetchBaseUrl = async () => {
+      const url = configureBaseUrl();
+      setBaseUrl(url);
+      
+    };
+
+    fetchBaseUrl();
   }, []);
+
+
+  async function handleAddToWishlist(userId, bookId, bookcode) {
+    setLoading(true)
+    try {
+      // API endpoint URL
+      const url = `${baseUrl}/addToWishlist`; // Replace with your actual backend endpoint
+  
+      // Prepare the request payload
+      const payload = {
+        userId,
+        bookId,
+      };
+  
+      // Send the POST request
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      // Handle the response based on the status code
+      if (response.ok) {
+        setLoading(false)
+        setClicke(true);
+        setNotification({message: `${bookcode} successfully added to wishlist!`, type: 'success'});
+        setTimeout(() => {
+          setClicke(false);
+          setNotification({ message: '', type: '' });
+        }, 4000);
+        // Handle the successful addition
+      } else if (response.status === 409) {
+        // 409 Conflict: Book already in wishlist
+        setLoading(false)
+        setNotification({message: `${bookcode} is already in your wishlist.`, type: 'info'});
+        setTimeout(() => {
+          setClicke(false);
+          setNotification({ message: '', type: '' });
+        }, 4000);
+      } else {
+        // Other errors
+        setLoading(false)
+        setNotification({message: `Failed to add ${bookcode} to the wishlist.`, type: 'error'})
+        console.log("Failed to add the book to the wishlist.");
+        setTimeout(() => {
+          setClicke(false);
+          setNotification({ message: '', type: '' });
+        }, 4000);
+      }
+    } catch (error) {
+      // Handle network errors
+      console.error("Error while adding to wishlist:", error);
+    }
+  }
+
 
   const [tour, setTour] = useState({
     run: false,
@@ -71,32 +117,77 @@ const Home = ({ cartItems, setCartItems }) => {
     
   });
 
-  const books = [
-    { code: 'STA112', id: 1, name: 'Probability II', department: 'Statistics', price: 2000, available: true, level: "100" },
-    { code: 'STA111', id: 2, name: 'Introduction to Probability', department: 'Statistics', price: 2500, available: true, level: "100" },
-    { code: 'STA132', id: 3, name: 'Inference II', department: 'Statistics', price: 3000, available: false, level: "100" },
-    { code: 'STA131', id: 4, name: 'Introduction to Inference', department: 'Statistics', price: 2200, available: true, level: "100" },
-    { code: 'STA172', id: 5, name: 'Statistical Computing', department: 'Statistics', price: 2800, available: true, level: "100" },
-    { code: 'MTH122', id: 6, name: 'Circle Geometry', department: 'Mathematics', price: 1800, available: true, level: "100" },
-    { code: 'MTH111', id: 7, name: 'Integrated Mathematics', department: 'Mathematics', price: 1500, available: false, level: "100" },
-    { code: 'MTH131', id: 8, name: 'Integration and Depreciation', department: 'Mathematics', price: 2000, available: true, level: "100" },
-    { code: 'BIO151', id: 9, name: 'Introduction to Biology', department: 'Micro Biology', price: 3000, available: true, level: "100" },
-    { code: 'CHM122', id: 10, name: 'Organic Chemistry II', department: 'Pure and Industrial Chemistry', price: 3500, available: true, level: "100" },
-    { code: 'CHM132', id: 11, name: 'Inorganic Chemistry II', department: 'Pure and Industrial Chemistry', price: 4000, available: false, level: "100" },
-    { code: 'CHM171', id: 12, name: 'Introduction to Organic Chemistry', department: 'Pure and Industrial Chemistry', price: 3200, available: true, level: "100" },
-    { code: 'CHM101', id: 13, name: 'Introduction to Inorganic Chemistry', department: 'Pure and Industrial Chemistry', price: 2800, available: true, level: "100" },
-    { code: 'ENG101', id: 14, name: 'Introduction to Engineering', department: 'Engineering', price: 2500, available: true, level: "100" },
-    { code: 'GSP102', id: 15, name: 'Lexis and Structure', department: 'General Studies', price: 1500, available: true, level: "100" }
-  ];
+  const [booksData, setBooksData] = useState({
+    recentChoices: [],
+    departmentBooks: []
+  });
+  
 
-  const bookse = [
-    { code: 'GSP111', id: 21, name: 'Use of Library', department: 'General Studies', price: 1000, available: false, level: "100" },
-    { code: 'GSP101', id: 16, name: 'Use of English', department: 'General Studies', price: 1200, available: true, level: "100" },
-    { code: 'ENG102', id: 17, name: 'Introduction to Engineering II', department: 'Engineering', price: 3000, available: true, level: "100" },
-    { code: 'GLG142', id: 18, name: 'Earth History', department: 'Geology', price: 2000, available: true, level: "100" },
-    { code: 'COS101', id: 19, name: 'Introduction to Computer Sciences', department: 'Computer Sciences', price: 2500, available: true, level: "100" },
-    { code: 'PHY121', id: 20, name: 'Physics for Engineering', department: 'Engineering', price: 2500, available: true, level: "100" }
-  ];
+  useEffect(() => {
+    const fetchUserDataFromLocalStorage = async () => {
+      try {
+        const user = await JSON.parse(localStorage.getItem('user'));
+        if (user) {
+          setUserId(user.userId); // Set the userId here
+          console.log("User data fetched from local storage:", user);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+  
+    fetchUserDataFromLocalStorage();
+  }, []);   // Empty dependency array to run only once on component mount
+
+  useEffect(() => {
+      if (userId) {
+        const fetchData = () => {
+          axios.get(`${baseUrl}/getbooks`, {
+            params: { userId: userId }
+          })
+            .then(response => {
+              const mappedData = {
+                recentChoices: mapBooks(response.data.recentChoices),
+                departmentBooks: mapBooks(response.data.allBooks)  // Changed to 'allBooks' based on backend
+              };
+              setBooksData(mappedData);
+              console.log(mappedData)
+              localStorage.setItem('homeBooksData', JSON.stringify(mappedData));
+            })
+            .catch(error => {
+              console.error("There was an error fetching the books data!", error);
+            });
+        };
+
+        const cachedBooksData = localStorage.getItem('homeBooksData');
+        if (cachedBooksData) {
+          setBooksData(JSON.parse(cachedBooksData));
+        } else {
+          fetchData();
+        }
+
+        const intervalId = setInterval(fetchData, 5 * 60 * 1000); // sync every 5 minutes
+
+        return () => clearInterval(intervalId); // Cleanup interval on component unmount
+      }
+    }, [userId]); // This effect runs when usersData is set
+
+  const mapBooks = (booksArray) => {
+    return booksArray.map(book => ({
+      id: book[0],
+      code: book[1],
+      name: book[2],
+      department: book[3],
+      price: parseFloat(book[4]),
+      available: Boolean(book[5]),
+      level: book[6],
+      quantity: book[7],
+      rating: book[8],
+      category: book[9]
+    }));
+  };
+
+  
 
   const handleTourFinish = () => {
     localStorage.setItem('hasCompletedTour', 'true');
@@ -149,18 +240,8 @@ const Home = ({ cartItems, setCartItems }) => {
     setNotification({ message: '', type: '' });
   };
 
-  const profileCompletion = {
-    firstName: !!userData?.username?.split(' ')[0],
-    lastName: !!userData?.username?.split(' ')[1],
-    email: !!userData?.email,
-    phone: !!userData?.phone,
-    department: !!userData?.department,
-    address: !!userData?.address,
-  };
-
-  const completionPercentage = Object.values(profileCompletion).filter(Boolean).length / Object.keys(profileCompletion).length * 100;
-
-  if (loading) return <p>Fetching Data .... </p>;
+  
+  if (loading) return <Loaders />;
 
   return (
     <div className="home">
@@ -184,20 +265,6 @@ const Home = ({ cartItems, setCartItems }) => {
           },
         }}
       />
-        <div className="profile-section">
-          <Link to="/home/profile" className="profile-link" data-tooltip-id="profile-tooltip">
-            <div className="profile-pic">
-              <img src={userData?.profileUrl || profilePic} alt="Profile" className="profile-img" />
-              {completionPercentage < 100 && (
-                <div className="profile-completion-overlay">
-                  <div className="completion-bar" style={{ width: `${completionPercentage}%` }}></div>
-                  <span className="completion-text">{Math.floor(completionPercentage)}% Complete</span>
-                </div>
-              )}
-            </div>
-          </Link>
-          <Tooltip id="profile-tooltip" content="View Profile" place="top" />
-        </div>
         <h1 className='hello'>Hello, {userData?.username?.split(' ')[0] || 'User'}!</h1>
         <div className="dashboard">
           <div className="dashboard-item">
@@ -223,7 +290,7 @@ const Home = ({ cartItems, setCartItems }) => {
         <div className="section recent-books">
           <h2>Recent Books</h2>
           <div className="book-cards">
-            {books.map((book) => (
+            {booksData.recentChoices.map((book) => (
               <div
                 key={book.id}
                 className={`book-card ${expandedBook === book.id ? 'expanded' : ''}`}
@@ -238,6 +305,7 @@ const Home = ({ cartItems, setCartItems }) => {
                   <div className="book-details">
                     <p>Title: {book.name}</p>
                     <p>Department: {book.department}</p>
+                    <p className='rating'>Rating: <span className='rating-value'>{book.rating}</span></p>
                     <button
                       onClick={(event) => {
                         event.stopPropagation(); 
@@ -257,7 +325,7 @@ const Home = ({ cartItems, setCartItems }) => {
                     <button
                       onClick={(event) => {
                         event.stopPropagation(); 
-                        handleAddToWishlist(book);
+                        handleAddToWishlist(userId, book.id, book.code);
                       }}
                       className={
                       clicke
@@ -265,7 +333,7 @@ const Home = ({ cartItems, setCartItems }) => {
                           : "add-to-wishlist-button"
                           }
                     >
-                      {clicke ? "Added!" : "Add to Wishlist"}
+                      {load ? <Loader /> : (clicke ? "Added!" : "Add to Wishlist")}
                     </button>
                   </div>
                 )}
@@ -274,9 +342,9 @@ const Home = ({ cartItems, setCartItems }) => {
           </div>
         </div>
         <div className="section highest-sellers">
-          <h2>Highest Sellers This Week</h2>
+          <h2>Based On Your Department</h2>
           <div className="book-cards">
-            {bookse.map((book) => (
+            {booksData.departmentBooks.map((book) => (
               <div
                 key={book.id}
                 className={`book-card ${expandedBook === book.id ? 'expanded' : ''}`}
@@ -291,6 +359,7 @@ const Home = ({ cartItems, setCartItems }) => {
                   <div className="book-details">
                     <p>Title: {book.name}</p>
                     <p>Department: {book.department}</p>
+                    <p className='rating'>Rating: <span className='rating-value'>{book.rating}</span></p>
                     <button
                       onClick={(event) => {
                         event.stopPropagation(); 
@@ -308,9 +377,10 @@ const Home = ({ cartItems, setCartItems }) => {
                       {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
                     </button>
                     <button
+                    
                       onClick={(event) => {
                         event.stopPropagation(); 
-                        handleAddToWishlist(book);
+                        handleAddToWishlist(userId, book.id, book.code);
                       }}
                       className={
                       clicke

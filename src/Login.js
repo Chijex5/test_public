@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, googleProvider } from './firebase'; // Import Firebase services
 import axios from 'axios'; // Import Axios
 import './Auth.css'; // Ensure this is your CSS file
 import Loader from './Loader'; // Ensure this is your Loader component
+import Deal from './uni2.png'
+import configureBaseUrl from './configureBaseUrl';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,8 +14,18 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const BASE_URL = window.location.hostname === 'localhost' ? 'http://127.0.0.1:5000' : 'http://192.168.113.240:5000';
+  const [baseUrl, setBaseUrl] = useState('');
 
+  useEffect(() => {
+    const fetchBaseUrl = async () => {
+      const url = configureBaseUrl();
+      setBaseUrl(url);
+      
+    };
+
+    fetchBaseUrl();
+  }, []);
+  
   const saveUserDataToLocalStorage = (user) => {
     const userData = {
       userId: user.uid,
@@ -26,15 +38,59 @@ const Login = () => {
 
   const sendUserDataToBackend = async (user) => {
     try {
-      await axios.post(`${BASE_URL}/login`, {
-        user_id: user.uid,
-        email: user.email
-      });
+        const response = await axios.post(`${baseUrl}/login`, {
+            user_id: user.uid,
+            email: user.email,
+            username: user.displayName || "",
+            profileUrl: user.photoURL || ""
+        });
+
+        const userData = response.data;
+
+        if (userData.error) {
+            setError(userData.error);
+            return;
+        }
+
+        if (response.status === 201) {
+            console.log('New user created');
+        }
+
+        const userToSave = {
+            userId: user.uid,
+            username: userData.name || user.displayName || "Anonymous",
+            email: user.email,
+            profileUrl: userData.profileUrl || user.photoURL || "",
+            level: userData.level || "",
+            flatNo: userData.flat_no || "",
+            street: userData.street || "",
+            city: userData.city || "",
+            state: userData.state || "",
+            postalCode: userData.postal_code || "",
+            address: userData.address || "",
+            phone: userData.phone || "",
+            department: userData.department || ""
+        };
+        localStorage.setItem('user', JSON.stringify(userToSave));
+
     } catch (err) {
-      console.error('Backend Error:', err);
-      setError('Failed to send user data to backend.');
+        console.error('Backend Error:', err);
+        setError('Failed to send user data to backend.');
     }
-  };
+};
+
+const checkUserExists = async (email, uid) => {
+  try {
+    const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
+    return response.data.exists; // Returns true if user exists
+  } catch (err) {
+    console.error('Error checking user:', err);
+    setError('Failed to verify user existence.');
+    return false;
+  }
+};
+
+
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
@@ -44,9 +100,16 @@ const Login = () => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
-      saveUserDataToLocalStorage(user);
-      await sendUserDataToBackend(user);
-      navigate('/home'); // Redirect to home page on success
+
+      const userExists = await checkUserExists(user.email, user.uid);
+
+      if (userExists) {
+        saveUserDataToLocalStorage(user);
+        await sendUserDataToBackend(user);
+        navigate('/home'); // Redirect to home if user exists
+      } else {
+        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+      }
     } catch (err) {
       setError(err.message);
       console.error('Authentication Error:', err);
@@ -56,7 +119,6 @@ const Login = () => {
   };
 
   const handleGoogleAuth = async () => {
-    setLoading(true);
     setError('');
 
     const TIMEOUT_DURATION = 100000; // 10 seconds timeout
@@ -74,20 +136,27 @@ const Login = () => {
       ]);
 
       const user = result.user;
-      saveUserDataToLocalStorage(user);
-      await sendUserDataToBackend(user);
-      navigate('/login'); // Redirect to home page on success
+      const userExists = await checkUserExists(user.email, user.uid);
+
+      if (userExists) {
+        saveUserDataToLocalStorage(user);
+        await sendUserDataToBackend(user);
+        navigate('/home'); // Redirect to home if user exists
+      } else {
+        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+      }
     } catch (err) {
       setError(err.message);
       console.error('Google Authentication Error:', err);
     } finally {
-      setLoading(false);
+      
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-card">
+      <img src={Deal} alt="logo" className="logo-img" />
         <h2>Log In</h2>
         {error && <p className="error">{error}</p>}
         <form onSubmit={handleEmailAuth}>
@@ -99,7 +168,7 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <label class="label-input">Email</label>
+            <label className="label-input">Email</label>
           </div>
           <div className='contain'>
             <input
@@ -109,17 +178,14 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <label class="label-input">Password</label>
+            <label className="label-input">Password</label>
           </div>
           <button type="submit" className="email-login-button" disabled={loading}>
             {loading ? <Loader /> : 'Log In'}
           </button>
         </form>
         <button onClick={handleGoogleAuth} className="google-sign-in-button" disabled={loading}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px">
-            <path fill="#ffffff" d="M44.5,20H24v8.5h11.9c-1,5-5.3,8.5-11.9,8.5c-7,0-12.5-5.7-12.5-12.5S17,12,24,12c3,0,5.7,1.1,7.8,3l5.7-5.7C34.2,5.8,29.3,4,24,4C12.4,4,3,13.4,3,25s9.4,21,21,21c10.6,0,19.7-7.9,21-18h-0.5V20z"/>
-          </svg>
-          <p>Log In with Google</p>
+          Log In with Google
         </button>
         <a href="#/signup" className="auth-link">
           Don't have an account? Sign Up

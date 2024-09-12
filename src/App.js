@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter  as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
+import {getAuth, onAuthStateChanged } from 'firebase/auth';
 import './App.css';
 import Header from './Header';
 import Footer from './Footer';
 import Cart from './Cart';
 import Home from './Home';
+import CompleteProfile from './CompleteProfile'
 import Books from './Book';
 import Login from './Login';
 import Signup from './Signup';
-import { auth } from './firebase';
 import Loaders from './Loaders';
 import UserProfile from './UserProfile';
 import Wishlist from './Wishlist';
 import { UserProvider } from './UserContext';
-import { ThemeProvider, useTheme } from './ThemeContext';
+import { ThemeProvider } from './ThemeContext';
 import ErrorBoundary from './ErrorBoundary';
 
 const App = () => {
@@ -22,6 +22,19 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [activeNav, setActiveNav] = useState('home');
   const [cartItems, setCartItems] = useState([]);
+
+  const auth = getAuth();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      }
+    });
+    return () => unsubscribe();
+  }, [auth]);
+
   
 
   useEffect(() => {
@@ -42,14 +55,16 @@ const App = () => {
       <ThemeProvider>
         <UserProvider>
         <ErrorBoundary>
+          
           <div className="App">
             <ConditionalHeaderFooter activeNav={activeNav} setActiveNav={setActiveNav} />
             <main>
               <Routes>
               <Route path="/" element={ <Navigate to="/home" /> } />
                 <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login />} />
-                <Route path="/signup" element={isAuthenticated ? <Navigate to="/home" /> : <Signup />} />
-                <Route path="/home/profile" element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} />
+                <Route path="/complete-profile" element={<CompleteProfile user={user} />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/profile" element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} />
                 <Route path="/home" element={isAuthenticated ? <Home cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
                 <Route path="/wishlist" element={isAuthenticated ? <Wishlist cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
                 <Route path="/book" element={isAuthenticated ? <Books cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
@@ -74,7 +89,7 @@ const ConditionalHeaderFooter = ({ activeNav, setActiveNav }) => {
     setActiveNav(currentPath);
   }, [location, setActiveNav]);
 
-  const noHeaderFooter = ['/login', '/signup'].includes(location.pathname);
+  const noHeaderFooter = ['/login', '/signup', '/complete-profile'].includes(location.pathname);
 
   return (
     <>

@@ -1,151 +1,351 @@
-/* General Styles */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
-  margin: 0;
-  padding: 0;
-  color: #333;
-}
-
-/* User Profile Container */
+/* Overall Page Style */
 .user-profile {
-  padding: 3rem 2rem;
-  max-width: 50rem;
+  width: 100%;
+  max-width: 800px;
   margin: 0 auto;
-  background-color: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  margin-bottom: 100px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 5em;
 }
 
-/* Header */
-.user-profile h1 {
-  font-size: 2.5rem;
-  color: #222;
-  margin-bottom: 2rem;
-  text-align: center;
-  font-weight: 600;
+/* Profile Header */
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-/* Profile Image */
 .profile-img {
-  display: block;
-  width: 10rem;
-  height: 10rem;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  margin: 0 auto 2rem auto;
+  margin-right: 20px;
   object-fit: cover;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  border: 0.3rem solid #4CAF50;
+  border: 4px solid #4CAF50;
 }
 
-/* Form and Details Layout */
-.form, .details {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+.profile-info h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #4CAF50;
 }
 
-/* Form Labels */
-.form label, .details p {
-  display: flex;
-  flex-direction: column;
-  font-size: 1rem;
-  color: #555;
+.email {
+  color: #888;
+  font-size: 16px;
 }
 
-/* Input Fields */
-.form input {
-  flex: 1;
-  padding: 0.75rem;
-  border: 0.1rem solid #ccc;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  margin-top: 0.5rem;
-  transition: border-color 0.3s;
+/* Form and Details Styling */
+.form label,
+.details p {
+  display: block;
+  margin-bottom: 10px;
 }
 
-.form input:focus {
+.form input[type="text"],
+.form input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.form input[type="text"]:focus,
+.form input[type="email"]:focus {
   border-color: #4CAF50;
   outline: none;
 }
 
-/* Buttons */
-.form button, .details button {
-  align-self: flex-start;
-  padding: 0.8rem 2rem;
+.details p {
+  font-size: 16px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.details p strong {
+  color: #4CAF50;
+}
+
+/* Button and SVG Styling */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+}
+
+.buttons button {
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  flex: 1; /* Ensures buttons are equal width */
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Adds space between SVG and text */
+}
+
+.buttons button:first-child {
+  margin-left: 0; /* Removes extra margin on the first button */
+}
+
+.buttons svg {
+  width: 20px;
+  height: 20px;
+}
+
+.edit-button, .save-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.prev-button, .next-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.logout-button {
+  background-color: #FF9800;
+  color: white;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px; /* Adds space between Back and Cancel buttons */
+  flex-grow: 1; /* Allows it to shrink, making Save more prominent */
+}
+
+/* Modal styling */
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  margin-bottom: 5em;
+}
+
+.profile-modal-content {
+  position: relative;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 90%;
+  width: 500px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.full-profile-img {
+  width: 90%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5em;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  
+}
+
+.upload-button {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.upload-button:hover {
+  background-color: #0056b3;
+}
+
+.close-modal i {
+  font-size: 1.8em; /* Adjust icon size */
+}
+
+.close-modal:hover {
+  color: #ccc; /* Lighter shade on hover for better UI feedback */
+}
+
+
+.change-profile-button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
   background-color: #4CAF50;
   color: #fff;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s, box-shadow 0.3s;
-  margin-top: 1rem;
 }
 
-.form button:hover, .details button:hover {
-  background-color: #45a049;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+.change-profile-button:hover {
+  opacity: 0.9;
 }
 
-/* Responsive Design */
+/* Mobile responsiveness */
 @media (max-width: 768px) {
-  .user-profile {
-    padding: 2rem;
+  .profile-modal-content {
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
   }
 
-  .user-profile h1 {
-    font-size: 2rem;
+  .full-profile-img {
+    width: 100%;
+    height: auto;
   }
 
-  .profile-img {
-    width: 8rem;
-    height: 8rem;
-    margin-bottom: 1.5rem;
+  .change-profile-button {
+    width: 80%;
   }
 
-  .form label, .details p {
-    font-size: 0.875rem;
-  }
-
-  .form input {
-    padding: 0.6rem;
-    font-size: 0.875rem;
-  }
-
-  .form button, .details button {
-    padding: 0.7rem 1.75rem;
-    font-size: 0.875rem;
+  .close-modal {
+    font-size: 1.2em;
   }
 }
 
-@media (max-width: 480px) {
+
+.button-group button {
+  flex: 1; /* Makes Back and Cancel buttons take equal space */
+  padding: 8px 12px;
+  font-size: 14px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* Space between SVG and text */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 760px) {
+  .buttons {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch; /* Ensures full-width buttons */
+  }
+
+  .buttons button {
+    width: 100%; /* Full width buttons */
+    margin: 10px 0; /* Adds space between buttons */
+    margin-left: 0; /* Removes side margin on smaller screens */
+  }
+}
+
+
+.edit-button {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+
+.save-button:hover,
+.cancel-button:hover,
+.edit-button:hover,
+.logout-button:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 47.5em) {
   .user-profile {
     padding: 1.5rem;
+    max-width: 400px;
+  }
+  .profile-header h2 {
+    font-size: 1.3em;
+    margin-bottom: 0.1em;
   }
 
-  .user-profile h1 {
+  .profile-header .email{
+    font-size: 0.8em;
+    margin-top: 0.1em;
+  }
+
+  h1 {
     font-size: 1.75rem;
+    
   }
 
   .profile-img {
-    width: 7rem;
-    height: 7rem;
-    margin-bottom: 1.25rem;
+    width: 6rem;
+    height: 6rem;
+    
+  }
+}
+
+.address-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.address-group label {
+  flex: 1;
+  min-width: 45%;
+  margin-right: 10px;
+}
+
+.address-group label:last-child {
+  margin-right: 0;
+}
+
+/* Button Styling */
+
+/* Step Indicator */
+.step-indicator {
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
+  color: #4CAF50;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 760px) {
+  .address-group {
+    flex-direction: column;
   }
 
-  .form label, .details p {
-    font-size: 0.75rem;
+  .address-group label {
+    min-width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
   }
 
-  .form input {
-    padding: 0.5rem;
-    font-size: 0.75rem;
-  }
-
-  .form button, .details button {
-    padding: 0.6rem 1.5rem;
-    font-size: 0.75rem;
-  }
 }

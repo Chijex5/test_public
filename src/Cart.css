@@ -176,6 +176,10 @@
       text-align: left;
       margin-top: 10px;
     }
+    .empty-cart img {
+      max-width: 80%;
+      height: auto;
+    }
     .quantity-selector {
       margin-top: 10px;
     }
@@ -183,6 +187,15 @@
       flex-direction: column;
       gap: 10px;
     }
+  }
+
+  .empty-cart img {
+    max-width: 100%;
+    width: 30rem;
+    height: 30rem;
+    object-fit: cover;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
   
   @media (max-width: 480px) {
@@ -216,6 +229,11 @@
     .continue-shopping, .checkout, .browse-books {
       padding: 8px 15px;
       font-size: 0.9em;
+    }
+
+    .empty-cart img {
+      max-width: 80%;
+      height: auto;
     }
 
     .continue-shopping{

@@ -1,0 +1,107 @@
+/* Signup.css */
+
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f9;
+    padding: 20px; /* Add padding to avoid elements touching the edges */
+  }
+  
+  .signup-card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box; /* Ensure padding is included in width calculations */
+  }
+  
+  .signup-card h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .input-group {
+    position: relative;
+    margin-bottom: 25px;
+    width: 100%; /* Ensure input groups take up the full width */
+  }
+  
+  .signup-input {
+    width: 100%; /* Make sure inputs take up the full width of their container */
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #555;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box; /* Include padding and border in the width calculation */
+  }
+  
+  .signup-input:focus {
+    border-color: #4caf50;
+    outline: none;
+  }
+  
+  .input-label {
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    background-color: #fff;
+    padding: 0 5px;
+    font-size: 0.9rem;
+    color: #888;
+    transition: color 0.3s ease;
+  }
+  
+  .signup-button,
+  .google-button {
+    width: 100%; /* Ensure buttons take up the full width */
+    padding: 12px 20px;
+    margin: 15px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .signup-button {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
+  .signup-button:hover {
+    background-color: #45a049;
+  }
+  
+  .google-button {
+    background-color: #db4437;
+    color: #fff;
+  }
+  
+  .google-button:hover {
+    background-color: #c33b2e;
+  }
+  
+  .error-message {
+    color: #ff5252;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+  
+  .signup-link {
+    color: #4caf50;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+  
+  .signup-link:hover {
+    text-decoration: underline;
+  }
+  

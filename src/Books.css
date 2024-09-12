@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Lato:wght@400;700&family=Playfair+Display:wght@400;700&display=swap');
+
 /* General Styles */
 body {
   font-family: Arial, sans-serif;
@@ -63,6 +65,29 @@ body {
   color: #333;
 }
 
+/* Text Container */
+.text-container {
+  font-family: 'Roboto', sans-serif; /* Modern, clean font */
+  color: #333; /* Dark gray for primary text */
+  line-height: 1.6;
+
+  border-radius: 8px;
+}
+
+.text-container .rating {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e67e22; /* Orange for rating text */
+  display: flex;
+  align-items: center;
+}
+
+.text-container .rating .rating-value {
+  margin-left: 5px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #f39c12; /* Slightly darker orange for the rating value */
+}
 
 
 
@@ -73,6 +98,7 @@ body {
 
 .section-title {
   font-size: 1.5em;
+  font-family: 'Cinzel', serif;
   margin-bottom: 10px;
   color: #33cc33;
 }
@@ -101,7 +127,7 @@ body {
 .section-title {
   text-align: center;
   color: #333;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Playfair Display', serif;
   margin-bottom: 1.5em;
 }
 
@@ -184,6 +210,7 @@ body {
 
 .book-cardy h3 {
   color: #33cc33;
+  font-family: 'Cinzel', serif;
 }
 
 .book-cardy p {
@@ -254,6 +281,10 @@ body {
       margin-bottom: 80px;
   }
 
+  .text-container p:first-child {
+    font-size: 1em;
+  }
+
   .search-bar {
       font-size: 12px;
   }
@@ -283,7 +314,7 @@ body {
 
 
   .book-cardy h3 {
-      font-size: 1.2em;
+      font-size: 1.4em;
   }
 
   .book-cardy p {
@@ -348,7 +379,7 @@ body {
 
 
   .book-cardy h3 {
-      font-size: 1em;
+      font-size: 1.2em;
   }
 
   .book-cardy p {

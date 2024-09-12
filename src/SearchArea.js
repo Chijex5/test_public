@@ -37,9 +37,7 @@ const SearchArea = ({ onSearch }) => {
       {showSuggestions && (
         <ul className="suggestions-list">
           {/* Sample suggestions for now, replace with actual logic */}
-          <li>Suggestion 1</li>
-          <li>Suggestion 2</li>
-          <li>Suggestion 3</li>
+          
         </ul>
       )}
     </div>

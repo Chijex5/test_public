@@ -1,6 +1,7 @@
 import React from 'react';
 import './Cart.css';
 import { useNavigate, Link } from 'react-router-dom';
+import image from './23.png';
 
 const Cart = ({ cartItems, setCartItems }) => {
   const navigate = useNavigate();
@@ -95,10 +96,15 @@ const Cart = ({ cartItems, setCartItems }) => {
         </>
       ) : (
         <div className="empty-cart">
+          <div className='text-button'>
             <p>Your cart is empty. Start adding books to your collection!</p>
             <Link to="/book" className="profile-link">
                 <button className="browse-books">Browse Books</button>
             </Link>
+          </div>
+            <div className='carrt-image'>
+              <img src={image} alt="No wishlist items" className="empty-cart-image" />
+            </div>
         </div>
       )}
     </div>

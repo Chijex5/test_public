@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import './ErrorBoundary.css';
+import errorImage from './assets.jpg'
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -16,10 +18,20 @@ class ErrorBoundary extends Component {
 
   render() {
     if (this.state.hasError) {
-      return <h1>Something went wrong. Please try refreshing the page.</h1>;
-    }
-
-    return this.props.children; 
+      return (
+        <div className="error-boundary-container">
+          <img src={errorImage} alt="Error Illustration" className="error-boundary-image" />
+          <h1 className="error-boundary-title">Oops! Something went wrong.</h1>
+          <p className="error-boundary-message">
+            An unexpected error has occurred. Please try refreshing the page or contact support if the issue persists.
+          </p>
+          <div className="error-boundary-footer">
+            <p>Bookshopp 2024</p>
+          </div>
+        </div>
+      );
+    }     
+    return this.props.children;
   }
 }
 

@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import './Auth.css'; // Ensure this is your CSS file
-import Loader from './Loader'; // Ensure this is your Loader component
+import axios from 'axios'; // Import axios for making HTTP requests
+import './Signup.css';
+import Loader from './Loader';
+import Deal from './uni2.png'
+import configureBaseUrl from './configureBaseUrl';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +14,27 @@ const Signup = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const auth = getAuth();
+  const [baseUrl, setBaseUrl] = useState('');
+
+  useEffect(() => {
+    const fetchBaseUrl = async () => {
+      const url = configureBaseUrl();
+      setBaseUrl(url);
+    };
+
+    fetchBaseUrl();
+  }, []);
+
+  const checkUserExists = async (email, uid) => {
+    try {
+      const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
+      return response.data.exists; // Returns true if user exists
+    } catch (err) {
+      console.error('Error checking user:', err);
+      setError('Failed to verify user existence.');
+      return false;
+    }
+  };
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
@@ -18,8 +42,17 @@ const Signup = () => {
     setError('');
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/home'); // Redirect to home page on success
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      // Check if user exists in the backend
+      const userExists = await checkUserExists(user.email, user.uid);
+
+      if (userExists) {
+        navigate('/home'); // Redirect to home if user exists
+      } else {
+        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+      }
     } catch (err) {
       setError(err.message);
       console.error('Authentication Error:', err);
@@ -34,8 +67,17 @@ const Signup = () => {
     setError('');
 
     try {
-      await signInWithPopup(auth, provider);
-      navigate('/home'); // Redirect to home page on success
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Check if user exists in the backend
+      const userExists = await checkUserExists(user.email, user.uid);
+
+      if (userExists) {
+        navigate('/home'); // Redirect to home if user exists
+      } else {
+        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+      }
     } catch (err) {
       setError(err.message);
       console.error('Google Authentication Error:', err);
@@ -45,39 +87,40 @@ const Signup = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
+    <div className="signup-container">
+      <div className="signup-card">
+      <img src={Deal} alt="logo" className="logo-img" />
         <h2>Sign Up</h2>
-        {error && <p className="error">{error}</p>}
+        {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleEmailAuth}>
-        <div className='contain'>
+          <div className="input-group">
             <input
               type="email"
-              className="auth-input"
+              className="signup-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <label class="label-input">Email</label>
+            <label className="input-label">Email</label>
           </div>
-          <div className='contain'>
+          <div className="input-group">
             <input
               type="password"
-              className="auth-input"
+              className="signup-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <label class="label-input">Password</label>
+            <label className="input-label">Password</label>
           </div>
-          <button type="submit" className="email-sign-up-button" disabled={loading}>
+          <button type="submit" className="signup-button" disabled={loading}>
             {loading ? <Loader /> : 'Sign Up'}
           </button>
         </form>
-        <button onClick={handleGoogleAuth} className="google-sign-in-button">
+        <button onClick={handleGoogleAuth} className="google-button">
           Continue with Google
         </button>
-        <a href="#/login" className="auth-link">
+        <a href="#/login" className="signup-link">
           Already have an account? Log In
         </a>
       </div>

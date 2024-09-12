@@ -1,70 +1,133 @@
-/* OffersCarousel.css */
-
-.sales-offers-carousel {
+.carousel {
   position: relative;
-  max-width: 600px;
-  margin: 20px auto;
-  overflow: hidden;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.offer-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 15px;
-  transition: transform 0.5s ease;
-}
-
-.offer-image {
   width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-  border-radius: 15px;
+  overflow: hidden;
+  max-width: 760px;
+  margin: 0 auto;
 }
 
-.offer-details {
-  margin-top: 15px;
+.carousel-inner {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
 }
 
-.offer-details h3 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #2d3436;
+.carousel-slide {
+  min-width: 100%;
+  box-sizing: border-box;
+  position: relative;
 }
 
-.offer-details p {
-  font-size: 16px;
-  color: #636e72;
+.carousel-slide img {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
 }
 
-.carousel-btn {
+.carousel-text {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 100%;
+  bottom: 10%;
+  left: 0;
+  color: white;
   background-color: rgba(0, 0, 0, 0.5);
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+}
+.cover-indicator{
+  width: 100%;
+  position: absolute;
+  bottom: 0%;
+  height: 10%;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-text h2 {
+  color: #ffffff;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.carousel-text p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 720px) {
+  .carousel-text h2{
+    font-size: 1.2em;
+  }
+  .carousel-text p {
+    font-size: 0.8em;
+  }
+  .carousel-text button {
+    font-size: 0.7em;
+  }
+}
+
+.carousel-text button {
+  background-color: #33cc33;
   color: white;
   border: none;
-  padding: 10px;
+  margin-bottom: 1em;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 50%;
   transition: background-color 0.3s ease;
-  font-size: 18px;
 }
 
-.carousel-btn:hover {
-  background-color: rgba(0, 0, 0, 0.7);
+.carousel-text button:hover {
+  background-color: #0056b3;
 }
 
-.prev-btn {
-  left: 10px;
+.carousel-arrows {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  z-index: 100;
 }
 
-.next-btn {
-  right: 10px;
+.arrow {
+  font-size: 2rem;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-items: center;
+  
+}
+.arrow svg{
+  width: 1em;
+  height: 1em;
+  align-self: center;
+}
+
+.arrow:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.indicator.active {
+  background-color: white;
 }

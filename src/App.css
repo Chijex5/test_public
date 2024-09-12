@@ -4,8 +4,10 @@
 
 header {
   background-color: #ffffff;
+  height: 6em;
   padding: 20px;
   color: rgb(10, 10, 10);
+  width: 100%;
   height: 50px;
 }
 
@@ -18,7 +20,41 @@ footer {
   bottom: 0;
 }
 
+/* app.css */
+
+/* Reset some default styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure the body takes full height */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Main content area */
 main {
-  padding: 20px;
-  
+  flex: 1; /* Ensures that main content area takes up available space */
+  padding: 1.25rem; /* 20px in rem for consistency */
+  width: 100%;
+  max-width: 1200px; /* Optional max-width for larger screens */
+  margin: 0 auto; /* Center the content */
+}
+
+/* Responsive adjustments */
+@media (max-width: 760px) {
+  main {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 0.75rem;
+  }
 }

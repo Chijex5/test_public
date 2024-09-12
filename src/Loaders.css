@@ -1,6 +1,16 @@
 :root {
   --second: 0.1s;
 }
+.major{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.image-group{
+  align-items: center;
+  justify-content: center;
+}
 
 .loader-container{
   height: 100vh;
@@ -8,6 +18,11 @@
   justify-content: center;
   align-items: center;
   margin: 0;
+}
+
+.loader-img{
+  width: 8em;
+  height: 8em;
 }
 
 .loader {
