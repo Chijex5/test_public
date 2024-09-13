@@ -44,7 +44,7 @@ const App = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [auth]);
 
   if (loading) {
     return <Loaders />;

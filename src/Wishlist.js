@@ -6,7 +6,6 @@ import axios from 'axios';
 import 'react-tooltip/dist/react-tooltip.css';
 import { Link } from 'react-router-dom';
 import image from './22.png';
-import Loader from './Loader'
 import configureBaseUrl from './configureBaseUrl';
 
 const Wishlist = ({ setCartItems }) => {

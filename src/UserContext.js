@@ -44,6 +44,50 @@ export const UserProvider = ({ children }) => {
     fetchUserDataFromLocalStorage();
   }, []);
 
+  const sendUserDataToBackend = async (user) => {
+    try {
+        const response = await axios.post(`${baseUrl}/login`, {
+            user_id: user.uid,
+            email: user.email,
+            username: user.displayName || "",
+            profileUrl: user.photoURL || ""
+        });
+
+        const usersData = response.data;
+
+        if (userData.error) {
+            setError(userData.error);
+            return;
+        }
+
+        if (response.status === 201) {
+            console.log('New user created');
+        }
+
+        const userToSave = {
+            userId: usersData.uid,
+            username: usersData.name ||  "Anonymous",
+            email: usersData.email,
+            profileUrl: usersData.profileUrl || "",
+            level: usersData.level || "",
+            flatNo: usersData.flat_no || "",
+            street: usersData.street || "",
+            city: usersData.city || "",
+            state: usersData.state || "",
+            postalCode: usersData.postal_code || "",
+            address: usersData.address || "",
+            phone: usersData.phone || "",
+            department: usersData.department || ""
+        };
+        setUserData(userToSave)
+        localStorage.setItem('user', JSON.stringify(userToSave));
+
+    } catch (err) {
+        console.error('Backend Error:', err);
+        setError('Failed to send user data to backend.');
+    }
+};
+
 
   const handleLogout = async () => {
     try {
@@ -73,7 +117,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ userData, updateUserData, loading, handleLogout }}>
+    <UserContext.Provider value={{ userData, updateUserData, loading, handleLogout, sendUserDataToBackend }}>
       {children}
     </UserContext.Provider>
   );

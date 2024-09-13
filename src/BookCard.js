@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './Books.css';
 import Notification from './Notifications';
 import configureBaseUrl from './configureBaseUrl';
+import Loader from './Loader'
 
 const BookCard = ({ book, onAddToCart }) => {
   const [baseUrl, setBaseUrl] = useState('');
   const [load, setLoading] = useState(false)
   const [clicke, setClicke] = useState(false);
+  const [userId, setUserId] = useState(''); 
   const [buttonState, setButtonState] = useState({ cartClicked: false, wishlistClicked: false });
   const [notification, setNotification] = useState({ message: '', type: '' });
   useEffect(() => {
@@ -17,6 +19,21 @@ const BookCard = ({ book, onAddToCart }) => {
     };
 
     fetchBaseUrl();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserDataFromLocalStorage = async () => {
+      try {
+        const user = await JSON.parse(localStorage.getItem('user'));
+        if (user) {
+          setUserId(user.userId); // Set the userId here
+          console.log("User data fetched from local storage:", user);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+    fetchUserDataFromLocalStorage();
   }, []);
   
   const showNotification = (message, type) => {
@@ -112,16 +129,16 @@ const BookCard = ({ book, onAddToCart }) => {
       <button
         onClick={(event) => {
           event.stopPropagation();
-          handleAddToWishlist(book);
+          handleAddToWishlist(userId, book.id, book.code);
         }}
         className={
-          buttonState.wishlistClicked
-            ? "add-to-wishlist-button clicked"
-            : "add-to-wishlist-button"
-        }
-      >
-        {buttonState.wishlistClicked ? "Added!" : "Add to Wishlist"}
-      </button>
+          clicke
+              ? "add-to-wishlist-button clicked"
+              : "add-to-wishlist-button"
+              }
+        >
+          {load ? <Loader /> : (clicke ? "Added!" : "Add to Wishlist")}
+        </button>
       {notification.message && (
         <Notification 
           message={notification.message} 

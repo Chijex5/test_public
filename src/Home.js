@@ -170,7 +170,7 @@ const Home = ({ cartItems, setCartItems }) => {
 
         return () => clearInterval(intervalId); // Cleanup interval on component unmount
       }
-    }, [userId]); // This effect runs when usersData is set
+    }, [userId, baseUrl]); // This effect runs when usersData is set
 
   const mapBooks = (booksArray) => {
     return booksArray.map(book => ({

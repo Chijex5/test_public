@@ -7,12 +7,14 @@ import './Auth.css'; // Ensure this is your CSS file
 import Loader from './Loader'; // Ensure this is your Loader component
 import Deal from './uni2.png'
 import configureBaseUrl from './configureBaseUrl';
+import { useUser } from './UserContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const {sendUserDataToBackend} = useUser();
   const navigate = useNavigate();
   const [baseUrl, setBaseUrl] = useState('');
 
@@ -26,58 +28,7 @@ const Login = () => {
     fetchBaseUrl();
   }, []);
   
-  const saveUserDataToLocalStorage = (user) => {
-    const userData = {
-      userId: user.uid,
-      username: user.displayName,
-      email: user.email,
-      profileUrl: user.photoURL
-    };
-    localStorage.setItem('user', JSON.stringify(userData));
-  };
 
-  const sendUserDataToBackend = async (user) => {
-    try {
-        const response = await axios.post(`${baseUrl}/login`, {
-            user_id: user.uid,
-            email: user.email,
-            username: user.displayName || "",
-            profileUrl: user.photoURL || ""
-        });
-
-        const userData = response.data;
-
-        if (userData.error) {
-            setError(userData.error);
-            return;
-        }
-
-        if (response.status === 201) {
-            console.log('New user created');
-        }
-
-        const userToSave = {
-            userId: user.uid,
-            username: userData.name || user.displayName || "Anonymous",
-            email: user.email,
-            profileUrl: userData.profileUrl || user.photoURL || "",
-            level: userData.level || "",
-            flatNo: userData.flat_no || "",
-            street: userData.street || "",
-            city: userData.city || "",
-            state: userData.state || "",
-            postalCode: userData.postal_code || "",
-            address: userData.address || "",
-            phone: userData.phone || "",
-            department: userData.department || ""
-        };
-        localStorage.setItem('user', JSON.stringify(userToSave));
-
-    } catch (err) {
-        console.error('Backend Error:', err);
-        setError('Failed to send user data to backend.');
-    }
-};
 
 const checkUserExists = async (email, uid) => {
   try {
@@ -100,12 +51,10 @@ const checkUserExists = async (email, uid) => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
-
       const userExists = await checkUserExists(user.email, user.uid);
 
       if (userExists) {
-        saveUserDataToLocalStorage(user);
-        await sendUserDataToBackend(user);
+        sendUserDataToBackend(user);
         navigate('/home'); // Redirect to home if user exists
       } else {
         navigate('/complete-profile'); // Redirect to complete profile if user does not exist
@@ -139,8 +88,7 @@ const checkUserExists = async (email, uid) => {
       const userExists = await checkUserExists(user.email, user.uid);
 
       if (userExists) {
-        saveUserDataToLocalStorage(user);
-        await sendUserDataToBackend(user);
+        sendUserDataToBackend(user);
         navigate('/home'); // Redirect to home if user exists
       } else {
         navigate('/complete-profile'); // Redirect to complete profile if user does not exist
