@@ -25,7 +25,7 @@ const SearchArea = ({ onSearch }) => {
           type="text"
           value={query}
           onChange={handleChange}
-          placeholder="Search for books, departments..."
+          placeholder="Search for books by Code(COS201), Department(Computer Science) or Title(Introduction to programing)"
           className="search-input"
         />
         {query && (

@@ -14,6 +14,33 @@ export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [baseUrl, setBaseUrl] = useState('');
+  const [totalSum, setTotalSum] = useState('---');
+  const [userId, setUserId] = useState(''); 
+  const [totalBooks, setTotalBooks] = useState('---');
+  const [hasFetched, setHasFetched] = useState(false);  // State to track if data has been fetched
+
+  useEffect(() => {
+    if (userId && !hasFetched) {
+      const fetchPurchaseSummary = async () => {
+        setLoading(true)
+        try {
+          const response = await axios.get(`${baseUrl}/user/purchases`, {
+            params: { userId }
+          });
+          const { totalSum, totalBooks } = response.data;
+          setTotalSum(totalSum);
+          setTotalBooks(totalBooks);
+          setHasFetched(true);  // Set to true after data is fetched
+        } catch (error) {
+          console.error('Error fetching purchase summary:', error);
+        } finally {
+          setLoading(false)
+        }
+      };
+
+      fetchPurchaseSummary();
+    }
+  }, [userId, hasFetched, baseUrl]);
 
   useEffect(() => {
     const fetchBaseUrl = async () => {
@@ -31,7 +58,7 @@ export const UserProvider = ({ children }) => {
         const user = await JSON.parse(localStorage.getItem('user'));
         if (user) {
           setUserData(user);
-          console.log(user)
+          
           
         }
       } catch (error) {
@@ -44,8 +71,24 @@ export const UserProvider = ({ children }) => {
     fetchUserDataFromLocalStorage();
   }, []);
 
+  useEffect(() => {
+    const fetchUserDataFromLocalStorage = async () => {
+      try {
+        const user = await JSON.parse(localStorage.getItem('user'));
+        if (user) {
+          setUserId(user.userId); // Set the userId here
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+  
+    fetchUserDataFromLocalStorage();
+  }, []);
+
   const sendUserDataToBackend = async (user) => {
     try {
+      setLoading(true)
         const response = await axios.post(`${baseUrl}/login`, {
             user_id: user.uid,
             email: user.email,
@@ -54,9 +97,10 @@ export const UserProvider = ({ children }) => {
         });
 
         const usersData = response.data;
-
-        if (userData.error) {
-            setError(userData.error);
+        
+        if (usersData.error) {
+            console.log(userData.error);
+            setLoading(false);
             return;
         }
 
@@ -65,7 +109,8 @@ export const UserProvider = ({ children }) => {
         }
 
         const userToSave = {
-            userId: usersData.uid,
+          
+            userId: usersData.userId,
             username: usersData.name ||  "Anonymous",
             email: usersData.email,
             profileUrl: usersData.profileUrl || "",
@@ -77,16 +122,42 @@ export const UserProvider = ({ children }) => {
             postalCode: usersData.postal_code || "",
             address: usersData.address || "",
             phone: usersData.phone || "",
-            department: usersData.department || ""
+            department: usersData.department || "",
+            code: "2"
         };
+
         setUserData(userToSave)
         localStorage.setItem('user', JSON.stringify(userToSave));
 
+        setLoading(false);
     } catch (err) {
         console.error('Backend Error:', err);
-        setError('Failed to send user data to backend.');
+        setLoading(false);
     }
 };
+
+
+const saveUserDataToLocalStorage = (user, additionalData) => {
+  const userData = {
+    userId: user.uid,
+    username: additionalData.fullName || user.displayName || "Anonymous",
+    email: user.email,
+    profileUrl: user.photoURL || "",
+    level: additionalData.level || "",
+    address: `${additionalData.flatNo ? `${additionalData.flatNo}, ` : ""}${additionalData.street ? `${additionalData.street}, ` : ""}${additionalData.city ? `${additionalData.city}, ` : ""}${additionalData.state ? `${additionalData.state}, ` : ""}${additionalData.postalCode ? `${additionalData.postalCode}` : ""}`.replace(/,\s*$/, ""),
+    phone: additionalData.phone || "",
+    flatNo: additionalData.flat_no || "",
+    street: additionalData.street || "",
+    city: additionalData.city || "",
+    state: additionalData.state || "",
+    postalCode: additionalData.postal_code || "",
+    code: "1",
+    department: additionalData.department || ""
+  };
+  setUserData(userData)
+  localStorage.setItem('user', JSON.stringify(userData));
+};
+
 
 
   const handleLogout = async () => {
@@ -94,7 +165,6 @@ export const UserProvider = ({ children }) => {
       localStorage.removeItem('user');
       setUserData(null);
       await signOut(auth);
-      localStorage.clear();
       navigate('/login');
     } catch (error) {
       console.error('Error signing out: ', error);
@@ -117,7 +187,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ userData, updateUserData, loading, handleLogout, sendUserDataToBackend }}>
+    <UserContext.Provider value={{ userData, updateUserData, totalBooks, loading, totalSum, setLoading, handleLogout, sendUserDataToBackend, saveUserDataToLocalStorage }}>
       {children}
     </UserContext.Provider>
   );

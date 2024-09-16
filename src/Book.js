@@ -5,6 +5,8 @@ import SearchArea from './SearchArea';
 import RecommendationArea from './RecommendationArea';
 import SellBook from './SellBook';
 import configureBaseUrl from './configureBaseUrl';
+import Loaders from './Loaders';
+
 
 
 const Books = ({ setCartItems }) => {
@@ -27,6 +29,7 @@ const Books = ({ setCartItems }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState(null);
   const [baseUrl, setBaseUrl] = useState('');
+  const [loading, setLoading] = useState(false)
 
 useEffect(() => {
   const fetchBaseUrl = async () => {
@@ -42,6 +45,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
         const response = await axios.get(`${baseUrl}/findbooks`);
         const mappedData = {
           recentChoices: mapBooks(response.data.recentChoices || []),
@@ -58,9 +62,11 @@ useEffect(() => {
           popularBooks: mapBooks(response.data.popularBooks || [])
         };
         setBooksData(mappedData);
+        setLoading(false)
         localStorage.setItem('booksData', JSON.stringify(mappedData));
         setError(null);
       } catch (err) {
+        setLoading(false)
         console.error("There was an error fetching the books data!", err);
         setError('Failed to fetch data from the backend.');
       }
@@ -121,6 +127,9 @@ useEffect(() => {
       }
     });
   };
+  if (loading) {
+    return <Loaders />
+  }
 
   if (error && booksData.allBooks.length === 0) {
     return <div className="error-message">{error}</div>;
@@ -140,61 +149,116 @@ useEffect(() => {
         <div className="no-results">No results found</div>
       ) : (
         <>
+        {booksData.recentChoices.length > 0 ? (
           <RecommendationArea
             title="Based on your recent choices"
             books={booksData.recentChoices}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+            <>
+            </>
+            )}
+          {booksData.newArrivals.length > 0 ? (
           <RecommendationArea
             title="New Arrivals"
             books={booksData.newArrivals}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+            <>
+            </>
+            )}
+          {booksData.topRatedBooks.length > 0 ? (
           <RecommendationArea
             title="Top Rated"
             books={booksData.topRatedBooks}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+            <>
+            </>
+            )}
+          {booksData.onSaleBooks.length > 0 ? (
           <RecommendationArea
             title="On Sale"
             books={booksData.onSaleBooks}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+            <>
+            </>
+            )}
+          {booksData.engineeringBooks.length > 0 ? (
           <RecommendationArea
             title="Engineering"
             books={booksData.engineeringBooks}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+            <>
+            </>
+            )}
+          {booksData.scienceBooks.length > 0 ? (
           <RecommendationArea
             title="Science"
             books={booksData.scienceBooks}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+            <>
+            </>
+            )}
+          {booksData.artsBooks.length > 0 ? (
           <RecommendationArea
             title="Arts"
             books={booksData.artsBooks}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+            <>
+            </>
+            )}
+          {booksData.itBooks.length > 0 ? (
           <RecommendationArea
             title="Information Technology"
             books={booksData.itBooks}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+            <>
+            </>
+            )}
+          {booksData.featuredBooks.length > 0 ? (
           <RecommendationArea
             title="Featured"
             books={booksData.featuredBooks}
             onAddToCart={handleAddToCart}
           />
-          <RecommendationArea
+          ) : (
+            <>
+            </>
+            )}
+          {booksData.mostViewedBooks.length > 0 ? (
+            <RecommendationArea
             title="Most Viewed"
             books={booksData.mostViewedBooks}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+          <>
+          </>
+          )}
+          {booksData.popularBooks.length > 0 ? (
           <RecommendationArea
             title="Popular Books"
             books={booksData.popularBooks}
             onAddToCart={handleAddToCart}
           />
+          ) : (
+            <>
+            </>
+            )}
           <SellBook />
         </>
       )}

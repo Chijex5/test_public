@@ -81,8 +81,9 @@
   }
   
   .google-button {
-    background-color: #db4437;
-    color: #fff;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #f4f4f9;
   }
   
   .google-button:hover {

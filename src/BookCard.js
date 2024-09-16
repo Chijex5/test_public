@@ -27,7 +27,7 @@ const BookCard = ({ book, onAddToCart }) => {
         const user = await JSON.parse(localStorage.getItem('user'));
         if (user) {
           setUserId(user.userId); // Set the userId here
-          console.log("User data fetched from local storage:", user);
+
         }
       } catch (error) {
         console.error("Failed to fetch user data:", error);
@@ -43,6 +43,7 @@ const BookCard = ({ book, onAddToCart }) => {
   
   async function handleAddToWishlist(userId, bookId, bookcode) {
     setLoading(true)
+    
     try {
       // API endpoint URL
       const url = `${baseUrl}/addToWishlist`; // Replace with your actual backend endpoint
@@ -105,40 +106,61 @@ const BookCard = ({ book, onAddToCart }) => {
   
 
   return (
-    <div className="book-cardy">
+    <div className="book-cardys">
       <h3>{book.code}</h3>
       <div className="text-container">
         <p>{book.name}</p>
-        <p>Department: {book.department}</p>
+        <p>{book.department}</p>
         <p>₦{book.price ? book.price.toFixed(2) : "N/A"}</p>
-        <p className='rating'>Rating: <span className='rating-value'>{book.rating}</span></p>
+
+        <div className="star-rating">
+          <div className="stars-outer">
+            <div
+              className="stars-inner"
+              style={{
+                width: `${
+                  book.rating && !isNaN(parseFloat(book.rating))
+                    ? (parseFloat(book.rating) / 5) * 100
+                    : 0
+                }%`
+              }}
+            ></div>
+          </div>
+          <span className="rating-text">
+            {book.rating && !isNaN(parseFloat(book.rating))
+              ? parseFloat(book.rating).toFixed(1)
+              : "No rating"}{" "}
+          </span>
+        </div>
       </div>
-      <button
-        onClick={handleAddToCart}
-        disabled={!book.available}
-        className={
-          buttonState.cartClicked
-            ? "add-to-cart-button clicked"
-            : book.available
-            ? "add-to-cart-button"
-            : "out-of-stock-button"
-        }
-      >
-        {book.available ? (buttonState.cartClicked ? "Added!" : "Add to Cart") : "Out of Stock"}
-      </button>
-      <button
-        onClick={(event) => {
-          event.stopPropagation();
-          handleAddToWishlist(userId, book.id, book.code);
-        }}
-        className={
-          clicke
-              ? "add-to-wishlist-button clicked"
-              : "add-to-wishlist-button"
-              }
+
+      <div className="button-container">
+        <button
+          onClick={handleAddToCart}
+          disabled={!book.available}
+          className={
+            buttonState.cartClicked
+              ? "add-to-cart-button clicked"
+              : book.available
+              ? "add-to-cart-button"
+              : "out-of-stock-button"
+          }
         >
-          {load ? <Loader /> : (clicke ? "Added!" : "Add to Wishlist")}
+          {book.available ? (buttonState.cartClicked ? "Added!" : "Add to Cart") : "Out of Stock"}
         </button>
+
+        <button
+          onClick={(event) => {
+            event.stopPropagation();
+            handleAddToWishlist(userId, book.id, book.code);
+          }}
+          className={clicke ? "adds-to-wishlist-button clicked" : "adds-to-wishlist-button"}
+        >
+          {load ? <Loader /> : clicke ? "Added!" : "Add to Wishlist"}
+        </button>
+      </div>
+
+
       {notification.message && (
         <Notification 
           message={notification.message} 

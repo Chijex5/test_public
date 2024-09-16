@@ -5,8 +5,9 @@ import Select from 'react-select';
 import './CompleteProfile.css';
 import Loader from './Loader';
 import configureBaseUrl from './configureBaseUrl';
-
+import { useUser } from './UserContext';
 const CompleteProfile = ({ user }) => {
+    const {saveUserDataToLocalStorage} = useUser();
     const [fullName, setFullName] = useState(user.displayName || '');
     const [phone, setPhone] = useState('');
     const [flatNo, setFlatNo] = useState('');
@@ -212,19 +213,6 @@ const CompleteProfile = ({ user }) => {
     
         fetchBaseUrl();
       }, []);
-  const saveUserDataToLocalStorage = (user, additionalData) => {
-    const userData = {
-      userId: user.uid,
-      username: fullName || user.displayName || "Anonymous",
-      email: user.email,
-      profileUrl: user.photoURL || "",
-      level: additionalData.level || "",
-      address: `${additionalData.flatNo ? `${additionalData.flatNo}, ` : ""}${additionalData.street ? `${additionalData.street}, ` : ""}${additionalData.city ? `${additionalData.city}, ` : ""}${additionalData.state ? `${additionalData.state}, ` : ""}${additionalData.postalCode ? `${additionalData.postalCode}` : ""}`.replace(/,\s*$/, ""),
-      phone: additionalData.phone || "",
-      department: additionalData.department || ""
-    };
-    localStorage.setItem('user', JSON.stringify(userData));
-  };
 
   useEffect(() => {
     if (user.displayName) {
@@ -292,6 +280,7 @@ const CompleteProfile = ({ user }) => {
         setError('');
       
         const additionalData = {
+          fullName,
           level,
           flatNo,
           street,
@@ -310,7 +299,7 @@ const CompleteProfile = ({ user }) => {
           await sendUserDataToBackend(user, additionalData);
       
           // Redirect to home page after completion
-          navigate('/home');
+          navigate('/dashboard');
         } catch (err) {
           setError(err.message);
           console.error('Profile Completion Error:', err);
@@ -367,6 +356,13 @@ const CompleteProfile = ({ user }) => {
       <div className="complete-profile-card">
         {/* Step Indicator */}
         <div className="step-indicator">Step {stage} of 4</div>
+        <div className="progress-bar">
+          <div
+            className="progress-bar-inner"
+            style={{ width: `${(stage / 4) * 100}%` }} 
+          ></div>
+        </div>
+
 
         
         {error && <p className="error-message">{error}</p>}
@@ -396,7 +392,7 @@ const CompleteProfile = ({ user }) => {
               </div>
               <div className="input-group">
                 <input
-                  type="tel"
+                  type="text"
                   className="complete-profile-input"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -505,18 +501,19 @@ const CompleteProfile = ({ user }) => {
             </>
           )}
 
-            {stage === 4 && (
-                <>
-                    <div className="confirm-details">
-                        <h2>Confirm Your Details</h2>
-                        <p><strong>Full Name:</strong> {fullName || user.displayName || 'Anonymous'}</p>
-                        <p><strong>Phone Number:</strong> {phone}</p>
-                        <p><strong>Address:</strong> {`${flatNo}, ${street}, ${city}, ${state}, ${postalCode}`}</p>
-                        <p><strong>Level:</strong> {level}</p>
-                        <p><strong>Department:</strong> {selectedDepartment ? selectedDepartment.label : 'Not selected'}</p>
-                    </div>
-                </>
-            )}
+          {stage === 4 && (
+            <div className="confirm-details">
+              <h2>Confirm Your Details</h2>
+              <div className="details-list">
+                <p><strong>Full Name:</strong> {fullName || user.displayName || 'Anonymous'}</p>
+                <p><strong>Phone Number:</strong> {phone}</p>
+                <p><strong>Address:</strong> {`${flatNo}, ${street}, ${city}, ${state}, ${postalCode}`}</p>
+                <p><strong>Level:</strong> {level}</p>
+                <p><strong>Department:</strong> {selectedDepartment ? selectedDepartment.label : 'Not selected'}</p>
+              </div>
+            </div>
+          )}
+
             
           {/* Navigation Buttons */}
           <div className="button-group">

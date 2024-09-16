@@ -20,6 +20,53 @@ footer {
   bottom: 0;
 }
 
+
+.verify-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.verify-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.verify-content h2 {
+  margin-bottom: 15px;
+}
+
+.verify-content p {
+  margin-bottom: 20px;
+}
+
+.verify-content button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.verify-content button:disabled {
+  background-color: #ccc;
+}
+
+.verify-content button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+
 /* app.css */
 
 /* Reset some default styles */

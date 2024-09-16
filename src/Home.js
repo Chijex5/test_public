@@ -14,12 +14,15 @@ import Notification from './Notifications';
 import configureBaseUrl from './configureBaseUrl';
 
 const Home = ({ cartItems, setCartItems }) => {
-  const { userData, loading } = useUser();
+  const { userData, loading, totalSum, totalBooks } = useUser();
   const [expandedBook, setExpandedBook] = useState(null);
-  const [load, setLoading] = useState(false)
+  const [loadingBooks, setLoadingBooks] = useState({});
   const [notification, setNotification] = useState({ message: '', type: '' });
   const [userId, setUserId] = useState(''); 
   const [baseUrl, setBaseUrl] = useState('');
+  const [clicked, setClicked] = useState({});
+  const [clicke, setClicke] = useState({});
+  
 
   useEffect(() => {
     const fetchBaseUrl = async () => {
@@ -33,7 +36,7 @@ const Home = ({ cartItems, setCartItems }) => {
 
 
   async function handleAddToWishlist(userId, bookId, bookcode) {
-    setLoading(true)
+    setLoadingBooks(prevState => ({ ...prevState, [bookId]: true }));
     try {
       // API endpoint URL
       const url = `${baseUrl}/addToWishlist`; // Replace with your actual backend endpoint
@@ -55,29 +58,29 @@ const Home = ({ cartItems, setCartItems }) => {
   
       // Handle the response based on the status code
       if (response.ok) {
-        setLoading(false)
-        setClicke(true);
+        setLoadingBooks(prevState => ({ ...prevState, [bookId]: false }));
+        setClicke(prevState => ({ ...prevState, [bookId]: true }));
         setNotification({message: `${bookcode} successfully added to wishlist!`, type: 'success'});
         setTimeout(() => {
-          setClicke(false);
+          setClicke(prevState => ({ ...prevState, [bookId]: false }));
           setNotification({ message: '', type: '' });
         }, 4000);
         // Handle the successful addition
       } else if (response.status === 409) {
         // 409 Conflict: Book already in wishlist
-        setLoading(false)
+        setLoadingBooks(prevState => ({ ...prevState, [bookId]: false }));
         setNotification({message: `${bookcode} is already in your wishlist.`, type: 'info'});
         setTimeout(() => {
-          setClicke(false);
+          setClicke(prevState => ({ ...prevState, [bookId]: false }));
           setNotification({ message: '', type: '' });
         }, 4000);
       } else {
         // Other errors
-        setLoading(false)
+        setLoadingBooks(prevState => ({ ...prevState, [bookId]: false }));
         setNotification({message: `Failed to add ${bookcode} to the wishlist.`, type: 'error'})
         console.log("Failed to add the book to the wishlist.");
         setTimeout(() => {
-          setClicke(false);
+          setClicke(prevState => ({ ...prevState, [bookId]: false }));
           setNotification({ message: '', type: '' });
         }, 4000);
       }
@@ -129,7 +132,6 @@ const Home = ({ cartItems, setCartItems }) => {
         const user = await JSON.parse(localStorage.getItem('user'));
         if (user) {
           setUserId(user.userId); // Set the userId here
-          console.log("User data fetched from local storage:", user);
         }
       } catch (error) {
         console.error("Failed to fetch user data:", error);
@@ -137,40 +139,51 @@ const Home = ({ cartItems, setCartItems }) => {
     };
   
     fetchUserDataFromLocalStorage();
-  }, []);   // Empty dependency array to run only once on component mount
-
+  }, []);  // Empty dependency array to run only once on component mount
+  
+  
   useEffect(() => {
-      if (userId) {
-        const fetchData = () => {
-          axios.get(`${baseUrl}/getbooks`, {
-            params: { userId: userId }
-          })
-            .then(response => {
-              const mappedData = {
-                recentChoices: mapBooks(response.data.recentChoices),
-                departmentBooks: mapBooks(response.data.allBooks)  // Changed to 'allBooks' based on backend
-              };
-              setBooksData(mappedData);
-              console.log(mappedData)
-              localStorage.setItem('homeBooksData', JSON.stringify(mappedData));
-            })
-            .catch(error => {
-              console.error("There was an error fetching the books data!", error);
-            });
+    if (!userId) return;  // Exit early if userId is not set
+
+  
+    const fetchBooksData = async () => {
+      try {
+        // Always fetch on first mount, even if cached data exists
+        const response = await axios.get(`${baseUrl}/getbooks`, {
+          params: { userId: userId }
+        });
+  
+        const mappedData = {
+          recentChoices: mapBooks(response.data.recentChoices),
+          departmentBooks: mapBooks(response.data.allBooks)
         };
-
-        const cachedBooksData = localStorage.getItem('homeBooksData');
-        if (cachedBooksData) {
-          setBooksData(JSON.parse(cachedBooksData));
-        } else {
-          fetchData();
-        }
-
-        const intervalId = setInterval(fetchData, 5 * 60 * 1000); // sync every 5 minutes
-
-        return () => clearInterval(intervalId); // Cleanup interval on component unmount
+  
+        setBooksData(mappedData);
+        
+  
+        // Cache fetched data in localStorage
+        localStorage.setItem('homeBooksData', JSON.stringify(mappedData));
+      } catch (error) {
+        console.error("There was an error fetching the books data!", error);
       }
-    }, [userId, baseUrl]); // This effect runs when usersData is set
+    };
+  
+    // First fetch on mount
+    fetchBooksData();
+  
+    const cachedHomeData = localStorage.getItem('homeBooksData');
+    if (cachedHomeData) {
+      setBooksData(JSON.parse(cachedHomeData));
+    }
+  
+    // Set up interval to refetch data every 5 minutes
+    const intervalId = setInterval(fetchBooksData, 5 * 60 * 1000);
+  
+  
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [userId, baseUrl]);  // Dependency array to re-run effect when userId or baseUrl changes
+  // This effect runs when usersData is set
 
   const mapBooks = (booksArray) => {
     return booksArray.map(book => ({
@@ -205,11 +218,10 @@ const Home = ({ cartItems, setCartItems }) => {
     setExpandedBook(expandedBook === id ? null : id);
   };
   // eslint-disable-next-line
-  const [clicked, setClicked] = useState(false);
-  const [clicke, setClicke] = useState(false);
+  
 
   const handleAddToCart = (book) => {
-    setClicked(true)
+    setClicked(prevState => ({ ...prevState, [book.id]: true }));
     
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.name === book.name);
@@ -225,12 +237,12 @@ const Home = ({ cartItems, setCartItems }) => {
       
     });
     setTimeout(() => {
-      setClicked(false);
+      setClicked(prevState => ({ ...prevState, [book.id]: false }));
     }, 2000); // 2 seconds
     setNotification({ message: `${book.code} added to cart!`, type: 'success' });
 
     setTimeout(() => {
-      setClicked(false);
+      setClicked(prevState => ({ ...prevState, [book.id]: false }));
       setNotification({ message: '', type: '' });
     }, 4000); // 2 seconds
 
@@ -240,6 +252,7 @@ const Home = ({ cartItems, setCartItems }) => {
     setNotification({ message: '', type: '' });
   };
 
+  
   
   if (loading) return <Loaders />;
 
@@ -269,11 +282,11 @@ const Home = ({ cartItems, setCartItems }) => {
         <div className="dashboard">
           <div className="dashboard-item">
             <span className="label">Books Bought</span>
-            <span className="value">10</span>
+            <span className="value">{totalBooks}</span>
           </div>
           <div className="dashboard-item">
             <span className="label">Money Spent</span>
-            <span className="value">₦20,000.00</span>
+            <span className="value">₦{totalSum.toLocaleString()}</span>
           </div>
           <div className="dashboard-item">
             <span className="label">Books in Cart</span>
@@ -297,15 +310,33 @@ const Home = ({ cartItems, setCartItems }) => {
                 onClick={() => toggleExpand(book.id)}
               >
                 <div className="book-summary" >
-                  <p>Course Code: {book.code}</p>
+                  <p className = "bold-code">{book.code}</p>
                   <p className={book.available ? "available" : "notavailable"}>{book.available ? "Available" : "Unavailable"}</p>
-                  <p>Price: ₦{book.price}</p>
+                  <p>₦{book.price}</p>
                 </div>
                 {expandedBook === book.id && (
                   <div className="book-details">
                     <p>Title: {book.name}</p>
                     <p>Department: {book.department}</p>
-                    <p className='rating'>Rating: <span className='rating-value'>{book.rating}</span></p>
+                     <div className="star-rating">
+                        <div className="stars-outer">
+                          <div
+                            className="stars-inner"
+                            style={{
+                              width: `${
+                                book.rating && !isNaN(parseFloat(book.rating))
+                                  ? (parseFloat(book.rating) / 5) * 100
+                                  : 0
+                              }%`
+                            }}
+                          ></div>
+                        </div>
+                        <span className="rating-text">
+                          {book.rating && !isNaN(parseFloat(book.rating))
+                            ? parseFloat(book.rating).toFixed(1)
+                            : "No rating"}{" "}
+                        </span>
+                      </div>
                     <button
                       onClick={(event) => {
                         event.stopPropagation(); 
@@ -313,14 +344,14 @@ const Home = ({ cartItems, setCartItems }) => {
                       }} 
                       disabled={!book.available}
                       className={
-                        clicked
+                        clicked[book.id]
                           ? "add-to-cart-button clicked"
                           : book.available
                           ? "add-to-cart-button"
                           : "out-of-stock-button"
                       }
                     >
-                      {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
+                      {book.available ? (clicked[book.id] ? "Added!" : "Add to Cart") : "Out of Stock"}
                     </button>
                     <button
                       onClick={(event) => {
@@ -328,12 +359,12 @@ const Home = ({ cartItems, setCartItems }) => {
                         handleAddToWishlist(userId, book.id, book.code);
                       }}
                       className={
-                      clicke
+                      clicke[book.id]
                           ? "add-to-wishlist-button clicked"
                           : "add-to-wishlist-button"
                           }
                     >
-                      {load ? <Loader /> : (clicke ? "Added!" : "Add to Wishlist")}
+                      {loadingBooks[book.id] ? <Loader /> : (clicke[book.id] ? "Added!" : "Add to Wishlist")}
                     </button>
                   </div>
                 )}
@@ -351,15 +382,33 @@ const Home = ({ cartItems, setCartItems }) => {
                 onClick={() => toggleExpand(book.id)}
               >
                 <div className="book-summary">
-                  <p>Course Code: {book.code}</p>
+                  <p className='bold-code'>{book.code}</p>
                   <p className={book.available ? "available" : "notavailable"}>{book.available ? "Available" : "Unavailable"}</p>
-                  <p>Price: ₦{book.price}</p>
+                  <p>₦{book.price}</p>
                 </div>
                 {expandedBook === book.id && (
                   <div className="book-details">
                     <p>Title: {book.name}</p>
                     <p>Department: {book.department}</p>
-                    <p className='rating'>Rating: <span className='rating-value'>{book.rating}</span></p>
+                    <div className="star-rating">
+                        <div className="stars-outer">
+                          <div
+                            className="stars-inner"
+                            style={{
+                              width: `${
+                                book.rating && !isNaN(parseFloat(book.rating))
+                                  ? (parseFloat(book.rating) / 5) * 100
+                                  : 0
+                              }%`
+                            }}
+                          ></div>
+                        </div>
+                        <span className="rating-text">
+                          {book.rating && !isNaN(parseFloat(book.rating))
+                            ? parseFloat(book.rating).toFixed(1)
+                            : "No rating"}{" "}
+                        </span>
+                      </div>
                     <button
                       onClick={(event) => {
                         event.stopPropagation(); 
@@ -367,28 +416,27 @@ const Home = ({ cartItems, setCartItems }) => {
                       }} 
                       disabled={!book.available}
                       className={
-                        clicked
+                        clicked[book.id]
                           ? "add-to-cart-button clicked"
                           : book.available
                           ? "add-to-cart-button"
                           : "out-of-stock-button"
                       }
                     >
-                      {book.available ? (clicked ? "Added!" : "Add to Cart") : "Out of Stock"}
+                      {book.available ? (clicked[book.id] ? "Added!" : "Add to Cart") : "Out of Stock"}
                     </button>
                     <button
-                    
                       onClick={(event) => {
                         event.stopPropagation(); 
                         handleAddToWishlist(userId, book.id, book.code);
                       }}
                       className={
-                      clicke
+                      clicke[book.id]
                           ? "add-to-wishlist-button clicked"
                           : "add-to-wishlist-button"
                           }
                     >
-                      {clicke ? "Added!" : "Add to Wishlist"}
+                      {loadingBooks[book.id] ? <Loader /> : (clicke[book.id] ? "Added!" : "Add to Wishlist")}
                     </button>
                   </div>
                 )}

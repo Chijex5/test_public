@@ -1,351 +1,427 @@
-/* Overall Page Style */
-.user-profile {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #333;
-  background-color: #f4f4f4;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 5em;
-}
-
-/* Profile Header */
-.profile-header {
+/* Container for the entire profile details section */
+.user-details-container {
+  width: 75vw;
+  max-width: 1000px;
+  margin: 3em auto;
+  padding: 2.5em;
+  margin-bottom: 4em;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 2.5em;
+  animation: fadeIn 0.5s ease-in-out;
+  transition: all 0.3s ease;
 }
 
-.profile-img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin-right: 20px;
-  object-fit: cover;
-  border: 4px solid #4CAF50;
+/* Animation for the container when it loads */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.profile-info h2 {
-  margin: 0;
-  font-size: 24px;
-  color: #4CAF50;
+/* Profile details section */
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8em;
+  font-size: 1.2rem; /* Slightly larger for readability */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #444;
 }
 
-.email {
-  color: #888;
-  font-size: 16px;
+/* Each detail item */
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8em 0;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  transition: background-color 0.3s ease;
 }
 
-/* Form and Details Styling */
-.form label,
-.details p {
-  display: block;
-  margin-bottom: 10px;
+.detail-item strong {
+  font-weight: 600;
+  color: #333;
 }
 
-.form input[type="text"],
-.form input[type="email"] {
+.detail-item:last-of-type {
+  border-bottom: none;
+}
+
+.detail-item:hover {
+  background-color: #f8f9fa; /* Subtle hover effect */
+  transform: scale(1.01);
+}
+
+/* Buttons section */
+.user-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5em;
+}
+
+.edit-button,
+.logout-button {
+  padding: 0.9em 1.8em;
+  font-size: 1.1rem;
+  font-family: 'Segoe UI', sans-serif;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.edit-button {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.edit-button:hover {
+  background-color: #43a047;
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+
+.user-actions .logout-button {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.user-actions .logout-button:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(244, 67, 54, 0.4);
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+  .user-details-container {
+    padding: 2em;
+    width: 85vw;
+    
+  }
+
+  .user-details {
+    font-size: 1rem;
+  }
+
+  .edit-button,
+  .logout-button {
+    font-size: 0.9rem;
+    padding: 0.7em 1.4em;
+  }
+
+  /* Adjustments for the detail items in smaller screens */
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* General form container styling */
+.form {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-sizing: border-box;
+  max-width: 600px;
+  margin: 2em auto;
+  margin-bottom: 3em;
+  padding: 2em;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.form input[type="text"]:focus,
-.form input[type="email"]:focus {
-  border-color: #4CAF50;
+.step-indicator {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1.5em;
+  font-weight: 600;
+}
+
+/* Label and input field styling */
+label {
+  display: block;
+  margin-bottom: 1.5em;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+input[type="text"],
+input[type="email"] {
+  width: 100%;
+  padding: 0.9em;
+  margin-top: 0.4em;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #4caf50;
   outline: none;
 }
 
-.details p {
-  font-size: 16px;
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.details p strong {
-  color: #4CAF50;
-}
-
-/* Button and SVG Styling */
-.buttons {
+/* Address group layout */
+.address-group {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
-  flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+  gap: 1.5em;
+  margin-bottom: 1.5em;
 }
 
-.buttons button {
-  padding: 10px 15px;
-  margin: 10px 0;
+/* Buttons styling */
+.user-profile button {
+  padding: 0.9em 2em;
+  font-size: 1.1rem;
+  border-radius: 8px;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  flex: 1; /* Ensures buttons are equal width */
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px; /* Adds space between SVG and text */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.buttons button:first-child {
-  margin-left: 0; /* Removes extra margin on the first button */
+.user-profile button:focus {
+  outline: none;
 }
 
-.buttons svg {
-  width: 20px;
-  height: 20px;
-}
-
-.edit-button, .save-button {
-  background-color: #4CAF50;
+.next-button,
+.save-button {
+  background-color: #4caf50;
   color: white;
 }
 
-.cancel-button {
+.next-button:hover,
+.save-button:hover {
+  background-color: #43a047;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
+}
+
+.prev-button,
+.button-group .cancel-button {
   background-color: #f44336;
   color: white;
 }
 
-.prev-button, .next-button {
-  background-color: #2196F3;
-  color: white;
+.prev-button:hover,
+.button-group .cancel-button:hover {
+  background-color: #e53935;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(244, 67, 54, 0.3);
 }
 
-.logout-button {
-  background-color: #FF9800;
-  color: white;
+/* Button group for positioning */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1em;
 }
 
 .button-group {
   display: flex;
-  gap: 10px; /* Adds space between Back and Cancel buttons */
-  flex-grow: 1; /* Allows it to shrink, making Save more prominent */
+  flex-direction: column;
+
+  width: 100%;
+  gap: 1em;
 }
 
-/* Modal styling */
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .form {
+    padding: 1.5em;
+  }
+
+  .address-group {
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .user-profile button {
+    width: 100%;
+  }
+}
+
+/* Modal container styling */
 .profile-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
-  margin-bottom: 5em;
+  animation: fadeIn 0.5s ease forwards;
+  z-index: 1000;
 }
 
+/* Modal content box */
 .profile-modal-content {
-  position: relative;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
+  background-color: white;
+  padding: 2em;
+  border-radius: 12px;
+  width: 400px;
   max-width: 90%;
-  width: 500px;
   text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: scaleUp 0.4s ease forwards;
+  position: relative;
 }
 
+/* Profile Image */
 .full-profile-img {
-  width: 90%;
-  height: auto;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 1.5em;
+  transition: transform 0.3s ease;
 }
 
-.close-modal {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.5em;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  
+.full-profile-img:hover {
+  transform: scale(1.05);
 }
 
-.upload-button {
-  display: inline-block;
-  padding: 10px 20px;
-  cursor: pointer;
-  background-color: #007bff;
+/* Button styling */
+.user-profile button {
+  padding: 0.8em 2em;
+  font-size: 1rem;
+  background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  text-align: center;
-  transition: background-color 0.3s ease;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 1em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.user-profile button:hover {
+  background-color: #43a047;
+  transform: translateY(-3px);
+}
+
+/* Upload button with more contrast */
+.upload-button {
+  background-color: #0288d1;
 }
 
 .upload-button:hover {
-  background-color: #0056b3;
+  background-color: #0277bd;
 }
 
-.close-modal i {
-  font-size: 1.8em; /* Adjust icon size */
-}
-
-.close-modal:hover {
-  color: #ccc; /* Lighter shade on hover for better UI feedback */
-}
-
-
-.change-profile-button {
-  display: block;
-  margin: 10px auto;
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.change-profile-button:hover {
-  opacity: 0.9;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .profile-modal-content {
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
+/* Animations for modal appearance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-
-  .full-profile-img {
-    width: 100%;
-    height: auto;
-  }
-
-  .change-profile-button {
-    width: 80%;
-  }
-
-  .close-modal {
-    font-size: 1.2em;
+  to {
+    opacity: 1;
   }
 }
 
-
-.button-group button {
-  flex: 1; /* Makes Back and Cancel buttons take equal space */
-  padding: 8px 12px;
-  font-size: 14px;
-  color: white;
-  border: none;
-  border-radius: 5px;
+@keyframes scaleUp {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* Overall Profile Container */
+.profile-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px; /* Space between SVG and text */
+  gap: 1.5rem; /* Adds space between image and text */
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 2rem auto;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 760px) {
-  .buttons {
+/* Profile Image Styling */
+.profile-img {
+  width: 120px; /* Adjust size as needed */
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover; /* Ensures image maintains aspect ratio and covers the entire container */
+  border: 4px solid #4caf50; /* Green border to match the theme */
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-img:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Adds a shadow on hover */
+}
+
+/* Profile Info Styling */
+.profile-info {
+  flex: 1; /* Ensures the text container takes up the remaining space */
+}
+
+.profile-info h2 {
+  font-size: 1.8rem;
+  color: #081b29; /* Dark color for a professional look */
+  margin: 0;
+}
+
+.profile-info .email {
+  font-size: 1rem;
+  color: #666; /* Lighter gray for email */
+  margin-top: 0.5rem;
+}
+
+/* Additional Styling for Modal and Container */
+.profile-heading {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #081b29;
+}
+
+@media (max-width: 768px) {
+  .profile-header {
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch; /* Ensures full-width buttons */
-  }
-
-  .buttons button {
-    width: 100%; /* Full width buttons */
-    margin: 10px 0; /* Adds space between buttons */
-    margin-left: 0; /* Removes side margin on smaller screens */
-  }
-}
-
-
-.edit-button {
-  background-color: #4CAF50;
-  color: #fff;
-}
-
-
-.save-button:hover,
-.cancel-button:hover,
-.edit-button:hover,
-.logout-button:hover {
-  opacity: 0.9;
-}
-
-@media (max-width: 47.5em) {
-  .user-profile {
-    padding: 1.5rem;
-    max-width: 400px;
-  }
-  .profile-header h2 {
-    font-size: 1.3em;
-    margin-bottom: 0.1em;
-  }
-
-  .profile-header .email{
-    font-size: 0.8em;
-    margin-top: 0.1em;
-  }
-
-  h1 {
-    font-size: 1.75rem;
-    
+    align-items: center;
+    padding: 1rem;
   }
 
   .profile-img {
-    width: 6rem;
-    height: 6rem;
-    
-  }
-}
-
-.address-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.address-group label {
-  flex: 1;
-  min-width: 45%;
-  margin-right: 10px;
-}
-
-.address-group label:last-child {
-  margin-right: 0;
-}
-
-/* Button Styling */
-
-/* Step Indicator */
-.step-indicator {
-  font-size: 18px;
-  margin-bottom: 20px;
-  font-weight: bold;
-  text-align: center;
-  color: #4CAF50;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 760px) {
-  .address-group {
-    flex-direction: column;
+    width: 100px;
+    height: 100px;
   }
 
-  .address-group label {
-    min-width: 100%;
-    margin-right: 0;
-    margin-bottom: 10px;
+  .profile-info h2 {
+    font-size: 1.5rem;
   }
 
+  .profile-info .email {
+    font-size: 0.9rem;
+  }
 }

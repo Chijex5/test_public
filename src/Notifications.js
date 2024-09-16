@@ -7,7 +7,7 @@ const Notification = ({ message, type, onClose }) => {
     <div className={`notification ${type}`}>
       <img src={Deal} alt="logo" className="notification-img" />
       <span>{message}</span>
-      <button onClick={onClose}>X</button>
+      <button onClick={onClose}><i className="fas fa-times"></i></button>
     </div>
   );
 };

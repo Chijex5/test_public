@@ -96,7 +96,7 @@ function UserProfile() {
           onClose={handleNotificationClose} 
         />
       )}
-      <h1>User Profile</h1>
+      <h1 className="profile-heading">User Profile</h1>
       <div className="profile-header">
         <img
           src={form?.profileUrl || profilePic}
@@ -112,14 +112,8 @@ function UserProfile() {
 
       {/* Full-Screen Profile Picture Modal */}
       {isProfileModalOpen && (
-        <div className="profile-modal">
-          <div className="profile-modal-content">
-          <button 
-            onClick={toggleProfileModal}
-            className="close-modal">
-              <i className="fas fa-times"></i>
-          </button>
-
+        <div className="profile-modal" onClick={toggleProfileModal}>
+          <div className="profile-modal-content" onClick={(e) => e.stopPropagation()}>
             <img src={form?.profileUrl || profilePic} alt="Full Profile" className="full-profile-img" />
             <button className="change-profile-button" onClick={() => document.getElementById('file-input').click()}>
               Change Profile Picture
@@ -140,60 +134,30 @@ function UserProfile() {
         </div>
       )}
 
-{isEditing ? (
+      {isEditing ? (
         <div className="form">
           <p className="step-indicator">Step {step} of 3</p>
           {step === 1 && (
             <>
-              <label>
-                First Name:
-                <input
-                  type="text"
-                  name="firstName"
-                  value={firstName}
-                  onChange={(e) => handleChange({ target: { name: 'username', value: `${e.target.value} ${lastName}` } })}
-                />
+              <label>First Name:
+                <input type="text" name="firstName" value={firstName} onChange={(e) => handleChange({ target: { name: 'username', value: `${e.target.value} ${lastName}` } })} />
               </label>
-              <label>
-                Last Name:
-                <input
-                  type="text"
-                  name="lastName"
-                  value={lastName}
-                  onChange={(e) => handleChange({ target: { name: 'username', value: `${firstName} ${e.target.value}` } })}
-                />
+              <label>Last Name:
+                <input type="text" name="lastName" value={lastName} onChange={(e) => handleChange({ target: { name: 'username', value: `${firstName} ${e.target.value}` } })} />
               </label>
-              <label>
-                Email:
-                <input
-                  type="email"
-                  name="email"
-                  value={form?.email || "johndoe@somebody.com" }
-                  disabled
-                />
+              <label>Email:
+                <input type="email" name="email" value={form?.email || "johndoe@somebody.com"} disabled />
               </label>
               <button className="next-button" onClick={handleNextStep}>Next</button>
             </>
           )}
           {step === 2 && (
             <>
-              <label>
-                Phone:
-                <input
-                  type="text"
-                  name="phone"
-                  value={form?.phone || "+234 000 000 0000"}
-                  onChange={handleChange}
-                />
+              <label>Phone:
+                <input type="text" name="phone" value={form?.phone || "+234 000 000 0000"} onChange={handleChange} />
               </label>
-              <label>
-                Department:
-                <input
-                  type="text"
-                  name="department"
-                  value={form?.department || ""}
-                  onChange={handleChange}
-                />
+              <label>Department:
+                <input type="text" name="department" value={form?.department || ""} onChange={handleChange} />
               </label>
               <button className="next-button" onClick={handleNextStep}>Next</button>
               <button className="prev-button" onClick={handlePreviousStep}>Back</button>
@@ -202,80 +166,54 @@ function UserProfile() {
           {step === 3 && (
             <>
               <div className="address-group">
-                <label>
-                  Flat No./Apartment:
-                  <input
-                    type="text"
-                    name="flatNo"
-                    value={form?.flatNo || ""}
-                    onChange={handleChange}
-                  />
+                <label>Flat No./Apartment:
+                  <input type="text" name="flatNo" value={form?.flatNo || ""} onChange={handleChange} />
                 </label>
-                <label>
-                  Street:
-                  <input
-                    type="text"
-                    name="street"
-                    value={form?.street || " "}
-                    onChange={handleChange}
-                  />
+                <label>Street:
+                  <input type="text" name="street" value={form?.street || " "} onChange={handleChange} />
                 </label>
               </div>
               <div className="address-group">
-                <label>
-                  City:
-                  <input
-                    type="text"
-                    name="city"
-                    value={form?.city || " "}
-                    onChange={handleChange}
-                  />
+                <label>City:
+                  <input type="text" name="city" value={form?.city || " "} onChange={handleChange} />
                 </label>
-                <label>
-                  State:
-                  <input
-                    type="text"
-                    name="state"
-                    value={form?.state || " "}
-                    onChange={handleChange}
-                  />
+                <label>State:
+                  <input type="text" name="state" value={form?.state || " "} onChange={handleChange} />
                 </label>
-                <label>
-                  Postal Code:
-                  <input
-                    type="text"
-                    name="postalCode"
-                    value={form?.postalCode || " "}
-                    onChange={handleChange}
-                  />
+                <label>Postal Code:
+                  <input type="text" name="postalCode" value={form?.postalCode || " "} onChange={handleChange} />
                 </label>
               </div>
               <div className="buttons">
                 <div className="button-group">
                   <button className="prev-button" onClick={handlePreviousStep}>Back</button>
                   <button className="cancel-button" onClick={handleCancel}>Cancel</button>
+                  <button className="save-button" onClick={handleSave}>Save</button>
                 </div>
-                <button className="save-button" onClick={handleSave}>Save</button>
               </div>
             </>
           )}
         </div>
       ) : (
-        <div className="details">
-          <p><strong>First Name:</strong> {firstName}</p>
-          <p><strong>Last Name:</strong> {lastName}</p>
-          <p><strong>Email:</strong> {form?.email || "johndoe@somebody.com"}</p>
-          <p><strong>Phone:</strong> {form?.phone || "+234 000 000 0000"}</p>
-          <p><strong>Department:</strong> {form?.department || ""}</p>
-          <p><strong>Address:</strong> {`${form?.flatNo || ""} ${form?.street || " "}, ${form?.city || ""}, ${form?.state  || " "}`}</p>
-          <div className="buttons">
+        <div className="user-details-container">
+          <div className="user-details">
+            <p className="detail-item"><strong>First Name:</strong> {firstName}</p>
+            <p className="detail-item"><strong>Last Name:</strong> {lastName}</p>
+            <p className="detail-item"><strong>Email:</strong> {form?.email || "johndoe@somebody.com"}</p>
+            <p className="detail-item"><strong>Phone:</strong> {form?.phone || "+234 000 000 0000"}</p>
+            <p className="detail-item"><strong>Department:</strong> {form?.department || ""}</p>
+            <p className="detail-item"><strong>Address:</strong> {`${form?.flatNo || ""} ${form?.street || " "}, ${form?.city || ""}, ${form?.state || " "}`}</p>
+          </div>
+          <div className="user-actions">
             <button className="edit-button" onClick={() => setIsEditing(true)}>Edit</button>
             <button className="logout-button" onClick={handleLogout}>Logout</button>
           </div>
         </div>
+
       )}
     </div>
   );
+
 }
 
 export default UserProfile;
