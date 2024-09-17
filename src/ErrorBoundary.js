@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './ErrorBoundary.css';
-import errorImage from './assets.jpg'
+import errorImage from './assets.jpg';
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -16,6 +16,10 @@ class ErrorBoundary extends Component {
     console.error("Error caught by ErrorBoundary:", error, errorInfo);
   }
 
+  handleRefresh = () => {
+    window.location.reload();
+  };
+
   render() {
     if (this.state.hasError) {
       return (
@@ -23,14 +27,18 @@ class ErrorBoundary extends Component {
           <img src={errorImage} alt="Error Illustration" className="error-boundary-image" />
           <h1 className="error-boundary-title">Oops! Something went wrong.</h1>
           <p className="error-boundary-message">
-            An unexpected error has occurred. Please try refreshing the page or contact support if the issue persists.
+            We encountered an unexpected error. Please try refreshing the page or contact support if the issue persists.
           </p>
+          <button className="error-boundary-button" onClick={this.handleRefresh}>
+            Refresh Page
+          </button>
           <div className="error-boundary-footer">
-            <p>Bookshopp 2024</p>
+            <p>&copy; Unibooks 2024</p>
           </div>
         </div>
       );
-    }     
+    }
+
     return this.props.children;
   }
 }

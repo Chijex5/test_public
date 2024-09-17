@@ -6,7 +6,7 @@ import image from './23.png';
 import configureBaseUrl from './configureBaseUrl';
 
 const Cart = ({ cartItems, setCartItems }) => {
-  const {userData, loading} = useUser();
+  const {userData, loading, handleLogout} = useUser();
   const [form, setForm] = useState({ ...userData });
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,12 +97,17 @@ useEffect(() => {
   useEffect(() => {
     if (!loading) {
       setForm(userData);
+      if (!userData?.username || userData.username.trim() === "") {
+        console.error("Invalid username (null or empty), logging out...");
+        handleLogout(); // Log out the user
+      }
+
     }
-  }, [userData, loading]);
+  }, [userData, loading, handleLogout]);
 
   const address = `${form?.flatNo || ""} ${form?.street || " "}, ${form?.city || ""}, ${form?.state}`
-  const name = form.username
-  const email = form.email
+  const name = form.username || ''
+  const email = form.email 
 
    // Function to handle checkout click (opens modal)
    const handleProceedToCheckout = () => {

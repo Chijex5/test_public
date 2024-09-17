@@ -3,60 +3,54 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background-color: #ffffff;
-  color: #2e7d32; /* Green color */
-  padding: 20px;
   text-align: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f8f9fa;
+  color: #333;
 }
 
 .error-boundary-image {
-  width: 18rem;
-  height: 20rem;
+  max-width: 400px;
+  width: 100%;
   margin-bottom: 20px;
+  animation: fadeIn 1s ease-in-out;
 }
-
-.error-boundary-footer {
-    margin-top: 20px;
-    font-size: 0.9rem;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    z-index: 1000;
-    background-color: #2e7d32;
-    color: #ffffff; /* Grey */
-  }
 
 .error-boundary-title {
   font-size: 2rem;
-  font-weight: bold;
-  color: #2e7d32; /* Dark Green */
   margin-bottom: 10px;
+  color: #ff5555; /* Error color */
 }
 
 .error-boundary-message {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   margin-bottom: 20px;
-  color: #555555; /* Slightly darker grey for readability */
+  color: #555;
 }
 
 .error-boundary-button {
-  background-color: #2e7d32; /* Green */
-  color: #ffffff; /* White */
-  font-size: 1rem;
+  background-color: #4caf50;
+  color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .error-boundary-button:hover {
-  background-color: #256b2b; /* Darker green on hover */
+  background-color: #388e3c;
 }
 
 .error-boundary-footer {
   margin-top: 20px;
   font-size: 0.9rem;
-  color: #777777; /* Grey */
+  color: #777;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
