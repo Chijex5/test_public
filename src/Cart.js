@@ -107,7 +107,7 @@ useEffect(() => {
 
   const address = `${form?.flatNo || ""} ${form?.street || " "}, ${form?.city || ""}, ${form?.state}`
   const name = form.username || ''
-  const email = form.email 
+  const email = form.email || ''
 
    // Function to handle checkout click (opens modal)
    const handleProceedToCheckout = () => {
