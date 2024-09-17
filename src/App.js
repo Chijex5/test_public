@@ -17,6 +17,7 @@ import { UserProvider } from './UserContext';
 import { ThemeProvider } from './ThemeContext';
 import ErrorBoundary from './ErrorBoundary';
 import ForgotPassword from './ForgotPassword';
+// import BuggyComponent from './BuggyComponent'
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -75,6 +76,7 @@ const App = () => {
       <ThemeProvider>
         <UserProvider>
           <ErrorBoundary>
+            {/* <BuggyComponent> */}
             <div className="App">
               <ConditionalHeaderFooter activeNav={activeNav} setActiveNav={setActiveNav} />
               <main>
@@ -113,6 +115,7 @@ const App = () => {
                 </div>
               )} */}
             </div>
+            {/* </BuggyComponent> */}
           </ErrorBoundary>
         </UserProvider>
       </ThemeProvider>

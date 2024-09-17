@@ -12,7 +12,8 @@ function UserProfile() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [notification, setNotification] = useState({ message: '', type: '' });
-
+  const profilePics = form?.profileUrl || profilePic
+  const [previewUrl, setPreviewUrl] = useState(profilePics); 
 
   const handleNotificationClose = () => {
     setNotification({ message: '', type: '' });
@@ -46,7 +47,8 @@ function UserProfile() {
       setNotification({ message: 'Only image files are allowed (JPEG, PNG, GIF)', type: 'error' });
       return;
     }
-    setSelectedFile(e.target.files[0]);
+    setSelectedFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
   };
 
   const handleChangeProfilePicture = () => {
@@ -114,7 +116,7 @@ function UserProfile() {
       {isProfileModalOpen && (
         <div className="profile-modal" onClick={toggleProfileModal}>
           <div className="profile-modal-content" onClick={(e) => e.stopPropagation()}>
-            <img src={form?.profileUrl || profilePic} alt="Full Profile" className="full-profile-img" />
+            <img src={previewUrl || profilePics} alt="Full Profile" className="full-profile-img" />
             <button className="change-profile-button" onClick={() => document.getElementById('file-input').click()}>
               Change Profile Picture
             </button>
@@ -181,7 +183,7 @@ function UserProfile() {
                   <input type="text" name="state" value={form?.state || " "} onChange={handleChange} />
                 </label>
                 <label>Postal Code:
-                  <input type="text" name="postalCode" value={form?.postalCode || " "} onChange={handleChange} />
+                  <input type="text" name="postalCode" value={form?.postal_code || " "} onChange={handleChange} />
                 </label>
               </div>
               <div className="buttons">
@@ -202,7 +204,7 @@ function UserProfile() {
             <p className="detail-item"><strong>Email:</strong> {form?.email || "johndoe@somebody.com"}</p>
             <p className="detail-item"><strong>Phone:</strong> {form?.phone || "+234 000 000 0000"}</p>
             <p className="detail-item"><strong>Department:</strong> {form?.department || ""}</p>
-            <p className="detail-item"><strong>Address:</strong> {`${form?.flatNo || ""} ${form?.street || " "}, ${form?.city || ""}, ${form?.state || " "}`}</p>
+            <p className="detail-item"><strong>Address:</strong> {form?.address || ""}</p>
           </div>
           <div className="user-actions">
             <button className="edit-button" onClick={() => setIsEditing(true)}>Edit</button>

@@ -94,15 +94,22 @@ export const UserProvider = ({ children }) => {
         console.log('New user created');
       }
 
+      console.log(usersData)
+
       const userToSave = {
         userId: usersData.userId,
         username: usersData.name || "Anonymous",
         email: usersData.email,
         profileUrl: usersData.profileUrl || "",
         level: usersData.level || "",
-        address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
+        address: `${usersData.flat_no || 'hey'}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
         phone: usersData.phone || "",
         department: usersData.department || "",
+        flatNo: usersData.flat_no,
+        street: usersData.street,
+        city: usersData.city,
+        state: usersData.state,
+        postal_code: usersData.postal_code,
         code: "2"
       };
 
@@ -114,7 +121,7 @@ export const UserProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
+  console.log(userData)
   const saveUserDataToLocalStorage = (user, additionalData) => {
     const userData = {
       userId: user.uid,

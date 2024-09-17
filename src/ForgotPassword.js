@@ -45,8 +45,8 @@ const ForgotPassword = () => {
                 <button onClick={handleForgotPassword} className="forgot-password-button">
                 {loading ? <Loader /> : 'Reset Password'}
                 </button>
-                {message && <p className="forgot-message success">{message}</p>}
-                {error && <p className="forgot-message error">{error}</p>}
+                {message && <p className="message success">{message}</p>}
+                {error && <p className="message error">{error}</p>}
             </form>
             <a href="#/login" className="auth-link">
                 <i className="fas fa-user"></i> Have an account? Log in
