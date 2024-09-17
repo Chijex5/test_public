@@ -3,16 +3,17 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-
+// Use environment variables for Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyDLVJ5bwl-4GezWHsQSLKKwxMyZVCdqmw0",
-  authDomain: "bookshop-4cb62.firebaseapp.com",
-  projectId: "bookshop-4cb62",
-  storageBucket: "bookshop-4cb62.appspot.com",
-  messagingSenderId: "795133676824",
-  appId: "1:795133676824:web:a6a0ddc876aec76422626d",
-  measurementId: "G-RWLVSQ54NV"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
