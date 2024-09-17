@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, googleProvider } from './firebase'; // Import Firebase services
 import axios from 'axios'; // Import Axios
@@ -69,24 +69,29 @@ const checkUserExists = async (email, uid) => {
 
   const handleGoogleAuth = async () => {
     setError('');
-
+  
     const TIMEOUT_DURATION = 100000; // 10 seconds timeout
-
     try {
-      // Create a timeout promise
       const timeoutPromise = new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Authentication timed out')), TIMEOUT_DURATION)
       );
-
-      
-      const result = await Promise.race([
-        signInWithPopup(auth, googleProvider).then((result) => result),
-        timeoutPromise
-      ]);
-
+  
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  
+      let result;
+      if (isMobile) {
+        signInWithRedirect(auth, googleProvider); // Use redirect for mobile
+        return; // No further action needed since it redirects
+      } else {
+        result = await Promise.race([
+          signInWithPopup(auth, googleProvider).then((result) => result),
+          timeoutPromise
+        ]);
+      }
+  
       const user = result.user;
       const userExists = await checkUserExists(user.email, user.uid);
-
+  
       if (userExists) {
         sendUserDataToBackend(user);
         navigate('/dashboard'); // Redirect to home if user exists
@@ -96,10 +101,9 @@ const checkUserExists = async (email, uid) => {
     } catch (err) {
       setError(err.message);
       console.error('Google Authentication Error:', err);
-    } finally {
-      
     }
   };
+  
 
   return (
     <div className="auth-container">
