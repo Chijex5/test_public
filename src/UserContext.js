@@ -1,4 +1,3 @@
-// UserContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import configureBaseUrl from './configureBaseUrl';
@@ -11,71 +10,80 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Centralized loading state
   const [baseUrl, setBaseUrl] = useState('');
   const [totalSum, setTotalSum] = useState('---');
   const [userId, setUserId] = useState('');
   const [totalBooks, setTotalBooks] = useState('---');
-  const [hasFetched, setHasFetched] = useState(false); // State to track if data has been fetched
+  const [hasFetched, setHasFetched] = useState(false);
 
   // Fetch Purchase Summary when userId and baseUrl are set
-  useEffect(() => {
-    if (userId && baseUrl && !hasFetched) {
-      const fetchPurchaseSummary = async () => {
-        setLoading(true);
-        try {
-          const response = await axios.get(`${baseUrl}/user/purchases`, {
-            params: { userId }
-          });
-          const { totalSum, totalBooks } = response.data;
-          setTotalSum(totalSum);
-          setTotalBooks(totalBooks);
-          setHasFetched(true); // Set to true after data is fetched
-        } catch (error) {
-          console.error('Error fetching purchase summary:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchPurchaseSummary();
+  const fetchPurchaseSummary = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/user/purchases`, {
+        params: { userId }
+      });
+      const { totalSum, totalBooks } = response.data;
+      setTotalSum(totalSum);
+      setTotalBooks(totalBooks);
+      setHasFetched(true);
+    } catch (error) {
+      console.error('Error fetching purchase summary:', error);
     }
-  }, [userId, hasFetched, baseUrl]);
+  };
 
-  // Fetch base URL on mount
-  useEffect(() => {
-    const fetchBaseUrl = async () => {
+  // Fetch base URL
+  const fetchBaseUrl = async () => {
+    try {
       const url = configureBaseUrl();
       setBaseUrl(url);
-    };
+    } catch (error) {
+      console.error('Failed to fetch base URL:', error);
+    }
+  };
 
-    fetchBaseUrl();
-  }, []);
-
-  // Fetch user data from localStorage and set both userData and userId
-  useEffect(() => {
-    const fetchUserDataFromLocalStorage = async () => {
-      setLoading(true);
-      try {
-        const user = await JSON.parse(localStorage.getItem('user'));
-        if (user) {
-          setUserData(user);
-          setUserId(user.userId); // Set the userId here
-        }
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-      } finally {
-        setLoading(false);
+  // Fetch user data from localStorage
+  const fetchUserDataFromLocalStorage = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        setUserData(user);
+        setUserId(user.userId); // Set the userId here
       }
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+    }
+  };
+
+  // Use `Promise.allSettled()` to wait for all async operations
+  useEffect(() => {
+    const fetchAllData = async () => {
+      setLoading(true); // Start loading
+
+      const fetchPromises = [
+        fetchUserDataFromLocalStorage(),
+        fetchBaseUrl(),
+      ];
+
+      // Wait for userId and baseUrl before fetching purchases
+      if (userId && baseUrl && !hasFetched) {
+        fetchPromises.push(fetchPurchaseSummary());
+      }
+
+      // Wait for all promises to settle (resolve or reject)
+      await Promise.allSettled(fetchPromises);
+
+      setLoading(false); // Stop loading after all operations are done
     };
 
-    fetchUserDataFromLocalStorage();
-  }, []);
+    fetchAllData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, baseUrl, hasFetched]);
 
-  // Function to send user data to backend
+  // Function to send user data to the backend
   const sendUserDataToBackend = async (user) => {
     try {
-      setLoading(true);
+      setLoading(true); // Start loading
       const response = await axios.post(`${baseUrl}/login`, {
         user_id: user.uid,
         email: user.email,
@@ -86,15 +94,9 @@ export const UserProvider = ({ children }) => {
       const usersData = response.data;
       if (usersData.error) {
         console.error(usersData.error);
-        setLoading(false);
+        setLoading(false); // Stop loading on error
         return;
       }
-
-      if (response.status === 201) {
-        console.log('New user created');
-      }
-
-      console.log(usersData)
 
       const userToSave = {
         userId: usersData.userId,
@@ -102,7 +104,7 @@ export const UserProvider = ({ children }) => {
         email: usersData.email,
         profileUrl: usersData.profileUrl || "",
         level: usersData.level || "",
-        address: `${usersData.flat_no || 'hey'}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
+        address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
         phone: usersData.phone || "",
         department: usersData.department || "",
         flatNo: usersData.flat_no,
@@ -115,13 +117,13 @@ export const UserProvider = ({ children }) => {
 
       setUserData(userToSave);
       localStorage.setItem('user', JSON.stringify(userToSave));
-      setLoading(false);
+      setLoading(false); // Stop loading after success
     } catch (error) {
       console.error('Backend Error:', error);
-      setLoading(false);
+      setLoading(false); // Stop loading on error
     }
   };
-  console.log(userData)
+
   const saveUserDataToLocalStorage = (user, additionalData) => {
     const userData = {
       userId: user.uid,
