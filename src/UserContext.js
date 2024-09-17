@@ -17,10 +17,10 @@ export const UserProvider = ({ children }) => {
   const [totalSum, setTotalSum] = useState('---');
   const [userId, setUserId] = useState(''); 
   const [totalBooks, setTotalBooks] = useState('---');
-  const [hasFetched, setHasFetched] = useState(false);  // State to track if data has been fetched
+  
 
   useEffect(() => {
-    if (userId && !hasFetched) {
+    if (userId) {
       const fetchPurchaseSummary = async () => {
         setLoading(true)
         try {
@@ -30,7 +30,6 @@ export const UserProvider = ({ children }) => {
           const { totalSum, totalBooks } = response.data;
           setTotalSum(totalSum);
           setTotalBooks(totalBooks);
-          setHasFetched(true);  // Set to true after data is fetched
         } catch (error) {
           console.error('Error fetching purchase summary:', error);
         } finally {
@@ -40,7 +39,7 @@ export const UserProvider = ({ children }) => {
 
       fetchPurchaseSummary();
     }
-  }, [userId, hasFetched, baseUrl]);
+  }, [userId, baseUrl]);
 
   useEffect(() => {
     const fetchBaseUrl = async () => {
