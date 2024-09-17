@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { getAuth, onAuthStateChanged, sendEmailVerification } from 'firebase/auth';
+import { getAuth, onAuthStateChanged} from 'firebase/auth';
 import './App.css';
 import Header from './Header';
 import Footer from './Footer';
@@ -24,9 +24,9 @@ const App = () => {
   const [activeNav, setActiveNav] = useState('dashboard');
   const [cartItems, setCartItems] = useState([]);
   const [user, setUser] = useState(null);
-  const [showVerifyModal, setShowVerifyModal] = useState(false); // Show verify modal
-  const [verificationSent, setVerificationSent] = useState(false); // Track if email verification has been sent
-  const [sending, setSending] = useState(false); // Track sending status
+  // const [showVerifyModal, setShowVerifyModal] = useState(false); // Show verify modal
+  // const [verificationSent, setVerificationSent] = useState(false); // Track if email verification has been sent
+  // const [sending, setSending] = useState(false); // Track sending status
 
   const auth = getAuth();
 
@@ -34,10 +34,11 @@ const App = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
+        console.log(user)
         setIsAuthenticated(true);
-        if (!user.emailVerified) {
-          setShowVerifyModal(true); // Show modal if email is not verified
-        }
+        // if (!user.emailVerified) {
+        //   setShowVerifyModal(true); // Show modal if email is not verified
+        // }
       } else {
         setIsAuthenticated(false);
       }
@@ -48,19 +49,22 @@ const App = () => {
   }, [auth]);
 
   // Function to send email verification
-  const handleSendVerification = async () => {
-    if (user) {
-      setSending(true);
-      try {
-        await sendEmailVerification(user);
-        setVerificationSent(true);
-      } catch (error) {
-        console.error('Error sending verification email:', error);
-      } finally {
-        setSending(false);
-      }
-    }
-  };
+  // const handleSendVerification = async () => {
+  //     if (user && !user.emailVerified) {  // Ensure email is unverified
+  //       setSending(true);
+  //       try {
+  //         await sendEmailVerification(user);
+  //         setVerificationSent(true);
+  //         console.log("Verification email sent successfully.");
+  //       } catch (error) {
+  //         console.error('Error sending verification email:', error.message);  // Log error message
+  //       } finally {
+  //         setSending(false);
+  //       }
+  //     } else {
+  //       console.warn("User is either not logged in or the email is already verified.");
+  //     }
+  // };
 
   if (loading) {
     return <Loaders />;
@@ -89,7 +93,7 @@ const App = () => {
                 </Routes>
               </main>
 
-              {/* Modal to prompt email verification */}
+              {/* Modal to prompt email verification
               {showVerifyModal && (
                 <div className="verify-modal">
                   <div className="verify-content">
@@ -107,7 +111,7 @@ const App = () => {
                     <button onClick={() => setShowVerifyModal(false)}>Close</button>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </ErrorBoundary>
         </UserProvider>
@@ -126,7 +130,7 @@ const ConditionalHeaderFooter = ({ activeNav, setActiveNav }) => {
     console.log(currentPath);
   }, [location, setActiveNav]);
 
-  const noHeaderFooter = ['/login', '/signup', '/complete-profile'].includes(location.pathname);
+  const noHeaderFooter = ['/login', '/signup', '/complete-profile', '/forgot-password'].includes(location.pathname);
 
   return (
     <>

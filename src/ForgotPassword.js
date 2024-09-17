@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { auth } from './firebase';
-import { sendPasswordResetEmail, fetchSignInMethodsForEmail} from 'firebase/auth';
+import { sendPasswordResetEmail} from 'firebase/auth';
 import './ForgotPassword.css' // Ensure you have Firebase set up and imported correctly
 import Loader from './Loader';
 
@@ -13,19 +13,11 @@ const ForgotPassword = () => {
   const handleForgotPassword = async () => {
     try {
       setLoading(true);
-      // Check if the email exists
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-  
-      if (signInMethods.length === 0) {
-        // If no sign-in methods are returned, the email isn't registered
-        setError('No account found with this email address.');
-        setMessage('');
-      } else {
+      // Check if the email exist
         // Proceed with password reset
         await sendPasswordResetEmail(auth, email);
         setMessage('Password reset email has been sent!');
         setError(''); // Clear any previous error
-      }
     } catch (err) {
       setError('Failed to send reset email. Please try again later.');
       console.log(err);
@@ -53,8 +45,8 @@ const ForgotPassword = () => {
                 <button onClick={handleForgotPassword} className="forgot-password-button">
                 {loading ? <Loader /> : 'Reset Password'}
                 </button>
-                {message && <p className="message success">{message}</p>}
-                {error && <p className="message error">{error}</p>}
+                {message && <p className="forgot-message success">{message}</p>}
+                {error && <p className="forgot-message error">{error}</p>}
             </form>
             <a href="#/login" className="auth-link">
                 <i className="fas fa-user"></i> Have an account? Log in
