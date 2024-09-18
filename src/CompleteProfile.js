@@ -52,6 +52,7 @@ const CompleteProfile = ({ user }) => {
           options: [
             { value: "Microbiology", label: "Microbiology" },
             { value: "Biochemistry", label: "Biochemistry" },
+            { value: "Genetics & Biotechnology", label: "Genetics & Biotechnology" },
             { value: "Plant Sciences", label: "Plant Sciences" },
             { value: "Zoology", label: "Zoology" },
           ],
