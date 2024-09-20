@@ -13,6 +13,10 @@
 }
 
 .loader-container{
+  position: fixed;
+  width: 100vw;
+  background: #fff;
+  z-index: 10000;
   height: 100vh;
   display: flex;
   justify-content: center;

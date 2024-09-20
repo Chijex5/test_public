@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from './UserContext';
 import './Home.css';
-import Loaders from './Loaders';
 import Loader from './Loader'
 import axios from 'axios'
 
@@ -14,7 +13,7 @@ import Notification from './Notifications';
 import configureBaseUrl from './configureBaseUrl';
 
 const Home = ({ cartItems, setCartItems }) => {
-  const { userData, loading, totalSum, totalBooks } = useUser();
+  const { userData, totalSum, totalBooks } = useUser();
   const [expandedBook, setExpandedBook] = useState(null);
   const [loadingBooks, setLoadingBooks] = useState({});
   const [notification, setNotification] = useState({ message: '', type: '' });
@@ -253,8 +252,6 @@ const Home = ({ cartItems, setCartItems }) => {
   };
 
   
-  
-  if (loading) return <Loaders />;
 
   return (
     <div className="home">

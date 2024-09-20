@@ -12,11 +12,36 @@ export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false); // Centralized loading state
   const [baseUrl, setBaseUrl] = useState('');
+  const [userExists, setUserExists] = useState(null);
   const [totalSum, setTotalSum] = useState('---');
+  const [error, setError] = useState(null);
   const [userId, setUserId] = useState('');
   const [totalBooks, setTotalBooks] = useState('---');
   const [hasFetched, setHasFetched] = useState(false);
 
+
+  const checkUserExists = async (email, uid) => {
+    try {
+      alert('checking')
+      const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
+      console.log(response)
+      return response.data.exists; // Returns true if user exists (profile is complete)
+    } catch (err) {
+      console.error('Error checking user:', err);
+      setError('Failed to verify user existence.');
+      return false;
+    }
+  };
+
+  // Function to check profile completion (can be called globally)
+  const checkProfileCompletion = async (user) => {
+    setLoading(true);
+    const exists = await checkUserExists(user.email, user.uid);
+    setUserExists(exists);
+    setLoading(false);
+  };
+
+  
   // Fetch Purchase Summary when userId and baseUrl are set
   const fetchPurchaseSummary = async () => {
     try {
@@ -163,7 +188,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ userData, updateUserData, totalBooks, loading, totalSum, setLoading, handleLogout, sendUserDataToBackend, saveUserDataToLocalStorage }}>
+    <UserContext.Provider value={{ userData, userExists, error, checkProfileCompletion, updateUserData, totalBooks, loading, totalSum, setLoading, handleLogout, sendUserDataToBackend, saveUserDataToLocalStorage }}>
       {children}
     </UserContext.Provider>
   );

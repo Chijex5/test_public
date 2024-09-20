@@ -1,232 +1,140 @@
-/* Global styles */
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
-  color: #ffffff; /* White text */
-  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  color: #4caf50; /* Primary color */
-  margin: 1em 0;
-  transition: color 0.3s ease-in-out;
-}
-
-/* Card Styles for Desktop */
-.card {
-  max-width: 600px;
-  margin: 20px auto;
-  background-color: #1a2733; /* Dark card background */
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Form Styles */
-form {
+.complete-profile-container {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9f9f9; /* Light background */
 }
 
-/* Input Styles */
-input[type="text"], input[type="email"], input[type="password"], select, textarea {
+.complete-profile-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
   width: 100%;
-  padding: 15px;
-  border: none;
-  border-radius: 5px;
-  background-color: #e9ecef; /* Light background for inputs */
-  color: #081b29; /* Dark text */
-  font-size: 1rem;
-  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
 }
 
-input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
-  background-color: #f0f4f7; /* Lighter background on focus */
-  box-shadow: 0 0 10px #4caf50;
-  outline: none;
-  transform: scale(1.05);
+.step-indicator {
+  font-size: 1.2rem;
+  color: #4caf50;
+  margin-bottom: 1rem;
 }
 
-input[type="text"]:hover, input[type="email"]:hover, input[type="password"]:hover, select:hover, textarea:hover {
-  background-color: #f0f4f7;
-}
-
-/* Button Styles */
-.button-group button {
-  background-color: #4caf50; /* Primary button color */
-  color: white;
-  padding: 15px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.button-group button:hover {
-  background-color: #388e3c; /* Darker green on hover */
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.button-group button:active {
-  background-color: #2e7d32; /* Even darker green on click */
-  transform: scale(0.98);
-  box-shadow: none;
-}
-
-/* Progress Bar Styles */
 .progress-bar {
   width: 100%;
-  background-color: #f0f4f7;
-  border-radius: 50px;
-  overflow: hidden;
-  height: 20px;
-  margin: 1em 0;
-  transition: background-color 0.5s ease-in-out;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .progress-bar-inner {
-  width: 50%; /* Adjust this dynamically based on the progress */
   height: 100%;
-  background-color: #4caf50; /* Primary progress color */
-  border-radius: 50px;
-  transition: width 0.4s ease, background-color 0.5s ease-in-out;
+  background-color: #4caf50;
+  border-radius: 5px;
 }
 
-/* Mobile Breakpoints */
-@media (max-width: 760px) {
-  .card {
-    padding: 10px;
-    max-width: 100%;
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #081b29;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.complete-profile-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.complete-profile-input:focus {
+  border-color: #4caf50;
+}
+
+.input-label {
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  background-color: white;
+  padding: 0 5px;
+  font-size: 0.85rem;
+  color: #4caf50;
+}
+
+.address-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+@media (max-width: 720px) {
+  .address-row {
+    flex-direction: column;
   }
-
-  .complete-profile-container input, .complete-profile-container select, .complete-profile-container textarea, .complete-profile-container button {
-    width: 100%;
-    font-size: 1rem;
-    padding: 10px;
-  }
 }
 
-/* Additional Elements Styling */
-label {
-  font-weight: bold;
-  margin-bottom: 10px;
-  transition: color 0.3s ease-in-out;
+.small-input {
+  flex: 1;
 }
 
-select {
-  appearance: none;
-  background-image: url('data:image/svg+xml,%3Csvg xmlns%3D%22http://www.w3.org/2000/svg%22 viewBox%3D%220 0 24 24%22 fill%3D%22none%22 stroke%3D%22%234CAF50%22 stroke-width%3D%222%22 stroke-linecap%3D%22round%22 stroke-linejoin%3D%22round%22 class%3D%22feather feather-chevron-down%22%3E%3Cpath d%3D%22M6 9l6 6 6-6%22%3E%3C/path%3E%3C/svg%3E');
-  background-repeat: no-repeat;
-  background-position: right 10px top 50%;
-  padding-right: 30px;
+.large-input {
+  flex: 2;
+}
+
+.confirm-details {
+  font-size: 1rem;
+  color: #333;
+}
+
+.confirm-details p {
+  margin-bottom: 0.8rem;
+}
+
+.details-list strong {
+  color: #081b29;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.complete-profile-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-textarea {
-  resize: vertical;
-  min-height: 150px;
-  transition: transform 0.3s;
+.complete-profile-button:hover {
+  background-color: #388e3c;
 }
 
-textarea:hover, textarea:focus {
-  transform: scale(1.05);
+.complete-profile-button.previous {
+  background-color: #ccc;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.card, form, input, button, textarea, select {
-  animation: fadeIn 0.5s ease-in-out;
-}
-/* Confirm details container */
-.confirm-details {
-  background-color: #f9fafb; /* Light background */
-  border: 1px solid #e0e3e8; /* Subtle border */
-  border-radius: 10px;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2em;
-  margin-top: 1.5em;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Light shadow for depth */
-  transition: transform 0.3s ease-in-out, background-color 0.5s ease;
-}
-.details-list{
-  text-align: left;
-}
-
-/* Title styling */
-.confirm-details h2 {
-  font-size: 1.75em;
-  margin-bottom: 1em;
-  color: #333; /* Darker text */
-  font-weight: 600;
-}
-
-/* Paragraph styling */
-.confirm-details p {
-  font-size: 1.1em;
-  line-height: 1.6;
-  margin-bottom: 0.8em;
-  color: #555; /* Subtle text color */
-}
-
-/* Bold label styling */
-.confirm-details p strong {
-  font-weight: 700;
-  color: #4caf50; /* Primary color */
-}
-
-/* Hover effect for entire container */
-.confirm-details:hover {
-  transform: translateY(-5px);
-  background-color: #ffffff; /* Slight lightening on hover */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .confirm-details {
-    padding: 1.5em;
-  }
-
-  .confirm-details h2 {
-    font-size: 1.5em;
-  }
-
-  .confirm-details p {
-    font-size: 1em;
-  }
-}
-
-@media (max-width: 480px) {
-  .confirm-details {
-    padding: 1.2em;
-  }
-
-  .confirm-details h2 {
-    font-size: 1.3em;
-  }
-
-  .confirm-details p {
-    font-size: 0.9em;
-  }
+.complete-profile-button.previous:hover {
+  background-color: #999;
 }

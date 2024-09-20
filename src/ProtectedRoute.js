@@ -1,17 +1,18 @@
-// src/ProtectedRoute.js
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import useAuth from './hooks/useAuth';
-import loading from './Loaders'
+import { Navigate, Outlet } from 'react-router-dom';
+import { useUser } from './UserContext';
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, authChecked } = useAuth();
+const ProtectedRoute = () => {
+  const { userExists, loading } = useUser(); // Access the profile state
 
-  if (!authChecked) {
-    return <loading />; // Show a loading indicator while checking auth status
+  if (loading) {
+    return <div>Loading...</div>; // Show loading spinner while checking
   }
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  if (userExists) {
+    return <Navigate to="/dashboard" />; // Redirect to dashboard if profile is complete
+  }
+
+  return <Outlet />; // Render the complete-profile form if profile is incomplete
 };
 
 export default ProtectedRoute;

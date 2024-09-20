@@ -42,42 +42,106 @@ useEffect(() => {
 
   // Function to confirm availability
   const handleConfirmDelivery = () => {
-    const purchaseDetails = cartItems.map(item => ({
-      userId: form?.userId,  // Assuming userId is part of the user data
-      bookId: item.id,   // Assuming each cart item has a bookId
-      price: item.price * item.quantity,
-      paymentMethod: 'Pay on Delivery',  // This can vary based on the selected method
-    }));
-    console.log(cartItems)
-    console.log(purchaseDetails)
-  
-    // Send purchase details to the backend
-    sendPurchaseData(purchaseDetails);
-  
-    setDeliveryConfirmed(true);
-    setCartItems([]);  // Empty the cart
+  // Extracting purchase data from cartItems
+  const purchases = cartItems.map(item => ({
+    book_code: item.code,
+    quantity: item.quantity,
+    unit_price: item.price,
+    total_price: item.price * item.quantity
+  }));
+
+  const purchasedDetails = cartItems.map(item => ({
+    userId: form?.userId,  // Assuming userId is part of the user data
+    bookId: item.id,   // Assuming each cart item has a bookId
+    price: item.price * item.quantity,
+    paymentMethod: 'Pay on Delivery' // This can vary based on the selected method
+  }));
+
+  // Payment method data
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };  // Date formatting options
+  const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };  // Time formatting options
+
+  const date = new Date();
+  const formattedDate = date.toLocaleDateString('en-US', options);
+  const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+
+  const time = `${formattedDate} by ${formattedTime}`;
+  const method = {
+    type: 'Pay on Delivery',  // This can vary based on the selected method
+    account_name: form.username,  // Assuming form contains user data
+    account_number: '0123 4567 8901',  // You can update this dynamically
+    pay_by: time,  // Example: using formatted time as the pay by date
+    tax: tax  // Assuming tax is defined elsewhere in your code
   };
 
-  const sendPurchaseData = async (purchaseDetails) => {
-    try {
-      const response = await fetch(`${baseUrl}/purchase`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(purchaseDetails),
-      });
-      
-      if (response.ok) {
-        const result = await response.json();
-        console.log(result.message);
-      } else {
-        console.error('Failed to send purchase data.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  console.log(method)
+
+  // Payload for backend
+  const purchaseDetails = {
+    customer_name: form.username,
+    address: `${form.flatNo || ""} ${form.street || " "}, ${form.city || ""}, ${form.state}`,
+    date: new Date().toISOString().split('T')[0],  // Current date in YYYY-MM-DD format
+    purchases: purchases,
+    method: method,
+    purchasedDetails: purchasedDetails
   };
+
+  // Send purchase details to the backend
+  sendPurchaseData(purchaseDetails);
+
+  setDeliveryConfirmed(true);
+  
+  setCartItems([]);  // Empty the cart
+};
+
+  const sendPurchaseData = async (purchaseDetails) => {
+  try {
+    const response = await fetch(`${baseUrl}/purchase`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(purchaseDetails),  // Send the purchase details
+    });
+  
+    if (response.ok) {
+      const blob = await response.blob();  // Get the file as a blob
+
+      // Create a link element
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+
+      // Set the file name to download
+      const contentDisposition = response.headers.get('Content-Disposition');
+      let filename = 'invoice.pdf';  // Default file name
+
+      if (contentDisposition && contentDisposition.indexOf('attachment') !== -1) {
+        const match = contentDisposition.match(/filename="(.+)"/);
+        if (match && match[1]) {
+          filename = match[1];
+        }
+      }
+
+      a.download = filename;
+
+      // Append the link to the document and trigger the download
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      console.log("Invoice downloaded successfully!");  // Handle success
+    } else {
+      console.error('Failed to send purchase data.');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
 
   
   
@@ -105,7 +169,7 @@ useEffect(() => {
     }
   }, [userData, loading, handleLogout]);
 
-  const address = `${form?.flatNo || ""} ${form?.street || " "}, ${form?.city || ""}, ${form?.state}`
+  const address = `${form?.flatNo || ""} ${form?.street || " "} ${form?.city || ""} ${form?.state}`
   const name = form.username || ''
   const email = form.email || ''
 

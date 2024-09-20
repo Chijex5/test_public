@@ -17,6 +17,7 @@ import { UserProvider } from './UserContext';
 import { ThemeProvider } from './ThemeContext';
 import ErrorBoundary from './ErrorBoundary';
 import ForgotPassword from './ForgotPassword';
+import ProtectedRoute from './ProtectedRoute';
 // import BuggyComponent from './BuggyComponent'
 
 const App = () => {
@@ -84,7 +85,9 @@ const App = () => {
                   <Route path="/" element={<Navigate to="/dashboard" />} />
                   <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
                   <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/dashboard" /> : <ForgotPassword />} />
-                  <Route path="/complete-profile" element={<CompleteProfile user={user} />} />
+                  <Route path="/complete-profile" element={<ProtectedRoute />}>
+                    <Route path="" element={<CompleteProfile user={user}/>} />
+                  </Route>
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/profile" element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} />
                   <Route path="/dashboard" element={isAuthenticated ? <Home cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />

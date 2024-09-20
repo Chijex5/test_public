@@ -1,47 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, googleProvider } from './firebase'; // Import Firebase services
-import axios from 'axios'; // Import Axios
 import './Auth.css'; // Ensure this is your CSS file
 import Loader from './Loader'; // Ensure this is your Loader component
 import Deal from './uni2.png'
-import configureBaseUrl from './configureBaseUrl';
+
 import { useUser } from './UserContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loadings, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const {sendUserDataToBackend} = useUser();
+  const {sendUserDataToBackend, checkProfileCompletion, userExists, loading} = useUser();
   const navigate = useNavigate();
-  const [baseUrl, setBaseUrl] = useState('');
-
-  useEffect(() => {
-    const fetchBaseUrl = async () => {
-      const url = configureBaseUrl();
-      setBaseUrl(url);
-      
-    };
-
-    fetchBaseUrl();
-  }, []);
-  
-
-
-const checkUserExists = async (email, uid) => {
-  try {
-    const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
-    return response.data.exists; // Returns true if user exists
-  } catch (err) {
-    console.error('Error checking user:', err);
-    setError('Failed to verify user existence.');
-    return false;
-  }
-};
-
-
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
@@ -51,13 +24,15 @@ const checkUserExists = async (email, uid) => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
-      const userExists = await checkUserExists(user.email, user.uid);
-
-      if (userExists) {
-        await sendUserDataToBackend(user);
-        navigate('/dashboard'); // Redirect to home if user exists
-      } else {
-        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+      await checkProfileCompletion(user);
+      console.log(userExists)
+      if(!loading) {
+        if (userExists) {
+          await sendUserDataToBackend(user);
+          navigate('/dashboard'); // Redirect to home if user exists
+        } else {
+          navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+        }
       }
     } catch (err) {
       setError(err.message);
@@ -72,7 +47,7 @@ const checkUserExists = async (email, uid) => {
         try {
         const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
-        const userExists = await checkUserExists(user.email, user.uid);
+        await checkProfileCompletion(user);
     
       if (userExists) {
         sendUserDataToBackend(user);
@@ -116,8 +91,8 @@ const checkUserExists = async (email, uid) => {
             />
             <label className="label-input">Password</label>
           </div>
-          <button type="submit" className="email-login-button" disabled={loading}>
-            {loading ? <Loader /> : 'Log In'}
+          <button type="submit" className="email-login-button" disabled={loadings}>
+            {loadings ? <Loader /> : 'Log In'}
           </button>
         </form>
         <button 
