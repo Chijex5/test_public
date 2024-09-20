@@ -1,30 +1,27 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import configureBaseUrl from './configureBaseUrl';
-import { signOut } from 'firebase/auth';
+import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
-import { useNavigate } from 'react-router-dom';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false); // Centralized loading state
+  const [loading, setLoading] = useState(false);
+  const [centralLoading, setCentralLoading] = useState(false); // Centralized loading state
   const [baseUrl, setBaseUrl] = useState('');
   const [userExists, setUserExists] = useState(null);
   const [totalSum, setTotalSum] = useState('---');
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState('');
+  const [user, setUser] = useState(false);
   const [totalBooks, setTotalBooks] = useState('---');
-  const [hasFetched, setHasFetched] = useState(false);
 
-
+  // Checking if the user exists
   const checkUserExists = async (email, uid) => {
     try {
-      alert('checking')
       const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
-      console.log(response)
       return response.data.exists; // Returns true if user exists (profile is complete)
     } catch (err) {
       console.error('Error checking user:', err);
@@ -35,23 +32,21 @@ export const UserProvider = ({ children }) => {
 
   // Function to check profile completion (can be called globally)
   const checkProfileCompletion = async (user) => {
-    setLoading(true);
+    setCentralLoading(true);
     const exists = await checkUserExists(user.email, user.uid);
     setUserExists(exists);
-    setLoading(false);
+    setCentralLoading(false);
   };
 
-  
   // Fetch Purchase Summary when userId and baseUrl are set
   const fetchPurchaseSummary = async () => {
     try {
       const response = await axios.get(`${baseUrl}/user/purchases`, {
-        params: { userId }
+        params: { userId },
       });
       const { totalSum, totalBooks } = response.data;
       setTotalSum(totalSum);
       setTotalBooks(totalBooks);
-      setHasFetched(true);
     } catch (error) {
       console.error('Error fetching purchase summary:', error);
     }
@@ -76,22 +71,40 @@ export const UserProvider = ({ children }) => {
         setUserId(user.userId); // Set the userId here
       }
     } catch (error) {
-      console.error("Failed to fetch user data:", error);
+      console.error('Failed to fetch user data:', error);
     }
   };
+
+  // Handle Firebase Authentication state changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(true)
+        console.log(currentUser)
+        await sendUserDataToBackend(currentUser);
+        // Check if the user's profile is complete
+        await checkProfileCompletion(currentUser);
+      } else {
+        // User is logged out, clear user data
+        setUserData(null);
+        setUser(false)
+        localStorage.removeItem('user');
+      }
+    });
+
+    return () => unsubscribe(); // Clean up the listener on unmount
+    // eslint-disable-next-line
+  }, [auth]);
 
   // Use `Promise.allSettled()` to wait for all async operations
   useEffect(() => {
     const fetchAllData = async () => {
       setLoading(true); // Start loading
 
-      const fetchPromises = [
-        fetchUserDataFromLocalStorage(),
-        fetchBaseUrl(),
-      ];
+      const fetchPromises = [fetchUserDataFromLocalStorage(), fetchBaseUrl()];
 
       // Wait for userId and baseUrl before fetching purchases
-      if (userId && baseUrl && !hasFetched) {
+      if (userId && baseUrl) {
         fetchPromises.push(fetchPurchaseSummary());
       }
 
@@ -103,7 +116,7 @@ export const UserProvider = ({ children }) => {
 
     fetchAllData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, baseUrl, hasFetched]);
+  }, [userId, baseUrl]);
 
   // Function to send user data to the backend
   const sendUserDataToBackend = async (user) => {
@@ -112,8 +125,8 @@ export const UserProvider = ({ children }) => {
       const response = await axios.post(`${baseUrl}/login`, {
         user_id: user.uid,
         email: user.email,
-        username: user.displayName || "",
-        profileUrl: user.photoURL || ""
+        username: user.displayName || '',
+        profileUrl: user.photoURL || '',
       });
 
       const usersData = response.data;
@@ -125,19 +138,13 @@ export const UserProvider = ({ children }) => {
 
       const userToSave = {
         userId: usersData.userId,
-        username: usersData.name || "Anonymous",
+        username: usersData.name || 'Anonymous',
         email: usersData.email,
-        profileUrl: usersData.profileUrl || "",
-        level: usersData.level || "",
-        address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
-        phone: usersData.phone || "",
-        department: usersData.department || "",
-        flatNo: usersData.flat_no,
-        street: usersData.street,
-        city: usersData.city,
-        state: usersData.state,
-        postal_code: usersData.postal_code,
-        code: "2"
+        profileUrl: usersData.profileUrl || '',
+        level: usersData.level || '',
+        address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ''),
+        phone: usersData.phone || '',
+        department: usersData.department || '',
       };
 
       setUserData(userToSave);
@@ -152,13 +159,13 @@ export const UserProvider = ({ children }) => {
   const saveUserDataToLocalStorage = (user, additionalData) => {
     const userData = {
       userId: user.uid,
-      username: additionalData.fullName || user.displayName || "Anonymous",
+      username: additionalData.fullName || user.displayName || 'Anonymous',
       email: user.email,
-      profileUrl: user.photoURL || "",
-      level: additionalData.level || "",
-      address: `${additionalData.flatNo ? `${additionalData.flatNo}, ` : ""}${additionalData.street ? `${additionalData.street}, ` : ""}${additionalData.city ? `${additionalData.city}, ` : ""}${additionalData.state ? `${additionalData.state}, ` : ""}${additionalData.postalCode ? `${additionalData.postalCode}` : ""}`.replace(/,\s*$/, ""),
-      phone: additionalData.phone || "",
-      department: additionalData.department || ""
+      profileUrl: user.photoURL || '',
+      level: additionalData.level || '',
+      address: `${additionalData.flatNo ? `${additionalData.flatNo}, ` : ''}${additionalData.street ? `${additionalData.street}, ` : ''}${additionalData.city ? `${additionalData.city}, ` : ''}${additionalData.state ? `${additionalData.state}, ` : ''}${additionalData.postalCode ? `${additionalData.postalCode}` : ''}`.replace(/,\s*$/, ''),
+      phone: additionalData.phone || '',
+      department: additionalData.department || '',
     };
     setUserData(userData);
     localStorage.setItem('user', JSON.stringify(userData));
@@ -169,7 +176,6 @@ export const UserProvider = ({ children }) => {
       localStorage.removeItem('user');
       setUserData(null);
       await signOut(auth);
-      navigate('/login');
     } catch (error) {
       console.error('Error signing out: ', error);
     }
@@ -183,12 +189,29 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(newData));
       }
     } catch (error) {
-      console.error("Failed to update user data:", error);
+      console.error('Failed to update user data:', error);
     }
   };
 
   return (
-    <UserContext.Provider value={{ userData, userExists, error, checkProfileCompletion, updateUserData, totalBooks, loading, totalSum, setLoading, handleLogout, sendUserDataToBackend, saveUserDataToLocalStorage }}>
+    <UserContext.Provider
+      value={{
+        userData,
+        userExists,
+        error,
+        checkProfileCompletion,
+        updateUserData,
+        totalBooks,
+        loading,
+        user,
+        centralLoading,
+        totalSum,
+        setLoading,
+        handleLogout,
+        sendUserDataToBackend,
+        saveUserDataToLocalStorage,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

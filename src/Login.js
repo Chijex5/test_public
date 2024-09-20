@@ -13,7 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loadings, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const {sendUserDataToBackend, checkProfileCompletion, userExists, loading} = useUser();
+  const {sendUserDataToBackend, checkProfileCompletion, userExists, loasding} = useUser();
   const navigate = useNavigate();
 
   const handleEmailAuth = async (e) => {
@@ -26,7 +26,7 @@ const Login = () => {
       const user = result.user;
       await checkProfileCompletion(user);
       console.log(userExists)
-      if(!loading) {
+      if(!loasding) {
         if (userExists) {
           await sendUserDataToBackend(user);
           navigate('/dashboard'); // Redirect to home if user exists
@@ -50,7 +50,7 @@ const Login = () => {
         await checkProfileCompletion(user);
     
       if (userExists) {
-        sendUserDataToBackend(user);
+        await sendUserDataToBackend(user);
         navigate('/dashboard'); // Redirect to home if user exists
       } else {
         navigate('/complete-profile'); // Redirect to complete profile if user does not exist
