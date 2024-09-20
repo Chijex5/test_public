@@ -69,7 +69,7 @@ useEffect(() => {
   const method = {
     type: 'Pay on Delivery',  // This can vary based on the selected method
     account_name: form.username,  // Assuming form contains user data
-    account_number: '0123 4567 8901',  // You can update this dynamically
+    account_number: 'NA',  // You can update this dynamically
     pay_by: time,  // Example: using formatted time as the pay by date
     tax: tax  // Assuming tax is defined elsewhere in your code
   };
