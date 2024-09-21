@@ -275,7 +275,7 @@ const Home = ({ cartItems, setCartItems }) => {
           },
         }}
       />
-        <h1 className='hello'>Hello, {userData?.username?.split(' ')[0] || 'User'}!</h1>
+        <h1 className='hello'>Hello, {userData?.username?.split(' ')[0] || ''}!</h1>
         <div className="dashboard">
           <div className="dashboard-item">
             <span className="label">Books Bought</span>

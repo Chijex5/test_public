@@ -4,10 +4,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from './UserContext';
 import image from './23.png';
 import configureBaseUrl from './configureBaseUrl';
+import Loaders from './Loaders';
 
 const Cart = ({ cartItems, setCartItems }) => {
-  const {userData, loading, handleLogout} = useUser();
-  const [form, setForm] = useState({ ...userData });
+  const {userData, loading} = useUser();
+  const [form, setForm] = useState(null);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPayOnDelivery, setIsPayOnDelivery] = useState(false);
@@ -159,15 +160,15 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    if (!loading) {
-      setForm(userData);
-      if (!userData?.username || userData.username.trim() === "") {
-        console.error("Invalid username (null or empty), logging out...");
-        handleLogout(); // Log out the user
-      }
-
+    if (!loading && userData) {
+      setForm(userData);  // Set form when userData is available
     }
-  }, [userData, loading, handleLogout]);
+  }, [userData, loading]);
+
+  // If loading, show the loader
+  if (loading || !form) {
+    return <Loaders />;
+  }
 
   const address = `${form?.flatNo || ""} ${form?.street || " "} ${form?.city || ""} ${form?.state}`
   const name = form.username || ''
@@ -198,7 +199,6 @@ useEffect(() => {
   );
   const tax = subtotal * 0.1; // Example tax calculation
   const total = subtotal + tax;
-
   return (
     <div className="cart-container">
       {!deliveryConfirmed ? (

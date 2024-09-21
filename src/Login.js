@@ -5,7 +5,7 @@ import { auth, googleProvider } from './firebase'; // Import Firebase services
 import './Auth.css'; // Ensure this is your CSS file
 import Loader from './Loader'; // Ensure this is your Loader component
 import Deal from './uni2.png'
-
+import Loaders from './Loaders';
 import { useUser } from './UserContext';
 
 const Login = () => {
@@ -13,7 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loadings, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const {sendUserDataToBackend, checkProfileCompletion, userExists, loasding} = useUser();
+  const {sendUserDataToBackend, checkProfileCompletion, loading, userExists} = useUser();
   const navigate = useNavigate();
 
   const handleEmailAuth = async (e) => {
@@ -25,14 +25,12 @@ const Login = () => {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
       await checkProfileCompletion(user);
-      console.log(userExists)
-      if(!loasding) {
-        if (userExists) {
-          await sendUserDataToBackend(user);
-          navigate('/dashboard'); // Redirect to home if user exists
-        } else {
-          navigate('/complete-profile'); // Redirect to complete profile if user does not exist
-        }
+
+      if (userExists) {
+        await sendUserDataToBackend(user);
+        navigate('/dashboard');
+      } else {
+        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
       }
     } catch (err) {
       setError(err.message);
@@ -51,7 +49,10 @@ const Login = () => {
     
       if (userExists) {
         await sendUserDataToBackend(user);
-        navigate('/dashboard'); // Redirect to home if user exists
+        if (!loading) {
+          console.log("done 2")
+          navigate('/dashboard');
+        } // Redirect to home if user exists
       } else {
         navigate('/complete-profile'); // Redirect to complete profile if user does not exist
       }
@@ -61,6 +62,9 @@ const Login = () => {
     }
   };
   
+  if (loading) {
+    return <Loaders />
+  }
 
   return (
     <div className="auth-container">
