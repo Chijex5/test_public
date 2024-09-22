@@ -10,16 +10,3 @@ body {
   flex-direction: column;
   font-family: 'Arial', sans-serif;
 }
-
-/* Responsive adjustments */
-@media (max-width: 760px) {
-  main {
-    padding: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  main {
-    padding: 0.75rem;
-  }
-}
