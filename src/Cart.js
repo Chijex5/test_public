@@ -82,7 +82,7 @@ useEffect(() => {
   // Payload for backend
   const purchaseDetails = {
     customer_name: form.username,
-    address: `${form.flatNo || ""} ${form.street || " "}, ${form.city || ""}, ${form.state}`,
+    address: address,
     date: new Date().toISOString().split('T')[0],  // Current date in YYYY-MM-DD format
     purchases: purchases,
     method: method,
