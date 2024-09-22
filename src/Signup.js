@@ -3,17 +3,20 @@ import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthPro
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Import axios for making HTTP requests
 import './Signup.css';
+import Loaders from './Loaders';
 import Loader from './Loader';
 import Deal from './uni2.png'
 import configureBaseUrl from './configureBaseUrl';
 import { useUser } from './UserContext';
 
+
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const {sendUserDataToBackend} = useUser();
+  const [loader, setLoader] = useState(false);
   const [error, setError] = useState('');
+  const {setUserData, setTotalBooks, setTotalSum, checkProfileCompletion,  userExists} = useUser();
   const navigate = useNavigate();
   const auth = getAuth();
   const [baseUrl, setBaseUrl] = useState('');
@@ -27,16 +30,66 @@ const Signup = () => {
     fetchBaseUrl();
   }, []);
 
-  const checkUserExists = async (email, uid) => {
+  const sendUserDataToBackend = async (user, userId) => {
+    if (!user || !baseUrl) return;
+    setLoader(true);
     try {
-      const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
-      return response.data.exists; // Returns true if user exists
-    } catch (err) {
-      console.error('Error checking user:', err);
-      setError('Failed to verify user existence.');
-      return false;
+      console.log(user);
+      const response = await axios.post(`${baseUrl}/login`, {
+        user_id: user.uid,
+        email: user.email,
+        username: user.displayName || "",
+        profileUrl: user.photoURL || ""
+      });
+      const usersData = response.data;
+      
+      console.log(usersData)
+      if (usersData.error) {
+        console.error(usersData.error);
+        return;
+      }
+
+      if (userId) { 
+        console.log("sttarting 3")// Ensure that userId is available
+        console.log(userId)
+        const response = await axios.get(`${baseUrl}/user/purchases`, {
+          params: { userId }
+        });
+        const { totalSum, totalBooks } = response.data;
+
+        if (user) {
+          user.totalSum = totalSum; // Append totalSum to the user data
+          user.totalBooks = totalBooks; // Append totalBooks to the user data
+          localStorage.setItem('user', JSON.stringify(user)); // Save the updated data back to localStorage
+        }
+
+        setTotalSum(totalSum);
+        setTotalBooks(totalBooks);
+      }
+
+  
+      const userToSave = {
+        userId: usersData.userId,
+        username: usersData.name || "Anonymous",
+        email: usersData.email,
+        profileUrl: usersData.profileUrl || "",
+        level: usersData.level || "",
+        address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
+        phone: usersData.phone || "",
+        department: usersData.department || ""
+      };
+  
+      setUserData(userToSave);
+      localStorage.setItem('user', JSON.stringify(userToSave));
+    } catch (error) {
+      console.error('Backend Error:', error);
+    } finally {
+      setLoader(false);
+      console.log("Done 1")
     }
   };
+
+  
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
@@ -47,9 +100,6 @@ const Signup = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       
-      // Check if user exists in the backend
-      const userExists = await checkUserExists(user.email, user.uid);
-
       if (userExists) {
         await sendUserDataToBackend(user);
         navigate('/dashboard')
@@ -74,7 +124,7 @@ const Signup = () => {
       const user = result.user;
 
       // Check if user exists in the backend
-      const userExists = await checkUserExists(user.email, user.uid);
+      const userExists = await checkProfileCompletion(user.email, user.uid);
 
       if (userExists) {
         await sendUserDataToBackend(user);
@@ -89,6 +139,10 @@ const Signup = () => {
       setLoading(false);
     }
   };
+
+  if (loader){
+    return <Loaders />
+  }
 
   return (
     <div className="signup-container">

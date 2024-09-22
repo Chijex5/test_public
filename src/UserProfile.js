@@ -53,7 +53,7 @@ function UserProfile() {
 
   const handleChangeProfilePicture = () => {
     // Handle profile picture upload to the backend here
-    console.log('File selected:', selectedFile);
+
     // You can call a function to send the file to the backend
     // For example: uploadProfilePicture(selectedFile);
   };

@@ -17,7 +17,7 @@ const Login = () => {
   const [loadingss, setLoadings] = useState(false);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState('');
-  const {setUserData, setTotalBooks, setTotalSum, checkProfileCompletion, loading, userExists} = useUser();
+  const {setUserData, setTotalBooks, setTotalSum, checkProfileCompletion, userExists} = useUser();
   const navigate = useNavigate();
 
   const [baseUrl, setBaseUrl] = useState('');
@@ -34,7 +34,6 @@ const Login = () => {
     if (!user || !baseUrl) return;
     setLoader(true);
     try {
-      console.log(user);
       const response = await axios.post(`${baseUrl}/login`, {
         user_id: user.uid,
         email: user.email,
@@ -42,16 +41,12 @@ const Login = () => {
         profileUrl: user.photoURL || ""
       });
       const usersData = response.data;
-      
-      console.log(usersData)
       if (usersData.error) {
         console.error(usersData.error);
         return;
       }
 
-      if (userId) { 
-        console.log("sttarting 3")// Ensure that userId is available
-        console.log(userId)
+      if (userId) {
         const response = await axios.get(`${baseUrl}/user/purchases`, {
           params: { userId }
         });
@@ -85,7 +80,7 @@ const Login = () => {
       console.error('Backend Error:', error);
     } finally {
       setLoader(false);
-      console.log("Done 1")
+      navigate('/dashboard');
     }
   };
 
@@ -101,10 +96,6 @@ const Login = () => {
 
       if (userExists) {
         await sendUserDataToBackend(user, user.uid);
-        if (!loader) {
-          console.log("done 2")
-          navigate('/dashboard');
-        }
       } else {
         navigate('/complete-profile'); // Redirect to complete profile if user does not exist
       }
@@ -126,10 +117,6 @@ const Login = () => {
     
       if (userExists) {
         await sendUserDataToBackend(user, user.uid);
-        if (!loading) {
-          console.log("done 2")
-          navigate('/dashboard');
-        } // Redirect to home if user exists
       } else {
         navigate('/complete-profile'); // Redirect to complete profile if user does not exist
       }

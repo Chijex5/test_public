@@ -20,7 +20,6 @@ const ForgotPassword = () => {
         setError(''); // Clear any previous error
     } catch (err) {
       setError('Failed to send reset email. Please try again later.');
-      console.log(err);
       setMessage('');
     } finally {
       setLoading(false);

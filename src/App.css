@@ -2,93 +2,13 @@
   text-align: center;
 }
 
-header {
-  background-color: #ffffff;
-  height: 6em;
-  padding: 20px;
-  color: rgb(10, 10, 10);
-  width: 100%;
-  height: 50px;
-}
 
-footer {
-  background-color: #282c34;
-  padding: 10px;
-  color: white;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-}
-
-
-.verify-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.verify-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.verify-content h2 {
-  margin-bottom: 15px;
-}
-
-.verify-content p {
-  margin-bottom: 20px;
-}
-
-.verify-content button {
-  padding: 10px 15px;
-  border: none;
-  background-color: #4caf50;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-right: 10px;
-}
-
-.verify-content button:disabled {
-  background-color: #ccc;
-}
-
-.verify-content button:hover:not(:disabled) {
-  background-color: #45a049;
-}
-
-
-/* app.css */
-
-/* Reset some default styles */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: 'Arial', sans-serif;
-}
-
-main {
-  flex: 1; /* Ensures that main content area takes up available space */
-  padding: 1.25rem; /* 20px in rem for consistency */
-  width: 100%;
-  max-width: 1200px; /* Optional max-width for larger screens */
-  margin: 0 auto; /* Center the content */
 }
 
 /* Responsive adjustments */

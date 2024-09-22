@@ -19,16 +19,14 @@ export const UserProvider = ({ children }) => {
   const [totalBooks, setTotalBooks] = useState('---');
 
   useEffect(() => {
-    console.log("sttarting")
     const fetchData = async () => {
-      console.log("sttarting 1")
       try {
         setLoading(true)
         const url = configureBaseUrl();
         setBaseUrl(url);
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
-          console.log("sttarting 2")
+
           setUserData(user); // Set the user data state
           setUserId(user.userId); 
         }
@@ -71,7 +69,6 @@ export const UserProvider = ({ children }) => {
   const checkUserExists = async (email, uid) => {
     try {
       const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
-      console.log(response)
       return response.data.exists; // Returns true if user exists (profile is complete)
     } catch (err) {
       console.error('Error checking user:', err);

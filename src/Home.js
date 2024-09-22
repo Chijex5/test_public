@@ -77,7 +77,6 @@ const Home = ({ cartItems, setCartItems }) => {
         // Other errors
         setLoadingBooks(prevState => ({ ...prevState, [bookId]: false }));
         setNotification({message: `Failed to add ${bookcode} to the wishlist.`, type: 'error'})
-        console.log("Failed to add the book to the wishlist.");
         setTimeout(() => {
           setClicke(prevState => ({ ...prevState, [bookId]: false }));
           setNotification({ message: '', type: '' });

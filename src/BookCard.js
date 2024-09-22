@@ -85,7 +85,6 @@ const BookCard = ({ book, onAddToCart }) => {
         // Other errors
         setLoading(false)
         setNotification({message: `Failed to add ${bookcode} to the wishlist.`, type: 'error'})
-        console.log("Failed to add the book to the wishlist.");
         setTimeout(() => {
           setClicke(false);
           setNotification({ message: '', type: '' });

@@ -246,7 +246,7 @@ const CompleteProfile = ({ user }) => {
       }
 
       if (response.status === 201) {
-        console.log('Profile completed successfully');
+        
       }
 
       const userToSave = {

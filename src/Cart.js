@@ -5,11 +5,13 @@ import { useUser } from './UserContext';
 import image from './23.png';
 import configureBaseUrl from './configureBaseUrl';
 import Loaders from './Loaders';
+import axios from 'axios';
 
 const Cart = ({ cartItems, setCartItems }) => {
-  const {userData, loading} = useUser();
+  const {userData, setTotalBooks, setTotalSum, loading} = useUser();
   const [form, setForm] = useState(null);
   const navigate = useNavigate();
+  const [userId, setUserId] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPayOnDelivery, setIsPayOnDelivery] = useState(false);
   const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
@@ -75,7 +77,7 @@ useEffect(() => {
     tax: tax  // Assuming tax is defined elsewhere in your code
   };
 
-  console.log(method)
+
 
   // Payload for backend
   const purchaseDetails = {
@@ -106,6 +108,17 @@ useEffect(() => {
     });
   
     if (response.ok) {
+
+      if (userId) { 
+
+        const response = await axios.get(`${baseUrl}/user/purchases`, {
+          params: { userId }
+        });
+        const { totalSum, totalBooks } = response.data;
+
+        setTotalSum(totalSum);
+        setTotalBooks(totalBooks);
+      }
       const blob = await response.blob();  // Get the file as a blob
 
       // Create a link element
@@ -133,8 +146,6 @@ useEffect(() => {
       // Clean up
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-
-      console.log("Invoice downloaded successfully!");  // Handle success
     } else {
       console.error('Failed to send purchase data.');
     }
@@ -161,7 +172,8 @@ useEffect(() => {
 
   useEffect(() => {
     if (!loading && userData) {
-      setForm(userData);  // Set form when userData is available
+      setForm(userData); 
+      setUserId(userData.userId) // Set form when userData is available
     }
   }, [userData, loading]);
 
@@ -170,7 +182,7 @@ useEffect(() => {
     return <Loaders />;
   }
 
-  const address = `${form?.flatNo || ""} ${form?.street || " "} ${form?.city || ""} ${form?.state}`
+  const address = form.address || ''
   const name = form.username || ''
   const email = form.email || ''
 
@@ -335,17 +347,19 @@ useEffect(() => {
         </>
       ) : (
         <div className="delivery-animation">
-        <p>Your package is being delivered!</p>
-        <p className='bold-email'>Check your email <span>"{email}"</span> for more details</p>
-        
-        <div className="delivery-bus"></div>
-        
-        <div className="road"></div>
-        
-        {/* Optional clouds for background effect */}
-        <div className="cloud" style={{ top: "150px", left: "20px" }}></div>
-        <div className="cloud" style={{ top: "170px", left: "150px" }}></div>
-      </div>
+          <p>Your package is being delivered!</p>
+          <p className='bold-email'>
+            Check your email <span>"{email}"</span> for more details. Your invoice download will begin shortly.
+          </p>
+
+          <div className="delivery-bus"></div>
+          
+          <div className="road"></div>
+          
+          {/* Optional clouds for background effect */}
+          <div className="cloud" style={{ top: "150px", left: "20px" }}></div>
+          <div className="cloud" style={{ top: "170px", left: "150px" }}></div>
+        </div>
       
       )}
     </div>
