@@ -82,7 +82,7 @@ const App = () => {
               <main>
                 <Routes>
                   <Route path="/" element={<Navigate to="/dashboard" />} />
-                  <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
+                  <Route path="/login" element={ <Login />} />
                   <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/dashboard" /> : <ForgotPassword />} />
                   <Route path="/complete-profile" element={<ProtectedRoute />}>
                     <Route path="" element={<CompleteProfile user={user}/>} />

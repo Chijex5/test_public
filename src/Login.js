@@ -1,20 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, googleProvider } from './firebase'; // Import Firebase services
 import './Auth.css'; // Ensure this is your CSS file
+import axios from 'axios';
 import Loader from './Loader'; // Ensure this is your Loader component
 import Deal from './uni2.png'
 import Loaders from './Loaders';
 import { useUser } from './UserContext';
+import configureBaseUrl from './configureBaseUrl';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loadings, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [error, setError] = useState('');
-  const {sendUserDataToBackend, checkProfileCompletion, loading, userExists} = useUser();
+  const {setUserData, setTotalBooks, setTotalSum, checkProfileCompletion, loading, userExists} = useUser();
   const navigate = useNavigate();
+
+  const [baseUrl, setBaseUrl] = useState('');
+
+  useEffect(() => {
+    const fetchBaseUrl = async () => {
+      const url = configureBaseUrl();
+      setBaseUrl(url);
+    };
+
+    fetchBaseUrl();
+  }, []);
+  const sendUserDataToBackend = async (user, userId) => {
+    if (!user || !baseUrl) return;
+    setLoader(true);
+    try {
+      console.log(user);
+      const response = await axios.post(`${baseUrl}/login`, {
+        user_id: user.uid,
+        email: user.email,
+        username: user.displayName || "",
+        profileUrl: user.photoURL || ""
+      });
+      const usersData = response.data;
+      
+      console.log(usersData)
+      if (usersData.error) {
+        console.error(usersData.error);
+        return;
+      }
+
+      if (userId) { 
+        console.log("sttarting 3")// Ensure that userId is available
+        console.log(userId)
+        const response = await axios.get(`${baseUrl}/user/purchases`, {
+          params: { userId }
+        });
+        const { totalSum, totalBooks } = response.data;
+
+        if (user) {
+          user.totalSum = totalSum; // Append totalSum to the user data
+          user.totalBooks = totalBooks; // Append totalBooks to the user data
+          localStorage.setItem('user', JSON.stringify(user)); // Save the updated data back to localStorage
+        }
+
+        setTotalSum(totalSum);
+        setTotalBooks(totalBooks);
+      }
+
+  
+      const userToSave = {
+        userId: usersData.userId,
+        username: usersData.name || "Anonymous",
+        email: usersData.email,
+        profileUrl: usersData.profileUrl || "",
+        level: usersData.level || "",
+        address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
+        phone: usersData.phone || "",
+        department: usersData.department || ""
+      };
+  
+      setUserData(userToSave);
+      localStorage.setItem('user', JSON.stringify(userToSave));
+    } catch (error) {
+      console.error('Backend Error:', error);
+    } finally {
+      setLoader(false);
+      console.log("Done 1")
+    }
+  };
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
@@ -27,8 +99,11 @@ const Login = () => {
       await checkProfileCompletion(user);
 
       if (userExists) {
-        await sendUserDataToBackend(user);
-        navigate('/dashboard');
+        await sendUserDataToBackend(user, user.uid);
+        if (!loader) {
+          console.log("done 2")
+          navigate('/dashboard');
+        }
       } else {
         navigate('/complete-profile'); // Redirect to complete profile if user does not exist
       }
@@ -48,7 +123,7 @@ const Login = () => {
         await checkProfileCompletion(user);
     
       if (userExists) {
-        await sendUserDataToBackend(user);
+        await sendUserDataToBackend(user, user.uid);
         if (!loading) {
           console.log("done 2")
           navigate('/dashboard');
@@ -62,7 +137,7 @@ const Login = () => {
     }
   };
   
-  if (loading) {
+  if (loader) {
     return <Loaders />
   }
 
