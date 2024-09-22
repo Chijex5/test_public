@@ -14,7 +14,7 @@
 
 .loader-container{
   position: fixed;
-  width: 100vw;
+  width: 100%;
   background: #fff;
   z-index: 10000;
   height: 100vh;

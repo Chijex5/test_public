@@ -45,6 +45,7 @@ const Wishlist = ({ setCartItems }) => {
   }, []);  
 
   useEffect(() => {
+    if (!baseUrl) return;
     const fetchAndSetWishlist = async () => {
       try {
         setLoad(true)

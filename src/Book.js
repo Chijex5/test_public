@@ -35,7 +35,6 @@ useEffect(() => {
   const fetchBaseUrl = async () => {
     const url = configureBaseUrl();
     setBaseUrl(url);
-    
   };
 
   fetchBaseUrl();
@@ -43,6 +42,7 @@ useEffect(() => {
 
 
   useEffect(() => {
+    if (!baseUrl) return;
     const fetchData = async () => {
       try {
         setLoading(true)

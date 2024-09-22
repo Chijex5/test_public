@@ -32,6 +32,8 @@
   overflow: hidden;
   padding: 0 12px;
   position: relative;
+  display: flex;
+  justify-content: center;
   text-align: center;
   -webkit-transition: background-color .218s, border-color .218s, box-shadow .218s;
   transition: background-color .218s, border-color .218s, box-shadow .218s;

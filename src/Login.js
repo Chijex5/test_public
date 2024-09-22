@@ -14,6 +14,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loadings, setLoading] = useState(false);
+  const [loadingss, setLoadings] = useState(false);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState('');
   const {setUserData, setTotalBooks, setTotalSum, checkProfileCompletion, loading, userExists} = useUser();
@@ -116,6 +117,7 @@ const Login = () => {
   };
 
   const handleGoogleAuth = async () => {
+    setLoadings(true);
     setError('');
         try {
         const result = await signInWithPopup(auth, googleProvider);
@@ -134,6 +136,8 @@ const Login = () => {
     } catch (err) {
       setError(err.message);
       console.error('Google Authentication Error:', err);
+    } finally{
+      setLoadings(false);
     }
   };
   
@@ -177,6 +181,7 @@ const Login = () => {
         <button 
           className="gsi-material-button"
           onClick={handleGoogleAuth}
+          disabled={loadings}
         >
           <div className="gsi-material-button-state"></div>
           <div className="gsi-material-button-content-wrapper">
@@ -189,7 +194,8 @@ const Login = () => {
                 <path fill="none" d="M0 0h48v48H0z"></path>
               </svg>
             </div>
-            <span className="gsi-material-button-contents">Sign in with Google</span>
+            <span className="gsi-material-button-contents">
+            {loadingss ? <Loader /> : 'Sign in with Google'}</span>
             <span style={{ display: 'none' }}>Sign in with Google</span>
           </div>
         </button>

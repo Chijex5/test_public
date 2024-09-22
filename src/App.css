@@ -76,7 +76,6 @@ footer {
   padding: 0;
 }
 
-/* Ensure the body takes full height */
 body {
   min-height: 100vh;
   display: flex;
@@ -84,7 +83,6 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-/* Main content area */
 main {
   flex: 1; /* Ensures that main content area takes up available space */
   padding: 1.25rem; /* 20px in rem for consistency */
