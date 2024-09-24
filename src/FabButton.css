@@ -1,0 +1,285 @@
+/* FAB Button */
+.fab-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 30px;
+  background-color: #4caf50; /* Green theme */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  font-size: 30px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.chat-popup {
+  position: fixed;
+  bottom: 90px;
+  right: 30px;
+  width: 300px;
+  margin-bottom: 3em;
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  z-index: 1000;
+  font-family: 'Arial', sans-serif;
+}
+
+.chat-header {
+  background-color: #081b29; /* Use your theme color */
+  padding: 15px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.chat-header h2 {
+  font-size: 1.2rem;
+  text-align: left;
+  color: #f8f9fa;
+  width: 80%;
+  margin: 0;
+}
+.chat-form .label-input{
+    color: #388e3c;
+    top: -5px;
+}
+
+.chat-form .labels-input{
+    position: absolute;
+  top: -10px;
+  left: 15px;
+  background-color: #fff;
+  padding: 0 5px;
+  font-size: 0.9rem;
+  color: #388e3c;
+  transition: color 0.3s ease;
+}
+
+.close-btn {
+  background: none;
+  border: 2px solid;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.close-btn:hover{
+    background: #d32f2f;
+    border: 2px solid #d32f2f;
+}
+
+.chat-body {
+  padding: 20px;
+  width: 80%;
+}
+
+.chat-body p {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.chat-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible ;
+}
+
+.input-field, .message-input {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  background-color: #fff;
+}
+
+.input-field {
+  height: 20px;
+}
+
+.message-input {
+  height: 80px;
+  resize: none;
+  width: 110%;
+  padding: 10px; /* Adds padding for better spacing */
+  box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.message-input:focus {
+  outline: none; /* Removes default focus outline */
+  border: 1px solid #4caf50;
+}
+
+
+.send-btn {
+  background-color: #4caf50; /* Button styled to match your theme */
+  color: white;
+  width: 150px;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.send-btn:hover {
+  background-color: #388e3c;
+}
+
+.chat-popup .send-btn:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 480px) {
+  .chat-popup {
+    width: 90%;
+    bottom: 20px;
+    right: 5%;
+  }
+}
+
+
+/* Hover effect with glow */
+.fab-btn:hover {
+  background-color: #388e3c;
+  transform: scale(1.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Pulsing animation to attract attention */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Initial animation */
+.fab-btn {
+  animation: pulse 2s infinite ease-in-out;
+}
+/* Popup Modal Background */
+.popup-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease forwards;
+  z-index: 1000;
+}
+
+/* Popup Content Box */
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.4s ease forwards;
+}
+
+
+
+/* Slide-in Animation for Popup */
+@keyframes slideUp {
+  0% {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Fade-in Background Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide-in and slide-out animation */
+@keyframes slideUp {
+    0% {
+      transform: translateY(100px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideDown {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100px);
+      opacity: 0;
+    }
+  }
+  
+  /* Fade-in and fade-out background animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  
+  /* When the modal is open */
+  .fade-in {
+    animation: fadeIn 0.3s ease forwards;
+  }
+  
+  /* When the modal is closing */
+  .fade-out {
+    animation: fadeOut 0.3s ease forwards;
+  }
+  
+  /* Popup content slide in */
+  .slide-up {
+    animation: slideUp 0.4s ease forwards;
+  }
+  
+  /* Popup content slide out */
+  .slide-down {
+    animation: slideDown 0.4s ease forwards;
+  }
+  

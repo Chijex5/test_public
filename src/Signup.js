@@ -16,6 +16,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState('');
+  const [didSendUserData, setDidSendUserData] = useState(false);
   const {setUserData, setTotalBooks, setTotalSum, checkProfileCompletion,  userExists} = useUser();
   const navigate = useNavigate();
   const auth = getAuth();
@@ -29,6 +30,18 @@ const Signup = () => {
 
     fetchBaseUrl();
   }, []);
+
+  const retrySendUserData = async (user, userId, maxRetries = 3) => {
+    for (let i = 0; i < maxRetries; i++) {
+      if (!didSendUserData) {
+        console.log(`Retrying sendUserDataToBackend, attempt ${i + 1}`);
+        await sendUserDataToBackend(user, userId);
+        if (didSendUserData) {
+          break;
+        }
+      }
+    }
+  };
 
   const sendUserDataToBackend = async (user, userId) => {
     if (!user || !baseUrl) return;
@@ -81,8 +94,11 @@ const Signup = () => {
   
       setUserData(userToSave);
       localStorage.setItem('user', JSON.stringify(userToSave));
+      setDidSendUserData(true)
+      navigate('/dashboard');
     } catch (error) {
       console.error('Backend Error:', error);
+      setDidSendUserData(false)
     } finally {
       setLoader(false);
       console.log("Done 1")
@@ -99,13 +115,20 @@ const Signup = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
+      await checkProfileCompletion(user);
+
       if (userExists) {
-        await sendUserDataToBackend(user);
-        navigate('/dashboard')
-      } else {
+        await sendUserDataToBackend(user, user.uid);
+        if (!didSendUserData) {
+          console.log("Retrying sendUserDataToBackend after failure");
+          await retrySendUserData(user, user.uid);
+        }
+      } else if(!userExists) {
         navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+      }  else if(userExists === 'null') {
+        setError('Failed to check user. Internal server error')
       }
+
     } catch (err) {
       setError(err.message);
       console.error('Authentication Error:', err);
@@ -122,15 +145,18 @@ const Signup = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-
-      // Check if user exists in the backend
-      const userExists = await checkProfileCompletion(user.email, user.uid);
+      await checkProfileCompletion(user);
 
       if (userExists) {
-        await sendUserDataToBackend(user);
-        navigate('/dashboard'); // Redirect to home if user exists
-      } else {
-        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+        await sendUserDataToBackend(user, user.uid);
+        if (!didSendUserData) {
+          console.log("Retrying sendUserDataToBackend after failure");
+          await retrySendUserData(user, user.uid);
+        }
+      } else if(!userExists) {
+        navigate('/complete-profile');
+      } else if(userExists === 'null') {
+        setError('Failed to check user. Internal server error')
       }
     } catch (err) {
       setError(err.message);

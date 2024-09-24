@@ -12,7 +12,7 @@ export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false); // Centralized loading state
   const [baseUrl, setBaseUrl] = useState('');
-  const [userExists, setUserExists] = useState(null);
+  const [userExists, setUserExists] = useState('null');
   const [totalSum, setTotalSum] = useState('---');
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState('');
@@ -25,8 +25,10 @@ export const UserProvider = ({ children }) => {
         const url = configureBaseUrl();
         setBaseUrl(url);
         const user = JSON.parse(localStorage.getItem('user'));
+        console.log(user)
         if (user) {
-
+          setTotalBooks(user.totalBook)
+          setTotalSum(user.totalSums)
           setUserData(user); // Set the user data state
           setUserId(user.userId); 
         }
@@ -69,7 +71,13 @@ export const UserProvider = ({ children }) => {
   const checkUserExists = async (email, uid) => {
     try {
       const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
-      return response.data.exists; // Returns true if user exists (profile is complete)
+      if (response.status === 200 ) {
+        return response.data.exists;
+      } else if (response.status === 404){
+        return response.data.exists;
+      } else {
+        return "null"
+      }
     } catch (err) {
       console.error('Error checking user:', err);
       setError('Failed to verify user existence.');
@@ -80,6 +88,7 @@ export const UserProvider = ({ children }) => {
   const checkProfileCompletion = async (user) => {
     const exists = await checkUserExists(user.email, user.uid);
     setUserExists(exists);
+    console.log(exists)
   };  
 
   const handleLogout = async () => {

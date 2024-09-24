@@ -18,6 +18,7 @@ import { ThemeProvider } from './ThemeContext';
 import ErrorBoundary from './ErrorBoundary';
 import ForgotPassword from './ForgotPassword';
 import ProtectedRoute from './ProtectedRoute';
+import FabButton from './FabButton';
 // import BuggyComponent from './BuggyComponent'
 
 const App = () => {
@@ -79,7 +80,9 @@ const App = () => {
             {/* <BuggyComponent> */}
             <div className="App">
               <ConditionalHeaderFooter activeNav={activeNav} setActiveNav={setActiveNav} />
+              
               <main>
+              <FabButton isAuth={isAuthenticated} />
                 <Routes>
                   <Route path="/" element={<Navigate to="/dashboard" />} />
                   <Route path="/login" element={ <Login />} />

@@ -13,6 +13,7 @@ import Notification from './Notifications';
 import configureBaseUrl from './configureBaseUrl';
 
 const Home = ({ cartItems, setCartItems }) => {
+  // eslint-disable-next-line
   const { userData, totalSum, totalBooks } = useUser();
   const [expandedBook, setExpandedBook] = useState(null);
   const [loadingBooks, setLoadingBooks] = useState({});
@@ -278,11 +279,11 @@ const Home = ({ cartItems, setCartItems }) => {
         <div className="dashboard">
           <div className="dashboard-item">
             <span className="label">Books Bought</span>
-            <span className="value">{totalBooks}</span>
+            <span className="value">{userData?.totalBooks || " "}</span>
           </div>
           <div className="dashboard-item">
             <span className="label">Money Spent</span>
-            <span className="value">₦{totalSum.toLocaleString()}</span>
+            <span className="value">₦{userData?.totalSum?.toLocaleString() || " "}</span>
           </div>
           <div className="dashboard-item">
             <span className="label">Books in Cart</span>

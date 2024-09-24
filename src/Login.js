@@ -46,41 +46,47 @@ const Login = () => {
         return;
       }
 
-      if (userId) {
-        const response = await axios.get(`${baseUrl}/user/purchases`, {
-          params: { userId }
-        });
-        const { totalSum, totalBooks } = response.data;
+      let totalBooks = 0;  // Declare totalBooks and totalSum outside the block
+    let totalSum = 0;
 
-        if (user) {
-          user.totalSum = totalSum; // Append totalSum to the user data
-          user.totalBooks = totalBooks; // Append totalBooks to the user data
-          localStorage.setItem('user', JSON.stringify(user)); // Save the updated data back to localStorage
-        }
+    if (userId) {
+      const purchasesResponse = await axios.get(`${baseUrl}/user/purchases`, {
+        params: { userId }
+      });
+      totalSum = purchasesResponse.data.totalSum;
+      totalBooks = purchasesResponse.data.totalBooks;
 
-        setTotalSum(totalSum);
-        setTotalBooks(totalBooks);
+      if (user) {
+        user.totalSum = totalSum; // Append totalSum to the user data
+        user.totalBooks = totalBooks; // Append totalBooks to the user data
+        localStorage.setItem('user', JSON.stringify(user)); // Save the updated data back to localStorage
       }
 
-  
-      const userToSave = {
-        userId: usersData.userId,
-        username: usersData.name || "Anonymous",
-        email: usersData.email,
-        profileUrl: usersData.profileUrl || "",
-        level: usersData.level || "",
-        address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
-        phone: usersData.phone || "",
-        department: usersData.department || ""
-      };
+      setTotalSum(totalSum);
+      setTotalBooks(totalBooks);
+    }
+
+    const userToSave = {
+      userId: usersData.userId,
+      username: usersData.name || "Anonymous",
+      email: usersData.email,
+      profileUrl: usersData.profileUrl || "",
+      level: usersData.level || "",
+      address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
+      phone: usersData.phone || "",
+      department: usersData.department || "",
+      totalBooks: totalBooks || " ", // Now properly accessible
+      totalSum: totalSum || " "     // Now properly accessible
+    };
   
       setUserData(userToSave);
       localStorage.setItem('user', JSON.stringify(userToSave));
+      navigate('/dashboard');
     } catch (error) {
       console.error('Backend Error:', error);
     } finally {
       setLoader(false);
-      navigate('/dashboard');
+      
     }
   };
 
@@ -117,8 +123,8 @@ const Login = () => {
     
       if (userExists) {
         await sendUserDataToBackend(user, user.uid);
-      } else {
-        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+      } else if(!userExists) {
+        navigate('/complete-profile');
       }
     } catch (err) {
       setError(err.message);
