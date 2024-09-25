@@ -4,7 +4,7 @@ import './SearchArea.css'; // Ensure your styles match your design preferences
 const SearchArea = ({ onSearch }) => {
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [suggestions, setSuggestions] = useState([]); // You may need to populate suggestions dynamically
+  const [suggestions] = useState([]); // You may need to populate suggestions dynamically
 
   const handleChange = (e) => {
     const value = e.target.value;

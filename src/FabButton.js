@@ -46,7 +46,7 @@ const FabButton = ({ isAuth }) => {
   return (
     <div>
       <button className="fab-btn" onClick={togglePopup}>
-        ?
+      <i class='bx bx-support'></i>
       </button>
 
       {isOpen && (
