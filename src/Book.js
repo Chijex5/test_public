@@ -136,7 +136,7 @@ useEffect(() => {
   }
 
   return (
-    <div className="container">
+    <div className="book-container">
       <SearchArea onSearch={handleSearch} allBooks={booksData.allBooks} />
 
       {isSearching && searchResults.length > 0 ? (
