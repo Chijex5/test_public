@@ -14,8 +14,15 @@ function UserProfile() {
   const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
   const [notification, setNotification] = useState({ message: '', type: '' });
-  const profilePics = form?.profileUrl || profilePic;
-  const [previewUrl, setPreviewUrl] = useState(profilePics); 
+  const generateAvatarUrl = (name) => {
+    const avatarBaseUrl = 'https://ui-avatars.com/api/';
+    return `${avatarBaseUrl}?name=${encodeURIComponent(name)}&background=random&color=fff&rounded=true&size=128`;
+  };
+
+  // Check if user has a profile picture
+  const avatarUrl = userData?.profileURL || generateAvatarUrl(userData?.fullname || 'User');
+
+  const [previewUrl, setPreviewUrl] = useState(avatarUrl); 
 
   const handleNotificationClose = () => {
     setNotification({ message: '', type: '' });
@@ -26,6 +33,8 @@ function UserProfile() {
       setForm(userData);
     }
   }, [userData, loading]);
+
+  
 
   const splitName = (fullName) => {
     if (!fullName) return { firstName: '', lastName: '' };
@@ -69,6 +78,7 @@ function UserProfile() {
     setIsEditing(false);
     setStep(1);
   };
+  console.log(avatarUrl)
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -117,7 +127,7 @@ function UserProfile() {
       <h1 className="profile-heading">User Profile</h1>
       <div className="profile-header">
         <img
-          src={form?.profileUrl || profilePic}
+          src={avatarUrl}
           alt="Profile"
           className="profile-img"
           onClick={toggleProfileModal}
@@ -132,7 +142,7 @@ function UserProfile() {
       {isProfileModalOpen && (
         <div className="profile-modal" onClick={toggleProfileModal}>
           <div className="profile-modal-content" onClick={(e) => e.stopPropagation()}>
-            <img src={previewUrl || profilePics} alt="Full Profile" className="full-profile-img" />
+            <img src={previewUrl || avatarUrl} alt="Full Profile" className="full-profile-img" />
             <button className="change-profile-button" onClick={() => document.getElementById('file-input').click()}>
               Change Profile Picture
             </button>

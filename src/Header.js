@@ -13,6 +13,14 @@ function Header() {
   const location = useLocation();
   const [completionPercentage, setCompletionPercentage] = useState(0); // State to store completion percentage
   const pathnames = location.pathname.split('/').filter(x => x);
+  const generateAvatarUrl = (name) => {
+    const avatarBaseUrl = 'https://ui-avatars.com/api/';
+    return `${avatarBaseUrl}?name=${encodeURIComponent(name)}&background=random&color=fff&rounded=true&size=128`;
+  };
+
+  // Check if user has a profile picture
+  const avatarUrl = userData?.profileURL || generateAvatarUrl(userData?.fullname || 'User');
+
 
   useEffect(() => {
     const splitName = (fullName) => {
@@ -69,7 +77,7 @@ function Header() {
         <div className="profile-section">
           <Link to="/profile" className="profile-link" data-tooltip-id="profile-tooltip">
             <div className="profile-pic">
-              <img src={userData?.profileUrl || profilePic} alt="Profile" className="profile-img" />
+              <img src={avatarUrl} alt="Profile" className="profile-img" />
               {completionPercentage < 100 && (
                 <div className="profile-completion-overlay">
                   <div className="completion-bar" style={{ width: `${completionPercentage}%` }}></div>
