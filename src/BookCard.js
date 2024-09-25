@@ -107,7 +107,7 @@ const BookCard = ({ book, onAddToCart }) => {
   return (
     <div className="book-cardys">
       <h3>{book.code}</h3>
-      <div className="text-container">
+      <div className="texts-container">
         <p>{book.name}</p>
         <p>{book.department}</p>
         <p>₦{book.price ? book.price.toFixed(2) : "N/A"}</p>

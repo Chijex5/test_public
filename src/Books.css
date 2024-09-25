@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-  width: 100%;
+  width: 100vw;
   margin: 0 auto;
   
   align-items: center;
@@ -71,8 +71,6 @@ body {
   font-family: 'Roboto', sans-serif; /* Modern, clean font */
   color: #333; /* Dark gray for primary text */
   line-height: 1.6;
-
-  border-radius: 8px;
 }
 
 .text-container .rating {
@@ -280,14 +278,11 @@ body {
   color: #333;
 }
 
-.book-cardys .text-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+.book-cardys .texts-container {
+  width: 100%;
 }
 
-.book-cardys .text-container p {
+.book-cardys .texts-container p {
   font-size: 1em;
   color: #555;
 }
@@ -417,11 +412,17 @@ body {
       margin-bottom: 80px;
   }
   .book-cardys{
-    min-width: 80%;
-    max-width: 90%;
+    min-width: 60%;
+    max-width: 70%;
+    gap: 10px;
+    height: 350px;
+  }
+  .book-cardys .texts-container{
+    margin-top: 5px;
+    gap: 5px;
   }
 
-  .text-container p:first-child {
+  .texts-container p:first-child {
     font-size: 1em;
   }
 
@@ -482,70 +483,4 @@ body {
 }
 
 /* For screens with max-width of 480px */
-@media (max-width: 480px) {
-  .container {
-      width: 100%;
-      padding: 5px;
-      margin-bottom: 80px;
-  }
-  .adds-to-wishlist-button{
-    width: 100%;
-  }
 
-  .search-area {
-      flex-direction: column;
-      align-items: stretch;
-  }
-
-  .search-bar {
-      font-size: 10px;
-      width: 100%;
-  }
-
-  .section-title {
-      font-size: 1em;
-  }
-
-  .sell-book-section {
-      padding: 1em;
-  }
-
-  .name-code {
-      flex-direction: column;
-      gap: 0.5em;
-  }
-
-  .input-field {
-      font-size: 12px;
-      padding: 0.5em;
-  }
-
-  .books-list {
-      gap: 10px;
-  }
-
-
-
-  .book-cardy h3 {
-      font-size: 1.2em;
-  }
-
-  .book-cardy p {
-      font-size: 0.8em;
-  }
-
-  .add-to-cart-button {
-      padding: 3px;
-      font-size: 0.8em;
-  }
-  
-
-  .earnings {
-      font-size: 0.9em;
-  }
-
-  .submit-button {
-      padding: 0.5em;
-      font-size: 0.8em;
-  }
-}

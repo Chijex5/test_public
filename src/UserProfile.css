@@ -149,15 +149,15 @@
 }
 
 /* Label and input field styling */
-label {
+.user-profile label {
   display: block;
   margin-bottom: 1.5em;
   font-size: 1.1rem;
   color: #444;
 }
 
-input[type="text"],
-input[type="email"] {
+.user-profile input[type="text"],
+.user-profile input[type="email"] {
   width: 100%;
   padding: 0.9em;
   margin-top: 0.4em;
@@ -167,7 +167,7 @@ input[type="email"] {
   transition: border-color 0.3s ease;
 }
 
-input:focus {
+.user-profile input:focus {
   border-color: #4caf50;
   outline: none;
 }
