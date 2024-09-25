@@ -68,12 +68,12 @@ const Login = () => {
 
     const userToSave = {
       userId: usersData.userId,
-      username: usersData.name || "Anonymous",
+      username: usersData.name,
       email: usersData.email,
-      profileUrl: usersData.profileUrl || "",
+      profileUrl: usersData.profileUrl,
       level: usersData.level || "",
       address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
-      phone: usersData.phone || "",
+      phone: usersData.phone,
       department: usersData.department || "",
       totalBooks: totalBooks || " ", // Now properly accessible
       totalSum: totalSum || " "     // Now properly accessible

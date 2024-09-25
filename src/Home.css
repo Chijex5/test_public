@@ -384,14 +384,14 @@ button {
 }
 
 .ads-container {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  display: inline-flex;
+  width: 100vw;
+  justify-content: center;
   gap: 2rem;
 }
 
 .ad {
-  width: 45%;
+  width: 45vw ;
   background-color: #fff;
   border-radius: 8px;
   padding: 1.5rem;
@@ -436,34 +436,121 @@ button {
   margin-bottom: 1.5rem;
 }
 
-.btn-shop-now {
-  background-color: #33cc33; /* Primary Color */
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  border-radius: 5px;
-  text-transform: uppercase;
-  font-weight: 600;
+.advertisement {
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  margin: 30px 0;
+}
+
+.advertisement .ad-title {
+  font-size: 2em;
+  color: #081b29; /* Your theme color */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.ad-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Common Styles for Ads */
+.ads {
+  flex: 1;
+  min-width: 300px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ads:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.ads-content {
+  text-align: center;
+}
+
+.ads-title {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.ads-text {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Buttons */
+.btn-shop-now, .btns-shop-now {
+  padding: 12px 20px;
+  font-size: 1em;
+  color: white;
+  background-color: #4caf50; /* Green for call-to-action */
   border: none;
+  border-radius: 25px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.btn-shop-now:hover {
-  background-color: #28a428; /* Darker shade of primary color */
+.btn-shop-now:hover, .btns-shop-now:hover {
+  background-color: #388e3c;
 }
+
+/* Pop-up Banner Specific Styles */
+.pop-up-banner {
+  background-color: #e8f5e9; /* Light green to differentiate */
+  border-left: 5px solid #4caf50;
+}
+
+.pop-up-banner .ads-title {
+  color: #2e7d32; /* Dark green to contrast */
+}
+
+/* Sidebar Ad Specific Styles */
+.sidebar-ad {
+  background-color: #e3f2fd; /* Light blue for contrast */
+  border-left: 5px solid #1976d2; /* Blue border */
+}
+
+.sidebar-ad .ads-title {
+  color: #1565c0; /* Dark blue to match */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ad-container {
+    flex-direction: column;
+  }
+
+  .ads {
+    margin-bottom: 20px;
+  }
+}
+
+
 
 /* Styles for screens with max-width of 720px */
 @media screen and (max-width: 720px) {
   .ads-container {
     flex-direction: column;
-    align-items: center;
+    align-items: center; 
   }
   .book-card{
     min-width: 200px;
   }
 
   .ad {
-    width: 100%;
+    width: 80vw;
   }
 
   .ads-title {
@@ -478,9 +565,6 @@ button {
     font-size: 0.9rem;
   }
 
-  .btn-shop-now {
-    padding: 0.65rem 1.25rem;
-  }
   .profile-completion-overlay .completion-text {
     opacity: 1;
     font-size: 10px;
@@ -493,12 +577,12 @@ button {
   .ads-container {
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 90vw;
     gap: 1rem;
   }
 
   .ad {
-    width: 100%;
+    width: 70vw;
   }
 
   .ads-title {
@@ -513,10 +597,6 @@ button {
     font-size: 0.85rem;
   }
 
-  .btn-shop-now {
-    padding: 0.6rem 1rem;
-    font-size: 0.85rem;
-  }
 
   .profile-completion-overlay .completion-text {
     opacity: 1;

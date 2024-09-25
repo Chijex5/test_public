@@ -448,25 +448,25 @@ const Home = ({ cartItems, setCartItems }) => {
 
         
               
-        <div className="section advertisements">
-          <h2 className="ads-title">Advertisements</h2>
-          <div className="ads-container">
+        <div className="section advertisement">
+          <h2 className="ad-title">Advertisements</h2>
+          <div className="ad-container">
             
             {/* Pop-Up Banner */}
-            <div className="ad pop-up-banner">
-              <div className="ad-content">
-                <h3 className="ad-title">New Arrivals Just In!</h3>
-                <p className="ad-text">Explore the latest additions to our collection.</p>
+            <div className="ads pop-up-banner">
+              <div className="ads-content">
+                <h3 className="ads-title">New Arrivals Just In!</h3>
+                <p className="ads-text">Explore the latest additions to our collection.</p>
                 <button className="btn-shop-now">Shop Now</button>
               </div>
             </div>
 
             {/* Sidebar Ad */}
-            <div className="ad sidebar-ad">
-              <div className="ad-content">
-                <h3 className="ad-title">Back-to-School Discounts</h3>
-                <p className="ad-text">Save up to 30% on textbooks and materials for the new school year.</p>
-                <button className="btn-shop-now">Shop Now</button>
+            <div className="ads sidebar-ad">
+              <div className="ads-content">
+                <h3 className="ads-title">Back-to-School Discounts</h3>
+                <p className="ads-text">Save up to 30% on textbooks and materials for the new school year.</p>
+                <button className="btns-shop-now">Shop Now</button>
               </div>
             </div>
             

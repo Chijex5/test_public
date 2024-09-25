@@ -8,7 +8,6 @@ const FabButton = ({ isAuth }) => {
   const { userData, loading } = useUser();
   const [newUsername, setNewUsername] = useState(userData?.username || '');
   const [newEmail, setNewEmail] = useState(userData?.email || '');
-    console.log(newUsername)
   const togglePopup = () => {
     if (isOpen) {
       setIsClosing(true); // Start the closing animation

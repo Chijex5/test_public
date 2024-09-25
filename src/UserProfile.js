@@ -3,6 +3,7 @@ import { useUser } from './UserContext';
 import './UserProfile.css';
 import Notification from './Notifications';
 import profilePic from './334.webp';
+import { useNavigate } from 'react-router-dom';
 
 function UserProfile() {
   const { userData, updateUserData, loading, handleLogout } = useUser();
@@ -11,8 +12,9 @@ function UserProfile() {
   const [step, setStep] = useState(1);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const navigate = useNavigate();
   const [notification, setNotification] = useState({ message: '', type: '' });
-  const profilePics = form?.profileUrl || profilePic
+  const profilePics = form?.profileUrl || profilePic;
   const [previewUrl, setPreviewUrl] = useState(profilePics); 
 
   const handleNotificationClose = () => {
@@ -20,7 +22,7 @@ function UserProfile() {
   };
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && userData) {
       setForm(userData);
     }
   }, [userData, loading]);
@@ -40,8 +42,7 @@ function UserProfile() {
     if (!file) {
       return;
     }
-  
-    // Check file type
+
     const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (!validImageTypes.includes(file.type)) {
       setNotification({ message: 'Only image files are allowed (JPEG, PNG, GIF)', type: 'error' });
@@ -53,10 +54,8 @@ function UserProfile() {
 
   const handleChangeProfilePicture = () => {
     // Handle profile picture upload to the backend here
-
-    // You can call a function to send the file to the backend
-    // For example: uploadProfilePicture(selectedFile);
   };
+
   const handleNextStep = () => {
     setStep(step + 1);
   };
@@ -76,6 +75,7 @@ function UserProfile() {
     setStep(1);
     setForm(userData);
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -85,10 +85,26 @@ function UserProfile() {
     setIsProfileModalOpen(!isProfileModalOpen);
   };
 
+  // Check if the app is still loading user data
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  // If there is no userData, display a dummy page with login/signup buttons
+  if (!userData) {
+    return (
+      <div className="dummy-page">
+        <div class="content-container">
+          <h1>Welcome to Unibook</h1>
+          <p>Please login or signup to access your profile.</p>
+          <button onClick={() => navigate("/login")} className='login-button'>Login</button>
+          <button onClick={() => navigate("/signup")} className='signup-button'>Signup</button>
+        </div>
+      </div>
+    );
+  }
+
+  // If userData exists, show the user profile
   return (
     <div className="user-profile">
       {notification.message && (
@@ -204,18 +220,16 @@ function UserProfile() {
             <p className="detail-item"><strong>Email:</strong> {form?.email || "johndoe@somebody.com"}</p>
             <p className="detail-item"><strong>Phone:</strong> {form?.phone || "+234 000 000 0000"}</p>
             <p className="detail-item"><strong>Department:</strong> {form?.department || ""}</p>
-            <p className="detail-item"><strong>Address:</strong> {form?.address || ""}</p>
+            <p className="detail-item"><strong>Address:</strong> {form?.flatNo || " "} {form?.street || ""} {form?.city || ""}, {form?.state || ""} {form?.postal_code || ""}</p>
           </div>
-          <div className="user-actions">
+          <div className="buttons">
             <button className="edit-button" onClick={() => setIsEditing(true)}>Edit</button>
             <button className="logout-button" onClick={handleLogout}>Logout</button>
           </div>
         </div>
-
       )}
     </div>
   );
-
 }
 
 export default UserProfile;
