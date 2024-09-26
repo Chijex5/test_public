@@ -4,6 +4,7 @@ import configureBaseUrl from './configureBaseUrl';
 import { signOut } from 'firebase/auth';
 import { auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
+import profilePic from './334.webp';
 
 const UserContext = createContext();
 
@@ -16,6 +17,7 @@ export const UserProvider = ({ children }) => {
   const [totalSum, setTotalSum] = useState('---');
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState('');
+  const [profileurl, setProfileurl] = useState(profilePic)
   const [totalBooks, setTotalBooks] = useState('---');
 
   useEffect(() => {
@@ -31,6 +33,7 @@ export const UserProvider = ({ children }) => {
           setTotalSum(user.totalSums)
           setUserData(user); // Set the user data state
           setUserId(user.userId); 
+          setProfileurl(user.profileUrl)
         }
   
       } catch (error) {
@@ -104,6 +107,7 @@ export const UserProvider = ({ children }) => {
 
   const updateUserData = async (newData) => {
     try {
+      console.log("started")
       const response = await axios.put(`${baseUrl}/updateuser`, newData);
       if (response.status === 200) {
         setUserData(newData);
@@ -115,7 +119,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ userData, userExists, error, checkProfileCompletion, updateUserData, setTotalBooks, setTotalSum, totalBooks, loading, totalSum, handleLogout, setUserData, saveUserDataToLocalStorage }}>
+    <UserContext.Provider value={{ userData, userExists, error, setProfileurl, profileurl, checkProfileCompletion, updateUserData, setTotalBooks, setTotalSum, totalBooks, loading, totalSum, handleLogout, setUserData, saveUserDataToLocalStorage }}>
       {children}
     </UserContext.Provider>
   );

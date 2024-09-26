@@ -15,12 +15,20 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loadings, setLoading] = useState(false);
   const [loadingss, setLoadings] = useState(false);
+  
+  
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState('');
-  const {setUserData, setTotalBooks, setTotalSum, checkProfileCompletion, userExists} = useUser();
+  const {setUserData, setTotalBooks, setProfileurl, setTotalSum, checkProfileCompletion, userExists} = useUser();
   const navigate = useNavigate();
 
   const [baseUrl, setBaseUrl] = useState('');
+
+  const generateAvatarUrl = (name) => {
+    console.log("starting", name)
+    const avatarBaseUrl = 'https://ui-avatars.com/api/';
+    return `${avatarBaseUrl}?name=${encodeURIComponent(name)}&background=random&color=fff&rounded=true&size=128`;
+  };
 
   useEffect(() => {
     const fetchBaseUrl = async () => {
@@ -57,20 +65,22 @@ const Login = () => {
       totalBooks = purchasesResponse.data.totalBooks;
 
       if (user) {
-        user.totalSum = totalSum; // Append totalSum to the user data
-        user.totalBooks = totalBooks; // Append totalBooks to the user data
-        localStorage.setItem('user', JSON.stringify(user)); // Save the updated data back to localStorage
+        user.totalSum = totalSum;
+        user.totalBooks = totalBooks;
+        localStorage.setItem('user', JSON.stringify(user));
       }
 
       setTotalSum(totalSum);
       setTotalBooks(totalBooks);
     }
+    const newAvatarUrl = generateAvatarUrl(usersData.name);
+    setProfileurl(newAvatarUrl)
 
     const userToSave = {
       userId: usersData.userId,
       username: usersData.name,
       email: usersData.email,
-      profileUrl: usersData.profileUrl,
+      profileUrl: usersData.profileUrl || newAvatarUrl,
       level: usersData.level || "",
       address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
       phone: usersData.phone,

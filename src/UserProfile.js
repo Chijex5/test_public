@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useUser } from './UserContext';
 import './UserProfile.css';
 import Notification from './Notifications';
-import profilePic from './334.webp';
 import { useNavigate } from 'react-router-dom';
 
 function UserProfile() {
-  const { userData, updateUserData, loading, handleLogout } = useUser();
+  const { userData, updateUserData, loading, handleLogout, profileurl } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({ ...userData });
   const [step, setStep] = useState(1);
@@ -14,16 +13,7 @@ function UserProfile() {
   const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
   const [notification, setNotification] = useState({ message: '', type: '' });
-  const generateAvatarUrl = (name) => {
-    const avatarBaseUrl = 'https://ui-avatars.com/api/';
-    return `${avatarBaseUrl}?name=${encodeURIComponent(name)}&background=random&color=fff&rounded=true&size=128`;
-  };
-
-  // Check if user has a profile picture
-  const avatarUrl = userData?.profileURL || generateAvatarUrl(userData?.fullname || 'User');
-
-  const [previewUrl, setPreviewUrl] = useState(avatarUrl); 
-
+  const [previewUrl, setPreviewUrl] = useState(profileurl); 
   const handleNotificationClose = () => {
     setNotification({ message: '', type: '' });
   };
@@ -31,8 +21,9 @@ function UserProfile() {
   useEffect(() => {
     if (!loading && userData) {
       setForm(userData);
+      setPreviewUrl(profileurl)
     }
-  }, [userData, loading]);
+  }, [userData, loading, profileurl]);
 
   
 
@@ -78,7 +69,7 @@ function UserProfile() {
     setIsEditing(false);
     setStep(1);
   };
-  console.log(avatarUrl)
+
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -126,12 +117,14 @@ function UserProfile() {
       )}
       <h1 className="profile-heading">User Profile</h1>
       <div className="profile-header">
-        <img
-          src={avatarUrl}
-          alt="Profile"
-          className="profile-img"
-          onClick={toggleProfileModal}
-        />
+        <div className="profile-image-container">
+          <img
+            src={previewUrl}
+            alt="Profile"
+            className="profile-img"
+            onClick={toggleProfileModal}
+          />
+        </div>
         <div className="profile-info">
           <h2>{firstName} {lastName}</h2>
           <p className="email">{form?.email || "johndoe@somebody.com"}</p>
@@ -142,7 +135,7 @@ function UserProfile() {
       {isProfileModalOpen && (
         <div className="profile-modal" onClick={toggleProfileModal}>
           <div className="profile-modal-content" onClick={(e) => e.stopPropagation()}>
-            <img src={previewUrl || avatarUrl} alt="Full Profile" className="full-profile-img" />
+            <img src={previewUrl} alt="Full Profile" className="full-profile-img" />
             <button className="change-profile-button" onClick={() => document.getElementById('file-input').click()}>
               Change Profile Picture
             </button>

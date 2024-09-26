@@ -45,7 +45,7 @@ const FabButton = ({ isAuth }) => {
   return (
     <div>
       <button className="fab-btn" onClick={togglePopup}>
-      <i class='bx bx-support bx-tada'></i>
+      <i className='bx bx-support bx-tada'></i>
       </button>
 
       {isOpen && (
@@ -57,17 +57,18 @@ const FabButton = ({ isAuth }) => {
             </div>
             <div className="chat-body">
               <p>Let us know how we can assist you.</p>
-              <form className="chat-form" onSubmit={handleSubmit}>
+              <form className="chat-form" id='form-field' onSubmit={handleSubmit}>
                 {/* Username Field */}
                 <div className="input-group">
                   <input
                     type="text"
+                    id='username'
                     placeholder="Your Name"
                     value={newUsername}
                     className="input-field"
                     onChange={handleChange(setNewUsername)}
                   />
-                  <label className="label-input">Full Name</label>
+                  <label id='username' className="label-input">Full Name</label>
                 </div>
 
                 {/* Email Field */}
@@ -75,11 +76,12 @@ const FabButton = ({ isAuth }) => {
                   <input
                     type="email"
                     placeholder="Your Email"
+                    id='useremail'
                     value={newEmail}
                     className="input-field"
                     onChange={handleChange(setNewEmail)}
                   />
-                  <label className="label-input">Email</label>
+                  <label id='useremail' className="label-input">Email</label>
                 </div>
 
                 {/* Message Field */}
