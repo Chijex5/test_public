@@ -4,8 +4,8 @@
 .auth-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    align-items: first baseline;
+    height: 100vh;
     background-color: #f4f4f9;
     padding: 20px;
 }
@@ -191,7 +191,7 @@ h2 {
     justify-content: center;
     width: 100%; /* Ensure buttons take up the full width */
     padding: 12px 20px;
-    margin: 15px 0;
+    margin-bottom: 2em;
     border: none;
     border-radius: 5px;
     font-size: 1rem;
