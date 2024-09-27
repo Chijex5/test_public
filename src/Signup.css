@@ -63,12 +63,34 @@
   .google-button {
     width: 100%; /* Ensure buttons take up the full width */
     padding: 12px 20px;
-    margin: 15px 0;
+    margin-bottom: 2em;
     border: none;
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
+  }
+
+  .or-box{
+    display: flex;
+    justify-content: start;
+    align-items: first baseline;
+    text-align: center;
+    margin-bottom: 2em;
+  }
+
+  .or-line{
+    width: 48%;
+    border-bottom: 2px solid #ccc ;
+  }
+
+  .craa-label{
+    top: 1;
+    background-color: #fff;
+    padding: 0 5px;
+    font-size: 0.9rem;
+    color: #888;
+    transition: color 0.3s ease;
   }
   
   .signup-button {

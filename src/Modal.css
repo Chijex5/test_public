@@ -1,0 +1,105 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Darker, more luxurious backdrop */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px); /* Adds a frosted glass effect */
+  }
+  
+  .modal-content {
+    background: linear-gradient(145deg, #ffffff, #f0f0f0); /* Soft gradient background for a rich look */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4); /* Deeper shadow for a more pronounced effect */
+    text-align: center;
+    transition: transform 0.4s ease, opacity 0.4s ease; /* Slower, smoother animations */
+    opacity: 0;
+    transform: scale(0.95);
+    animation: fadeInModal 0.4s forwards ease-out; /* Fade and scale-in animation */
+  }
+  
+  @keyframes fadeInModal {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .modal-header h2 {
+    color: #333;
+    font-size: 26px;
+    font-weight: 600; /* Bolder for a more premium appearance */
+    letter-spacing: 1px; /* Slight spacing for elegance */
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .close-button:hover {
+    color: #000;
+    transform: scale(1.1); /* A slight hover effect for interactivity */
+  }
+  
+  .modal-body {
+    color: #444;
+    font-size: 18px;
+    line-height: 1.6; /* Improved readability */
+  }
+  
+  .resend-button {
+    background-color: #4caf50; /* Primary color for the button */
+    color: #fff;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 50px; /* Fully rounded for a modern look */
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5); /* Glowing button effect */
+  }
+  
+  .resend-button:hover {
+    background-color: #43a047; /* Slightly darker green on hover */
+    transform: scale(1.05); /* Hover zoom effect */
+    box-shadow: 0 12px 30px rgba(76, 175, 80, 0.7); /* Larger glow on hover */
+  }
+  
+  .modal-content:hover {
+    transform: scale(1.02); /* Subtle overall scale-up when hovered */
+  }
+  
+  .modal-body p {
+    margin-bottom: 20px;
+    color: #555;
+  }
+  
+  .resend-button:focus {
+    outline: none;
+  }
+  

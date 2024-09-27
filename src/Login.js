@@ -74,7 +74,6 @@ const Login = () => {
       setTotalBooks(totalBooks);
     }
     const newAvatarUrl = generateAvatarUrl(usersData.name);
-    setProfileurl(newAvatarUrl)
 
     const userToSave = {
       userId: usersData.userId,
@@ -88,6 +87,8 @@ const Login = () => {
       totalBooks: totalBooks || " ", // Now properly accessible
       totalSum: totalSum || " "     // Now properly accessible
     };
+    setProfileurl(userToSave.profileUrl)
+
   
       setUserData(userToSave);
       localStorage.setItem('user', JSON.stringify(userToSave));
@@ -108,18 +109,54 @@ const Login = () => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
-      await checkProfileCompletion(user);
-
-      if (userExists) {
+      const emailVerified = await checkEmailVerification(user);
+  
+      if (!emailVerified) {
+        setError('A verification email has been sent. Please verify your email before continuing.');
+        return; // Stop further execution until email is verified
+      }
+  
+      // Check if the user exists in your database
+      const exists = await checkUserExists(user.email, user.uid);
+      console.log(exists)
+  
+      if (exists) {
         await sendUserDataToBackend(user, user.uid);
+      
       } else {
-        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
+        navigate('/complete-profile');
       }
     } catch (err) {
       setError(err.message);
       console.error('Authentication Error:', err);
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const checkEmailVerification = async (user) => {
+    if (user) {
+      if (user.emailVerified) {
+        console.log("Email has been verified.");
+        return true;  // Email is verified
+      } else {
+        console.log("Email is not verified. Sending verification...");
+        return false;  // Email is not yet verified
+      }
+    } else {
+      console.log("No user is signed in.");
+      return null;  // No user signed in
+    }
+  };
+  
+  const checkUserExists = async (email, uid) => {
+    try {
+      const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
+        return response.data.exists;
+    } catch (err) {
+      console.error('Error checking user:', err);
+      setError('Failed to verify user existence.');
+      return false;
     }
   };
 
@@ -177,9 +214,16 @@ const Login = () => {
             />
             <label className="label-input">Password</label>
           </div>
+          <div className='craaa'>
           <button type="submit" className="email-login-button" disabled={loadings}>
             {loadings ? <Loader /> : 'Log In'}
           </button>
+            <div className='or-box'>
+              <div className='or-line'></div>
+              <label className='craa-label'>OR</label>
+              <div className='or-line'></div>
+            </div>
+          </div>
         </form>
         <button 
           className="gsi-material-button"

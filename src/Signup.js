@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Import axios for making HTTP requests
 import './Signup.css';
 import Loaders from './Loaders';
 import Loader from './Loader';
+import Modal from './Modal';
 import Deal from './uni2.png'
 import configureBaseUrl from './configureBaseUrl';
 import { useUser } from './UserContext';
@@ -12,12 +13,14 @@ import { useUser } from './UserContext';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState('');
   const [didSendUserData, setDidSendUserData] = useState(false);
-  const {setUserData, setTotalBooks, setTotalSum, checkProfileCompletion,  userExists} = useUser();
+  const {setUserData, setTotalBooks, setTotalSum} = useUser();
   const navigate = useNavigate();
   const auth = getAuth();
   const [baseUrl, setBaseUrl] = useState('');
@@ -105,35 +108,92 @@ const Signup = () => {
     }
   };
 
-  
+  const resendVerification = async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        await sendEmailVerification(user);
+        alert('Verification email has been resent.');
+      }
+    } catch (err) {
+      console.error('Error resending verification:', err);
+    }
+  };
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
+  
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      await checkProfileCompletion(user);
-
-      if (userExists) {
+  
+      // Send verification email and wait for it
+      const emailVerified = await checkEmailVerification(user);
+  
+      if (!emailVerified) {
+        setError('A verification email has been sent. Please verify your email before continuing.');
+        return; // Stop further execution until email is verified
+      }
+  
+      // Check if the user exists in your database
+      const exists = await checkUserExists(user.email, user.uid);
+  
+      if (exists) {
         await sendUserDataToBackend(user, user.uid);
         if (!didSendUserData) {
-          console.log("Retrying sendUserDataToBackend after failure");
           await retrySendUserData(user, user.uid);
         }
-      } else if(!userExists) {
-        navigate('/complete-profile'); // Redirect to complete profile if user does not exist
-      }  else if(userExists === 'null') {
-        setError('Failed to check user. Internal server error')
+      } else if (!exists) {
+        navigate('/complete-profile');
+      } else {
+        setError('Failed to check user. Internal server error.');
       }
-
     } catch (err) {
       setError(err.message);
       console.error('Authentication Error:', err);
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const checkEmailVerification = async (user) => {
+    if (user) {
+      if (user.emailVerified) {
+        console.log("Email has been verified.");
+        return true;  // Email is verified
+      } else {
+        console.log("Email is not verified. Sending verification...");
+  
+        // Update the user's display name before sending verification
+        await updateProfile(user, {
+          displayName: displayName // Set the custom display name here
+        }).then(async () => {
+          // Send verification email after updating the display name
+          await sendEmailVerification(user);
+          console.log("Verification email sent with display name:", user.displayName);
+        }).catch((error) => {
+          console.error("Error updating display name:", error);
+        });
+  
+        setShowModal(true); // Show modal after sending email
+        return false;  // Email is not yet verified
+      }
+    } else {
+      console.log("No user is signed in.");
+      return null;  // No user signed in
+    }
+  };
+  
+  const checkUserExists = async (email, uid) => {
+    try {
+      const response = await axios.post(`${baseUrl}/check-user`, { email, uid });
+        return response.data.exists;
+    } catch (err) {
+      console.error('Error checking user:', err);
+      setError('Failed to verify user existence.');
+      return false;
     }
   };
 
@@ -145,17 +205,18 @@ const Signup = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      await checkProfileCompletion(user);
+      const exists = await checkUserExists(user.email, user.uid);
+      console.log(exists)
 
-      if (userExists) {
+      if (exists) {
         await sendUserDataToBackend(user, user.uid);
         if (!didSendUserData) {
           console.log("Retrying sendUserDataToBackend after failure");
           await retrySendUserData(user, user.uid);
         }
-      } else if(!userExists) {
+      } else if(!exists) {
         navigate('/complete-profile');
-      } else if(userExists === 'null') {
+      } else {
         setError('Failed to check user. Internal server error')
       }
     } catch (err) {
@@ -173,10 +234,26 @@ const Signup = () => {
   return (
     <div className="signup-container">
       <div className="signup-card">
+      <Modal
+        show={showModal}
+        closeModal={() => setShowModal(false)}
+        resendVerification={resendVerification}
+      />
       <img src={Deal} alt="logo" className="logo-img" />
         <h2>Sign Up</h2>
         {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleEmailAuth}>
+        <div className="input-group">
+            <input
+              type="text"
+              id='name'
+              className="signup-input"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              required
+            />
+            <label className="input-label">Full Name</label>
+          </div>
           <div className="input-group">
             <input
               type="email"
@@ -199,9 +276,16 @@ const Signup = () => {
             />
             <label className="input-label">Password</label>
           </div>
-          <button type="submit" className="signup-button" disabled={loading}>
-            {loading ? <Loader /> : 'Sign Up'}
-          </button>
+          <div className='craaa'>
+            <button type="submit" className="signup-button" disabled={loading}>
+              {loading ? <Loader /> : 'Sign Up'}
+            </button>
+            <div className='or-box'>
+              <div className='or-line'></div>
+              <label className='craa-label'>OR</label>
+              <div className='or-line'></div>
+            </div>
+          </div>
         </form>
         <button 
           className="gsi-material-button"

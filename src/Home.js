@@ -449,29 +449,48 @@ const Home = ({ cartItems, setCartItems }) => {
         
               
         <div className="section advertisement">
-          <h2 className="ad-title">Advertisements</h2>
-          <div className="ad-container">
-            
-            {/* Pop-Up Banner */}
-            <div className="ads pop-up-banner">
-              <div className="ads-content">
-                <h3 className="ads-title">New Arrivals Just In!</h3>
-                <p className="ads-text">Explore the latest additions to our collection.</p>
-                <button className="btn-shop-now">Shop Now</button>
-              </div>
-            </div>
+        <h2 className="ad-title">Unibooks Offers</h2>
+        <div className="ad-container">
 
-            {/* Sidebar Ad */}
-            <div className="ads sidebar-ad">
-              <div className="ads-content">
-                <h3 className="ads-title">Back-to-School Discounts</h3>
-                <p className="ads-text">Save up to 30% on textbooks and materials for the new school year.</p>
-                <button className="btns-shop-now">Shop Now</button>
-              </div>
+          {/* Pop-Up Banner */}
+          <div className="ads pop-up-banner">
+            <div className="ads-content">
+              <h3 className="ads-title">New Book Arrivals!</h3>
+              <p className="ads-text">Discover the latest bestsellers and academic titles in our collection.</p>
+              <button className="btns-shop-now">Browse Now</button>
             </div>
-            
           </div>
+
+          {/* Sidebar Ad 1 */}
+          <div className="ads sidebar-ad">
+            <div className="ads-content">
+              <h3 className="ads-title">Student Discount</h3>
+              <p className="ads-text">Get up to 20% off textbooks when you register with your student ID.</p>
+              <button className="btn-shop-now">Get Discount</button>
+            </div>
+          </div>
+
+          {/* Sidebar Ad 2 */}
+          <div className="ads pop-up-banner">
+            <div className="ads-content">
+              <h3 className="ads-title">Free Shipping on Book Orders</h3>
+              <p className="ads-text">Enjoy free shipping on all orders above $50. Limited time only!</p>
+              <button className="btns-shop-now">Shop Now</button>
+            </div>
+          </div>
+
+          {/* Sidebar Ad 3 */}
+          <div className="ads sidebar-ad">
+            <div className="ads-content">
+              <h3 className="ads-title">Exclusive eBook Deals</h3>
+              <p className="ads-text">Save up to 50% on selected eBooks and enjoy reading on the go.</p>
+              <button className="btn-shop-now">Explore eBooks</button>
+            </div>
+          </div>
+
         </div>
+      </div>
+
       </div>
       </div>
     );

@@ -70,7 +70,7 @@ function UserProfile() {
     setStep(1);
   };
 
-
+  console.log(previewUrl)
   const handleCancel = () => {
     setIsEditing(false);
     setStep(1);
@@ -95,7 +95,7 @@ function UserProfile() {
   if (!userData) {
     return (
       <div className="dummy-page">
-        <div class="content-container">
+        <div className="content-container">
           <h1>Welcome to Unibook</h1>
           <p>Please login or signup to access your profile.</p>
           <button onClick={() => navigate("/login")} className='login-button'>Login</button>
