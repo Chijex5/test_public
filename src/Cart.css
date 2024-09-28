@@ -1,17 +1,22 @@
 /* General Styles */
 .cart-container {
-    max-width: 800px;
+    max-width: 80vw;
     margin: 0 auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 140px;
+    margin-bottom: 100px;
   }
   
   .quantity-selector {
     display: flex;
     align-items: center;
+  }
+
+  .cart-animation {
+    width: 300px; /* Adjust size */
+    height: 300px; /* Adjust size */
   }
   
   .quantity-button {
@@ -146,16 +151,22 @@
     text-align: center;
     margin-top: 50px;
     color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
   }
   
   .empty-cart p {
     font-size: 1.1em;
     margin-bottom: 20px;
+   
   }
   
   .browse-books {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #28a428;
     color: #fff;
     width: auto;
     border: none;
@@ -270,6 +281,10 @@ body {
 }
 
 @media (max-width: 768px) {
+  .cart-container{
+    width: 100VW;
+    max-width: 90vw;
+  }
   .modals-content {
     padding: 20px; /* Adjust padding for smaller screens */
   }
@@ -289,25 +304,25 @@ body {
   .delivery-info, .availability-info {
     margin-bottom: 16px; /* Slightly reduce margin */
   }
-}
 
-@media (max-width: 480px) {
-  .modals-content {
-    padding: 15px; /* Further reduce padding for very small screens */
+  .delivery-animation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    margin-top: 50px;
+    padding: 0;
   }
-
-  .modals-content h2 {
-    font-size: 1.2em; /* Further reduce font size for very small screens */
-  }
-
-  .modals-content p {
-    font-size: 0.9em; /* Smaller font size on very small screens */
-  }
-
-  .modals-content h3 {
-    font-size: 1em; /* Further reduce heading size */
+  .delivery-text{
+    display: flex;
+    flex-direction: column;
+    width: 80vw;
   }
 }
+
+
 
 /* Confirm button */
 .confirm-delivery {
@@ -364,19 +379,19 @@ body {
 
 
 
+
+
 /* Delivery animation */
 .delivery-animation {
   display: flex;
-  flex-direction: column;
   height: 60vh;
-  
   justify-content: center;
   align-items: center;
   text-align: center;
   font-family: 'Arial', sans-serif;
   margin-top: 50px;
   padding: 0;
-  overflow: hidden;
+
 }
 .close-modal {
   position: absolute;

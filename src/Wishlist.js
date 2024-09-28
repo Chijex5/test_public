@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './Wishlist.css'; // Use a separate CSS file for Wishlist
 import Notification from './Notifications';
 import { Tooltip } from 'react-tooltip';
+import Lottie from 'lottie-react';
+import animationData from './fff.json';
 import axios from 'axios';
 import 'react-tooltip/dist/react-tooltip.css';
 import { Link } from 'react-router-dom';
-import image from './22.png';
 import configureBaseUrl from './configureBaseUrl';
 import Loaders from './Loaders';
 
@@ -170,7 +171,7 @@ const handleMoveToCart = async (book, bookId) => {
 
   return (
     <div className="wishlist-page">
-      <h2>Your Wishlist</h2>
+      <h2>{!load && wishlist.length > 0 ? ('Your Wishlist') : ('No items in your wishlist')}</h2>
       {notification.message && (
         <Notification 
           message={notification.message} 
@@ -256,7 +257,9 @@ const handleMoveToCart = async (book, bookId) => {
           <Link to="/book" className="profile-link">
                 <button className="browse-books">Browse Books</button>
           </Link>
-          <img src={image} alt="No wishlist items" className="empty-wishlist-image" />
+          <div className='cart-animation'>
+            <Lottie animationData={animationData} loop={true} />
+          </div>
         </div>
         )
       )}

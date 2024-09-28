@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import './Cart.css';
 import { useNavigate, Link } from 'react-router-dom';
+import Lottie from 'lottie-react';
+import animationData from './Untitled_file.json';
+import animationData2 from './Untitled_file (1).json';
 import { useUser } from './UserContext';
-import image from './23.png';
 import configureBaseUrl from './configureBaseUrl';
 import Loaders from './Loaders';
 import axios from 'axios';
@@ -339,26 +341,22 @@ useEffect(() => {
                   <button className="browse-books">Browse Books</button>
                 </Link>
               </div>
-              <div className='cart-image'>
-                <img src={image} alt="No wishlist items" className="empty-cart-image" />
+              <div className='cart-animation'>
+                <Lottie animationData={animationData} loop={true} />
               </div>
             </div>
+
           )}
         </>
       ) : (
         <div className="delivery-animation">
-          <p>Your package is being delivered!</p>
-          <p className='bold-email'>
-            Check your email <span>"{email}"</span> for more details. Your invoice download will begin shortly.
-          </p>
-
-          <div className="delivery-bus"></div>
-          
-          <div className="road"></div>
-          
-          {/* Optional clouds for background effect */}
-          <div className="cloud" style={{ top: "150px", left: "20px" }}></div>
-          <div className="cloud" style={{ top: "170px", left: "150px" }}></div>
+          <div className='delivery-text'>
+            <p>Your package is being delivered!</p>
+            <p className='bold-email'>
+              Check your email <span>"{email}"</span> for more details. Your invoice download will begin shortly.
+            </p>
+          </div>
+          <Lottie animationData={animationData2} loop={true} />
         </div>
       
       )}
