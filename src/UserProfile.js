@@ -223,7 +223,7 @@ function UserProfile() {
             <p className="detail-item"><strong>Email:</strong> {form?.email || "johndoe@somebody.com"}</p>
             <p className="detail-item"><strong>Phone:</strong> {form?.phone || "+234 000 000 0000"}</p>
             <p className="detail-item"><strong>Department:</strong> {form?.department || ""}</p>
-            <p className="detail-item"><strong>Address:</strong> {form?.flatNo || " "} {form?.street || ""} {form?.city || ""}, {form?.state || ""} {form?.postal_code || ""}</p>
+            <p className="detail-item"><strong>Address:</strong> {form?.flat_no || " "} {form?.street || ""} {form?.city || ""}, {form?.state || ""} {form?.postal_code || ""}</p>
           </div>
           <div className="buttons">
             <button className="edit-button" onClick={() => setIsEditing(true)}>Edit</button>
