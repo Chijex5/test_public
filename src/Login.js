@@ -84,6 +84,11 @@ const Login = () => {
       level: usersData.level || "",
       address: `${usersData.flat_no || ''}, ${usersData.street || ''}, ${usersData.city || ''}, ${usersData.state || ''}, ${usersData.postal_code || ''}`.replace(/,\s*$/, ""),
       phone: usersData.phone,
+      flat_no: usersData.flat_no,
+      street: usersData.street,
+      city: usersData.city,
+      postal_code: usersData.postal_code,
+      state: usersData.state,
       department: usersData.department || "",
       totalBooks: totalBooks || " ", // Now properly accessible
       totalSum: totalSum || " "     // Now properly accessible
