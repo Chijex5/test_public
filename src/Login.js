@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendEmailVerification, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, googleProvider } from './firebase'; // Import Firebase services
 import './Auth.css'; // Ensure this is your CSS file
 import axios from 'axios';
 import Loader from './Loader'; // Ensure this is your Loader component
 import Deal from './uni2.png'
+import Modal from './Modal';
 import Loaders from './Loaders';
 import { useUser } from './UserContext';
 import configureBaseUrl from './configureBaseUrl';
@@ -13,6 +14,7 @@ import configureBaseUrl from './configureBaseUrl';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showModal, setShowModal] = useState(false);
   const [loadings, setLoading] = useState(false);
   const [loadingss, setLoadings] = useState(false);
   
@@ -25,7 +27,6 @@ const Login = () => {
   const [baseUrl, setBaseUrl] = useState('');
 
   const generateAvatarUrl = (name) => {
-    console.log("starting", name)
     const avatarBaseUrl = 'https://ui-avatars.com/api/';
     return `${avatarBaseUrl}?name=${encodeURIComponent(name)}&background=random&color=fff&rounded=true&size=128`;
   };
@@ -101,6 +102,18 @@ const Login = () => {
     }
   };
 
+  const resendVerification = async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        await sendEmailVerification(user);
+        alert('Verification email has been resent.');
+      }
+    } catch (err) {
+      console.error('Error resending verification:', err);
+    }
+  };
+
   const handleEmailAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -112,17 +125,15 @@ const Login = () => {
       const emailVerified = await checkEmailVerification(user);
   
       if (!emailVerified) {
+        setShowModal(true);
         setError('A verification email has been sent. Please verify your email before continuing.');
         return; // Stop further execution until email is verified
       }
   
       // Check if the user exists in your database
       const exists = await checkUserExists(user.email, user.uid);
-      console.log(exists)
-  
       if (exists) {
         await sendUserDataToBackend(user, user.uid);
-      
       } else {
         navigate('/complete-profile');
       }
@@ -137,14 +148,12 @@ const Login = () => {
   const checkEmailVerification = async (user) => {
     if (user) {
       if (user.emailVerified) {
-        console.log("Email has been verified.");
         return true;  // Email is verified
       } else {
-        console.log("Email is not verified. Sending verification...");
+        
         return false;  // Email is not yet verified
       }
     } else {
-      console.log("No user is signed in.");
       return null;  // No user signed in
     }
   };
@@ -187,6 +196,11 @@ const Login = () => {
 
   return (
     <div className="auth-container">
+      <Modal
+        show={showModal}
+        closeModal={() => setShowModal(false)}
+        resendVerification={resendVerification}
+      />
       <div className="auth-card">
       <img src={Deal} alt="logo" className="logo-img" />
         <h2>Log In</h2>

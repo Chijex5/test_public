@@ -17,7 +17,7 @@ import { UserProvider } from './UserContext';
 import { ThemeProvider } from './ThemeContext';
 import ErrorBoundary from './ErrorBoundary';
 import ForgotPassword from './ForgotPassword';
-import ProtectedRoute from './ProtectedRoute';
+
 import FabButton from './FabButton';
 // import BuggyComponent from './BuggyComponent'
 
@@ -27,9 +27,6 @@ const App = () => {
   const [activeNav, setActiveNav] = useState('dashboard');
   const [cartItems, setCartItems] = useState([]);
   const [user, setUser] = useState(null);
-  // const [showVerifyModal, setShowVerifyModal] = useState(false); // Show verify modal
-  // const [verificationSent, setVerificationSent] = useState(false); // Track if email verification has been sent
-  // const [sending, setSending] = useState(false); // Track sending status
 
   const auth = getAuth();
 
@@ -38,9 +35,6 @@ const App = () => {
       if (user) {
         setUser(user);
         setIsAuthenticated(true);
-        // if (!user.emailVerified) {
-        //   setShowVerifyModal(true); // Show modal if email is not verified
-        // }
       } else {
         setIsAuthenticated(false);
       }
@@ -49,24 +43,6 @@ const App = () => {
 
     return () => unsubscribe();
   }, [auth]);
-
-  // Function to send email verification
-  // const handleSendVerification = async () => {
-  //     if (user && !user.emailVerified) {  // Ensure email is unverified
-  //       setSending(true);
-  //       try {
-  //         await sendEmailVerification(user);
-  //         setVerificationSent(true);
-  //         console.log("Verification email sent successfully.");
-  //       } catch (error) {
-  //         console.error('Error sending verification email:', error.message);  // Log error message
-  //       } finally {
-  //         setSending(false);
-  //       }
-  //     } else {
-  //       console.warn("User is either not logged in or the email is already verified.");
-  //     }
-  // };
 
   if (loading) {
     return <Loaders />;
@@ -87,9 +63,7 @@ const App = () => {
                   <Route path="/" element={<Navigate to="/dashboard" />} />
                   <Route path="/login" element={ <Login />} />
                   <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/dashboard" /> : <ForgotPassword />} />
-                  <Route path="/complete-profile" element={<ProtectedRoute />}>
-                    <Route path="" element={<CompleteProfile user={user}/>} />
-                  </Route>
+                  <Route path="/complete-profile" element={<CompleteProfile user={user}/>} />
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/profile" element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} />
                   <Route path="/dashboard" element={isAuthenticated ? <Home cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
@@ -99,26 +73,6 @@ const App = () => {
                   <Route path="*" element={<Navigate to="/dashboard" />} />
                 </Routes>
               </main>
-
-              {/* Modal to prompt email verification
-              {showVerifyModal && (
-                <div className="verify-modal">
-                  <div className="verify-content">
-                    <h2>Email Verification Needed</h2>
-                    <p>Your email is not verified. Please verify your email to continue using the app.</p>
-
-                    {verificationSent ? (
-                      <p>A verification email has been sent to your email address.</p>
-                    ) : (
-                      <button onClick={handleSendVerification} disabled={sending}>
-                        {sending ? 'Sending...' : 'Send Verification Email'}
-                      </button>
-                    )}
-
-                    <button onClick={() => setShowVerifyModal(false)}>Close</button>
-                  </div>
-                </div>
-              )} */}
             </div>
             {/* </BuggyComponent> */}
           </ErrorBoundary>

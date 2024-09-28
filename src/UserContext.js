@@ -27,7 +27,6 @@ export const UserProvider = ({ children }) => {
         const url = configureBaseUrl();
         setBaseUrl(url);
         const user = JSON.parse(localStorage.getItem('user'));
-        console.log(user)
         if (user) {
           setTotalBooks(user.totalBook)
           setTotalSum(user.totalSums)
@@ -91,7 +90,6 @@ export const UserProvider = ({ children }) => {
   const checkProfileCompletion = async (user) => {
     const exists = await checkUserExists(user.email, user.uid);
     setUserExists(exists);
-    console.log(exists)
   };  
 
   const handleLogout = async () => {
@@ -107,7 +105,6 @@ export const UserProvider = ({ children }) => {
 
   const updateUserData = async (newData) => {
     try {
-      console.log("started")
       const response = await axios.put(`${baseUrl}/updateuser`, newData);
       if (response.status === 200) {
         setUserData(newData);

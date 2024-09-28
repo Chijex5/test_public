@@ -37,7 +37,6 @@ const Signup = () => {
   const retrySendUserData = async (user, userId, maxRetries = 3) => {
     for (let i = 0; i < maxRetries; i++) {
       if (!didSendUserData) {
-        console.log(`Retrying sendUserDataToBackend, attempt ${i + 1}`);
         await sendUserDataToBackend(user, userId);
         if (didSendUserData) {
           break;
@@ -50,7 +49,6 @@ const Signup = () => {
     if (!user || !baseUrl) return;
     setLoader(true);
     try {
-      console.log(user);
       const response = await axios.post(`${baseUrl}/login`, {
         user_id: user.uid,
         email: user.email,
@@ -58,16 +56,12 @@ const Signup = () => {
         profileUrl: user.photoURL || ""
       });
       const usersData = response.data;
-      
-      console.log(usersData)
       if (usersData.error) {
         console.error(usersData.error);
         return;
       }
 
       if (userId) { 
-        console.log("sttarting 3")// Ensure that userId is available
-        console.log(userId)
         const response = await axios.get(`${baseUrl}/user/purchases`, {
           params: { userId }
         });
@@ -104,7 +98,7 @@ const Signup = () => {
       setDidSendUserData(false)
     } finally {
       setLoader(false);
-      console.log("Done 1")
+      
     }
   };
 
@@ -161,18 +155,13 @@ const Signup = () => {
   const checkEmailVerification = async (user) => {
     if (user) {
       if (user.emailVerified) {
-        console.log("Email has been verified.");
-        return true;  // Email is verified
+        return true;
       } else {
-        console.log("Email is not verified. Sending verification...");
-  
-        // Update the user's display name before sending verification
+
         await updateProfile(user, {
-          displayName: displayName // Set the custom display name here
+          displayName: displayName 
         }).then(async () => {
-          // Send verification email after updating the display name
           await sendEmailVerification(user);
-          console.log("Verification email sent with display name:", user.displayName);
         }).catch((error) => {
           console.error("Error updating display name:", error);
         });
@@ -181,7 +170,6 @@ const Signup = () => {
         return false;  // Email is not yet verified
       }
     } else {
-      console.log("No user is signed in.");
       return null;  // No user signed in
     }
   };
@@ -206,12 +194,10 @@ const Signup = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const exists = await checkUserExists(user.email, user.uid);
-      console.log(exists)
 
       if (exists) {
         await sendUserDataToBackend(user, user.uid);
         if (!didSendUserData) {
-          console.log("Retrying sendUserDataToBackend after failure");
           await retrySendUserData(user, user.uid);
         }
       } else if(!exists) {
