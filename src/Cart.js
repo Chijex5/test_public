@@ -127,7 +127,7 @@ useEffect(() => {
 
       // Set the file name to download
       const contentDisposition = response.headers.get('Content-Disposition');
-      alert(contentDisposition)
+      alert(contentDisposition, "that is your content despistion")
       let filename = 'invoice.pdf'; // Default file name
 
       if (contentDisposition && contentDisposition.includes('attachment')) {
