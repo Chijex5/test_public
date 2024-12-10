@@ -90,11 +90,7 @@ useEffect(() => {
     method: method,
     purchasedDetails: purchasedDetails
   };
-    console.log = logToScreen
-    // Test the function
-    console.log("This is a test log")
-    console.log(purchaseDetails)
-
+    alert(purchaseDetails)
   // Send purchase details to the backend
   sendPurchaseData(purchaseDetails);
 
