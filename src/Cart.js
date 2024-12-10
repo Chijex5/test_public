@@ -90,8 +90,6 @@ useEffect(() => {
     method: method,
     purchasedDetails: purchasedDetails
   };
-    alert(purchaseDetails)
-  // Send purchase details to the backend
   sendPurchaseData(purchaseDetails);
 
   setDeliveryConfirmed(true);
@@ -100,9 +98,6 @@ useEffect(() => {
 };
 
   const sendPurchaseData = async (purchaseDetails) => {
-    alert(JSON.stringify(purchaseDetails))
-    console.log(purchaseDetails)
-    console.log(JSON.stringify(purchaseDetails))
   try {
     const response = await fetch(`${baseUrl}/purchase`, {
       method: 'POST',
@@ -124,8 +119,7 @@ useEffect(() => {
         setTotalSum(totalSum);
         setTotalBooks(totalBooks);
       }
-      const blob = await response.blob();  // Get the file as a blob
-
+      const blob = await response.blob(); // Get the file as a blob
       // Create a link element
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -133,16 +127,16 @@ useEffect(() => {
 
       // Set the file name to download
       const contentDisposition = response.headers.get('Content-Disposition');
-      let filename = 'invoice.pdf';  // Default file name
+      let filename = 'invoice.pdf'; // Default file name
 
       if (contentDisposition && contentDisposition.indexOf('attachment') !== -1) {
-        const match = contentDisposition.match(/filename="(.+)"/);
+        const match = contentDisposition.match(/filename[^;=\n]*=([^;\n]+)/); // Updated regex
         if (match && match[1]) {
-          filename = match[1];
+          filename = match[1].replace(/"/g, ''); // Remove any surrounding quotes if present
         }
       }
 
-      a.download = filename;
+      a.download = filename; // Use the extracted or default filename
 
       // Append the link to the document and trigger the download
       document.body.appendChild(a);
@@ -151,6 +145,7 @@ useEffect(() => {
       // Clean up
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
+      
     } else {
       console.error('Failed to send purchase data.');
     }
