@@ -130,13 +130,15 @@ useEffect(() => {
       alert(contentDisposition)
       let filename = 'invoice.pdf'; // Default file name
 
-      if (contentDisposition && contentDisposition.indexOf('attachment') !== -1) {
-        const match = contentDisposition.match(/filename[^;=\n]*=([^;\n]+)/); // Updated regex
-        alert(match)
-        if (match && match[1]) {
-          filename = match[1].replace(/"/g, ''); // Remove any surrounding quotes if present
-        }
+      if (contentDisposition && contentDisposition.includes('attachment')) {
+        alert("heyyyy")
+      // Match both quoted and unquoted filenames
+      const match = contentDisposition.match(/filename="?([^";]+)"?/);
+      if (match && match[1]) {
+        alert("matched")
+        filename = match[1];
       }
+    }
 
       a.download = filename; // Use the extracted or default filename
 
