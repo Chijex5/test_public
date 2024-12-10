@@ -101,6 +101,8 @@ useEffect(() => {
 
   const sendPurchaseData = async (purchaseDetails) => {
     alert(JSON.stringify(purchaseDetails))
+    console.log(purchaseDetails)
+    console.log(JSON.stringify(purchaseDetails))
   try {
     const response = await fetch(`${baseUrl}/purchase`, {
       method: 'POST',
