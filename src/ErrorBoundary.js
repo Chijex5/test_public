@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './ErrorBoundary.css';
-import errorGif from './gif/error.gif';
+import errorGif from './error.gif';
 
 class ErrorBoundary extends Component {
   constructor(props) {
