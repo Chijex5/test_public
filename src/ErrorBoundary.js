@@ -35,10 +35,10 @@ class ErrorBoundary extends Component {
 
             <h1 className="error-title">500</h1>
             <h2 className="error-subtitle">
-              Looks like you're lost
+              Something went wrong 
             </h2>
             <p className="error-message">
-              The page you are looking for is not available
+              It's from our end and we are working on fixing it
             </p>
 
             <button
@@ -49,7 +49,7 @@ class ErrorBoundary extends Component {
             </button>
 
             <div className="error-footer">
-              <p>sL Code Hub</p>
+              <p>Unibooks</p>
             </div>
           </div>
         </div>
