@@ -23,19 +23,18 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="error-boundary-container">
-          <img src={errorImage} alt="Error Illustration" className="error-boundary-image" />
-          <h1 className="error-boundary-title">Oops! Something went wrong.</h1>
-          <p className="error-boundary-message">
-            We encountered an unexpected error. Please try refreshing the page or contact support if the issue persists.
-          </p>
-          <button className="error-boundary-button" onClick={this.handleRefresh}>
+        <div class="error-content">
+        <h1>500</h1>
+        <img src="gif/error.gif" alt="">
+        <div class="text">
+            <h2>Look like you're lost</h2>
+            <p>the page you are looking for not available</p>
+            <button onClick={this.handleRefresh}>
             Refresh Page
           </button>
-          <div className="error-boundary-footer">
-            <p>&copy; Unibooks 2024</p>
-          </div>
         </div>
+        <p>sL Code <span style="color: red;">Hub</span></p>
+    </div>
       );
     }
 
