@@ -1,42 +1,72 @@
-@import url(https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-error-content {
+/* ErrorBoundary.css */
+.error-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  text-align: center;
-}
-error-content h1 {
-  font-size: 90px;
-}
-error-content img {
-  width: 500px;
-}
-error-content .text {
-  font-family: "Poppins", sans-serif;
-}
-error-content .text h2 {
-  font-weight: 600;
-  font-size: 30px;
-}
-error-content .text p {
-  font-size: 10px;
-  font-weight: 300;
+  padding: 1rem;
 }
 
-error-content button {
-  background: #33cc33;
-  width: 200px;
-  height: 40px;
-  margin: 20px;
-  border-radius: 20px;
-  color: #fff;
-  border: none;
+.error-content {
+  max-width: 28rem;
+  width: 100%;
+  text-align: center;
+}
+
+.error-image-container {
+  width: 12rem;
+  height: 12rem;
+  margin: 0 auto;
+  margin-bottom: 1.5rem;
+}
+
+.error-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.error-title {
+  font-size: 3.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.error-subtitle {
+  font-size: 1.5rem;
   font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+.refresh-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color: #33cc33;
+  color: white;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.refresh-button:hover {
+  background-color: #2ab82a;
+}
+
+.error-footer {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  color: #6b7280;
+  font-weight: 500;
 }
