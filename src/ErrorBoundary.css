@@ -15,8 +15,8 @@
 }
 
 .error-image-container {
-  width: 12rem;
-  height: 12rem;
+  width: 100vw;
+  height: 100%;
   margin: 0 auto;
   margin-bottom: 1.5rem;
 }
