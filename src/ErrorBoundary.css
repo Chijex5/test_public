@@ -1,56 +1,42 @@
-.error-boundary-container {
+@import url(https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+error-content {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
   min-height: 100vh;
-  padding: 20px;
-  background-color: #f8f9fa;
-  color: #333;
+  text-align: center;
+}
+error-content h1 {
+  font-size: 90px;
+}
+error-content img {
+  width: 500px;
+}
+error-content .text {
+  font-family: "Poppins", sans-serif;
+}
+error-content .text h2 {
+  font-weight: 600;
+  font-size: 30px;
+}
+error-content .text p {
+  font-size: 10px;
+  font-weight: 300;
 }
 
-.error-boundary-image {
-  max-width: 400px;
-  width: 100%;
-  margin-bottom: 20px;
-  animation: fadeIn 1s ease-in-out;
-}
-
-.error-boundary-title {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #ff5555; /* Error color */
-}
-
-.error-boundary-message {
-  font-size: 1.25rem;
-  margin-bottom: 20px;
-  color: #555;
-}
-
-.error-boundary-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 20px;
+error-content button {
+  background: #009ec5;
+  width: 200px;
+  height: 40px;
+  margin: 20px;
+  border-radius: 20px;
+  color: #fff;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.error-boundary-button:hover {
-  background-color: #388e3c;
-}
-
-.error-boundary-footer {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: #777;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  font-weight: 600;
 }
