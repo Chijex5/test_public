@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './ErrorBoundary.css';
-import errorImage from './assets.jpg';
+import errorGif from './gif/error.gif';
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -23,18 +23,18 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div class="error-content">
-        <h1>500</h1>
-        <img src="gif/error.gif" alt="">
-        <div class="text">
+        <div className="error-content">
+          <h1>500</h1>
+          <img src={errorGif} alt="Error" />
+          <div className="text">
             <h2>Look like you're lost</h2>
-            <p>the page you are looking for not available</p>
+            <p>The page you are looking for is not available</p>
             <button onClick={this.handleRefresh}>
-            Refresh Page
-          </button>
+              Refresh Page
+            </button>
+          </div>
+          <p>sL Code <span style={{ color: 'red' }}>Hub</span></p>
         </div>
-        <p>sL Code <span style="color: red;">Hub</span></p>
-    </div>
       );
     }
 
