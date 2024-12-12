@@ -441,6 +441,38 @@ const Home = ({ cartItems, setCartItems }) => {
             ))}
           </div>
         </div>
+            <div className="section advertisements">
+  <h2 className="ads-title">Don't Miss Out!</h2>
+  <div className="ads-container">
+    <div className="ad">
+      <div className="ad-content">
+        <h3 className="ad-title">Latest Releases</h3>
+        <p className="ad-text">
+          Discover the newest additions to our collection. Updated weekly!
+        </p>
+        <button className="btn-shop-now">Explore Now</button>
+      </div>
+    </div>
+    <div className="ad">
+      <div className="ad-content">
+        <h3 className="ad-title">Exclusive Sale</h3>
+        <p className="ad-text">
+          Enjoy discounts on select titles for a limited time only.
+        </p>
+        <button className="btn-shop-now">Shop the Sale</button>
+      </div>
+    </div>
+    <div className="ad">
+      <div className="ad-content">
+        <h3 className="ad-title">Best Offers</h3>
+        <p className="ad-text">
+          Grab amazing deals on our top-rated books. Hurry, while stocks last!
+        </p>
+        <button className="btn-shop-now">View Offers</button>
+      </div>
+    </div>
+  </div>
+</div>
       </div>
       </div>
     );
