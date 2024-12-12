@@ -38,7 +38,7 @@ class ErrorBoundary extends Component {
               Something went wrong 
             </h2>
             <p className="error-message">
-              It's from our end and we are working on fixing it
+              We apologize for the recent technical difficulties. Our team is currently working to resolve the issue.
             </p>
 
             <button
