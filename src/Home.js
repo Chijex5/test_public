@@ -121,8 +121,7 @@ const Home = ({ cartItems, setCartItems }) => {
 
   const [booksData, setBooksData] = useState({
     recentChoices: [],
-    departmentBooks: [],
-    recommendations: []
+    departmentBooks: []
   });
   
 
@@ -155,8 +154,7 @@ const Home = ({ cartItems, setCartItems }) => {
   
         const mappedData = {
           recentChoices: mapBooks(response.data.recentChoices),
-          departmentBooks: mapBooks(response.data.allBooks),
-          recommendations: mapBooks(response.data.recommendations)
+          departmentBooks: mapBooks(response.data.allBooks)
         };
   
         setBooksData(mappedData);
@@ -303,78 +301,6 @@ const Home = ({ cartItems, setCartItems }) => {
           <h2>Recent Books</h2>
           <div className="book-cards">
             {booksData.recentChoices.map((book) => (
-              <div
-                key={book.id}
-                className={`book-card ${expandedBook === book.id ? 'expanded' : ''}`}
-                onClick={() => toggleExpand(book.id)}
-              >
-                <div className="book-summary" >
-                  <p className = "bold-code">{book.code}</p>
-                  <p className={book.available ? "available" : "notavailable"}>{book.available ? "Available" : "Unavailable"}</p>
-                  <p>₦{book.price}</p>
-                </div>
-                {expandedBook === book.id && (
-                  <div className="book-details">
-                    <p>Title: {book.name}</p>
-                    <p>Department: {book.department}</p>
-                     <div className="star-rating">
-                        <div className="stars-outer">
-                          <div
-                            className="stars-inner"
-                            style={{
-                              width: `${
-                                book.rating && !isNaN(parseFloat(book.rating))
-                                  ? (parseFloat(book.rating) / 5) * 100
-                                  : 0
-                              }%`
-                            }}
-                          ></div>
-                        </div>
-                        <span className="rating-text">
-                          {book.rating && !isNaN(parseFloat(book.rating))
-                            ? parseFloat(book.rating).toFixed(1)
-                            : "No rating"}{" "}
-                        </span>
-                      </div>
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation(); 
-                        handleAddToCart(book);
-                      }} 
-                      disabled={!book.available}
-                      className={
-                        clicked[book.id]
-                          ? "add-to-cart-button clicked"
-                          : book.available
-                          ? "add-to-cart-button"
-                          : "out-of-stock-button"
-                      }
-                    >
-                      {book.available ? (clicked[book.id] ? "Added!" : "Add to Cart") : "Out of Stock"}
-                    </button>
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation(); 
-                        handleAddToWishlist(userId, book.id, book.code);
-                      }}
-                      className={
-                      clicke[book.id]
-                          ? "add-to-wishlist-button clicked"
-                          : "add-to-wishlist-button"
-                          }
-                    >
-                      {loadingBooks[book.id] ? <Loader /> : (clicke[book.id] ? "Added!" : "Add to Wishlist")}
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="section recent-books">
-          <h2>Books for you</h2>
-          <div className="book-cards">
-            {booksData.recommendations.map((book) => (
               <div
                 key={book.id}
                 className={`book-card ${expandedBook === book.id ? 'expanded' : ''}`}
