@@ -441,10 +441,6 @@ const Home = ({ cartItems, setCartItems }) => {
             ))}
           </div>
         </div>
-
-        </div>
-      </div>
-
       </div>
       </div>
     );
