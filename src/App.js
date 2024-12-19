@@ -11,6 +11,7 @@ import Books from './Book';
 import Login from './Login';
 import Signup from './Signup';
 import Loaders from './Loaders';
+import NotFound from './NotFound';
 import UserProfile from './UserProfile';
 import Wishlist from './Wishlist';
 import { UserProvider } from './UserContext';
@@ -70,7 +71,7 @@ const App = () => {
                   <Route path="/wishlist" element={isAuthenticated ? <Wishlist cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
                   <Route path="/book" element={isAuthenticated ? <Books cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
                   <Route path="/cart" element={isAuthenticated ? <Cart cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
-                  <Route path="*" element={<Navigate to="/dashboard" />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
             </div>
