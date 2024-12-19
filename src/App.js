@@ -62,16 +62,21 @@ const App = () => {
               <FabButton isAuth={isAuthenticated} />
                 <Routes>
                   <Route path="/" element={<Navigate to="/dashboard" />} />
-                  <Route path="/login" element={ <Login />} />
+                  <Route path="/login" element={<Login />} />
                   <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/dashboard" /> : <ForgotPassword />} />
-                  <Route path="/complete-profile" element={<CompleteProfile user={user}/>} />
+                  <Route path="/complete-profile" element={<CompleteProfile user={user} />} />
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/profile" element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} />
                   <Route path="/dashboard" element={isAuthenticated ? <Home cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
                   <Route path="/wishlist" element={isAuthenticated ? <Wishlist cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
                   <Route path="/book" element={isAuthenticated ? <Books cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
                   <Route path="/cart" element={isAuthenticated ? <Cart cartItems={cartItems} setCartItems={setCartItems} /> : <Navigate to="/login" />} />
-                  <Route path="*" element={<NotFound />} />
+  
+                  {/* Explicit 404 route */}
+                  <Route path="/404" element={<NotFound />} />
+
+                  {/* Redirect unmatched paths to 404 */}
+                  <Route path="*" element={<Navigate to="/404" />} />
                 </Routes>
               </main>
             </div>
