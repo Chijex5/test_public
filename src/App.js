@@ -87,12 +87,11 @@ const ConditionalHeaderFooter = ({ activeNav, setActiveNav }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // Determine the current path and set activeNav accordingly
     const currentPath = location.pathname.split('/')[1] || 'dashboard';
     setActiveNav(currentPath);
   }, [location, setActiveNav]);
 
-  const noHeaderFooter = ['/login', '/signup', '/complete-profile', '/forgot-password'].includes(location.pathname);
+  const noHeaderFooter = ['/login', '/signup', '/complete-profile', '/forgot-password', '/404', '/not-found'].includes(location.pathname);
 
   return (
     <>
