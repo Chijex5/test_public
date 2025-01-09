@@ -118,8 +118,6 @@ useEffect(() => {
         setTotalSum(totalSum);
         setTotalBooks(totalBooks);
       }
-      console.log(response)
-      console.log(response.headers)
 
       // Step 3: Getting the file as a blob
       const blob = await response.blob(); 
@@ -130,7 +128,6 @@ useEffect(() => {
 
       // Step 5: Checking the Content-Disposition header for the filename
       const contentDisposition = response.headers.get('Content-Disposition');
-      console.log(contentDisposition)
       let filename = 'invoice.pdf'; // Default file name
       if (contentDisposition && contentDisposition.includes('attachment')) {
         // Step 6: Extracting the filename from the Content-Disposition header
