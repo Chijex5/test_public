@@ -99,9 +99,6 @@ useEffect(() => {
 
   const sendPurchaseData = async (purchaseDetails) => {
   try {
-    // Step 1: Sending purchase data
-    alert("Sending purchase data to the server...");
-    
     const response = await fetch(`${baseUrl}/purchase`, {
       method: 'POST',
       headers: {
@@ -111,27 +108,20 @@ useEffect(() => {
     });
 
     if (response.ok) {
-      alert("Purchase data sent successfully.");
-
       if (userId) { 
         // Step 2: Fetch user purchase data if userId is available
-        alert(`Fetching user purchases with userId: ${userId}`);
-        
         const userResponse = await axios.get(`${baseUrl}/user/purchases`, {
           params: { userId }
         });
         
         const { totalSum, totalBooks } = userResponse.data;
-        alert(`Total Sum: ${totalSum}, Total Books: ${totalBooks}`);
-
         setTotalSum(totalSum);
         setTotalBooks(totalBooks);
       }
+      console.log(response)
 
       // Step 3: Getting the file as a blob
       const blob = await response.blob(); 
-      alert("Received file as blob.");
-      
       // Step 4: Creating a download link for the file
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -139,45 +129,31 @@ useEffect(() => {
 
       // Step 5: Checking the Content-Disposition header for the filename
       const contentDisposition = response.headers.get('Content-Disposition');
-      alert("Content-Disposition: " + contentDisposition);
-
       let filename = 'invoice.pdf'; // Default file name
       if (contentDisposition && contentDisposition.includes('attachment')) {
-        alert("Content-Disposition indicates an attachment.");
-
         // Step 6: Extracting the filename from the Content-Disposition header
         const match = contentDisposition.match(/filename="?([^";]+)"?/);
         if (match && match[1]) {
-          alert("Filename matched: " + match[1]);
           filename = match[1]; // Use the filename from the Content-Disposition header
         } else {
-          alert("No filename found in Content-Disposition.");
         }
       } else {
-        alert("No attachment found in Content-Disposition.");
       }
 
       // Step 7: Setting the filename for download
-      a.download = filename; // Use the extracted or default filename
-      alert("Download filename set to: " + filename);
-
+      a.download = filename;
       // Step 8: Triggering the download
       document.body.appendChild(a);
       a.click();
-      alert("Download triggered.");
 
       // Step 9: Clean up after the download
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      alert("Cleaned up and revoked URL.");
       
     } else {
-      alert('Failed to send purchase data.');
     }
   } catch (error) {
     // Step 10: Catching errors
-    alert('Error occurred: ' + error);
-    console.error('Error:', error);
   }
 };
 
